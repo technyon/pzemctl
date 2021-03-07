@@ -4,8 +4,8 @@
 #include <HardwareSerial.h>
 
 PZEM004Tv30 pzem1(&Serial1);
-PZEM004Tv30 pzem2(&Serial1);
-PZEM004Tv30 pzem3(&Serial1);
+PZEM004Tv30 pzem2(&Serial2);
+PZEM004Tv30 pzem3(&Serial3);
 
 // the setup routine runs once when you press reset:
 void setup() {
