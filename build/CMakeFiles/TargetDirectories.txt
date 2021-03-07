@@ -1,5 +1,0 @@
-/home/daphreak/workspace/pzemctl/build/CMakeFiles/rebuild_cache.dir
-/home/daphreak/workspace/pzemctl/build/CMakeFiles/upload-hello_world.dir
-/home/daphreak/workspace/pzemctl/build/CMakeFiles/edit_cache.dir
-/home/daphreak/workspace/pzemctl/build/CMakeFiles/_arduino_lib_core.dir
-/home/daphreak/workspace/pzemctl/build/CMakeFiles/hello_world.dir
