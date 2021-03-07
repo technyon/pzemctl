@@ -10,14 +10,15 @@ add_definitions(-DPZEM004_NO_SWSERIAL)
 add_executable(pzemctl
         pzemctl.cpp
         Lib/pzem004t/PZEM004Tv30.cpp
-        pzem004t.cpp)
+        pzem004t.cpp network.cpp network.h)
 
 # Arduino.h is included in hello_world.cpp, so link with Arduino core
 target_link_arduino_libraries(pzemctl
     PRIVATE
         core
         SPI
-        Ethernet)
+        Ethernet2
+        PubSubClient)
 
 # This is needed for the generation of HEX binary and uploading it
 target_enable_arduino_upload(pzemctl)
