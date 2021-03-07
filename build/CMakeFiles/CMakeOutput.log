@@ -1,0 +1,300 @@
+The target system is: Arduino -  - 
+The host system is: Linux - 5.8.0-44-generic - x86_64
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-g++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/daphreak/workspace/pzemctl/build/CMakeFiles/3.16.3/CompilerIdCXX/a.out"
+
+Determining if the CXX compiler works passed with the following output:
+Change Dir: /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_4b7a9/fast && /usr/bin/make -f CMakeFiles/cmTC_4b7a9.dir/build.make CMakeFiles/cmTC_4b7a9.dir/build
+make[1]: Entering directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_4b7a9.dir/testCXXCompiler.cxx.o
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-g++  -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO=108013 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR   -DARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560   /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx -o CMakeFiles/cmTC_4b7a9.dir/testCXXCompiler.cxx.o
+Linking CXX static library libcmTC_4b7a9.a
+/usr/bin/cmake -P CMakeFiles/cmTC_4b7a9.dir/cmake_clean_target.cmake
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b7a9.dir/link.txt --verbose=1
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc-ar  rcs  libcmTC_4b7a9.a  CMakeFiles/cmTC_4b7a9.dir/testCXXCompiler.cxx.o
+make[1]: Leaving directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2bc17/fast && /usr/bin/make -f CMakeFiles/cmTC_2bc17.dir/build.make CMakeFiles/cmTC_2bc17.dir/build
+make[1]: Entering directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-g++  -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO=108013 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR   -DARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560  -v /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp -o CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o
+Using built-in specs.
+Reading specs from /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/device-specs/specs-atmega2560
+COLLECT_GCC=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-g++
+Target: avr
+Configured with: ../gcc/configure --enable-fixed-point --enable-languages=c,c++ --prefix=/home/jenkins/workspace/avr-gcc-staging/label/debian7-x86_64/objdir --disable-nls --disable-libssp --disable-libada --disable-shared --with-avrlibc=yes --with-dwarf2 --disable-doc --target=avr
+Thread model: single
+gcc version 7.3.0 (GCC) 
+COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu++11' '-fpermissive' '-fno-exceptions' '-ffunction-sections' '-fdata-sections' '-fno-threadsafe-statics' '-Wno-error=narrowing' '-MMD' '-flto'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6'
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/cc1plus -quiet -v -imultilib avr6 -iprefix /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/ -MMD CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.d -MQ CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o -D__AVR_ATmega2560__ -D__AVR_DEVICE_NAME__=atmega2560 -D F_CPU=16000000L -D ARDUINO=108013 -D ARDUINO_AVR_MEGA2560 -D ARDUINO_ARCH_AVR -D ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560 /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp -mn-flash=4 -mno-skip-bug -quiet -dumpbase CMakeCXXCompilerABI.cpp -mmcu=avr6 -auxbase-strip CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o -g -Os -Wno-error=narrowing -w -std=gnu++11 -version -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -flto -mn-flash=4 -mno-skip-bug -fno-rtti -fno-enforce-eh-specs -fno-exceptions -o /tmp/cc2Cf5xu.s
+GNU C++11 (GCC) version 7.3.0 (avr)
+	compiled by GNU C version 4.7.2, GMP version 5.0.2, MPFR version 3.1.0, MPC version 0.9, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/avr/avr6"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/backward"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/sys-include"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/avr/avr6"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/backward"
+ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include"
+ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include-fixed"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/sys-include"
+ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include
+End of search list.
+GNU C++11 (GCC) version 7.3.0 (avr)
+	compiled by GNU C version 4.7.2, GMP version 5.0.2, MPFR version 3.1.0, MPC version 0.9, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 9c6d235b99e8a30dffa1915004724177
+COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu++11' '-fpermissive' '-fno-exceptions' '-ffunction-sections' '-fdata-sections' '-fno-threadsafe-statics' '-Wno-error=narrowing' '-MMD' '-flto'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6'
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/as -mmcu=avr6 -mno-skip-bug -o CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc2Cf5xu.s
+COMPILER_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/
+LIBRARY_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/
+COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu++11' '-fpermissive' '-fno-exceptions' '-ffunction-sections' '-fdata-sections' '-fno-threadsafe-statics' '-Wno-error=narrowing' '-MMD' '-flto'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6'
+Linking CXX static library libcmTC_2bc17.a
+/usr/bin/cmake -P CMakeFiles/cmTC_2bc17.dir/cmake_clean_target.cmake
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2bc17.dir/link.txt --verbose=1
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc-ar  rcs  libcmTC_2bc17.a  CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o
+make[1]: Leaving directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include]
+    add: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed]
+    add: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include]
+  end of search list found
+  collapse include dir [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include] ==> [/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include]
+  collapse include dir [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed] ==> [/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include-fixed]
+  collapse include dir [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include] ==> [/usr/local/arduino-1.8.13/hardware/tools/avr/avr/include]
+  implicit include dirs: [/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include;/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include-fixed;/usr/local/arduino-1.8.13/hardware/tools/avr/avr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(avr-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_2bc17/fast && /usr/bin/make -f CMakeFiles/cmTC_2bc17.dir/build.make CMakeFiles/cmTC_2bc17.dir/build]
+  ignore line: [make[1]: Entering directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-g++  -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO=108013 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR   -DARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560  -v /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp -o CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [Using built-in specs.]
+  ignore line: [Reading specs from /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/device-specs/specs-atmega2560]
+  ignore line: [COLLECT_GCC=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-g++]
+  ignore line: [Target: avr]
+  ignore line: [Configured with: ../gcc/configure --enable-fixed-point --enable-languages=c c++ --prefix=/home/jenkins/workspace/avr-gcc-staging/label/debian7-x86_64/objdir --disable-nls --disable-libssp --disable-libada --disable-shared --with-avrlibc=yes --with-dwarf2 --disable-doc --target=avr]
+  ignore line: [Thread model: single]
+  ignore line: [gcc version 7.3.0 (GCC) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu++11' '-fpermissive' '-fno-exceptions' '-ffunction-sections' '-fdata-sections' '-fno-threadsafe-statics' '-Wno-error=narrowing' '-MMD' '-flto'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6']
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/cc1plus -quiet -v -imultilib avr6 -iprefix /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/ -MMD CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.d -MQ CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o -D__AVR_ATmega2560__ -D__AVR_DEVICE_NAME__=atmega2560 -D F_CPU=16000000L -D ARDUINO=108013 -D ARDUINO_AVR_MEGA2560 -D ARDUINO_ARCH_AVR -D ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560 /usr/share/cmake-3.16/Modules/CMakeCXXCompilerABI.cpp -mn-flash=4 -mno-skip-bug -quiet -dumpbase CMakeCXXCompilerABI.cpp -mmcu=avr6 -auxbase-strip CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o -g -Os -Wno-error=narrowing -w -std=gnu++11 -version -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -flto -mn-flash=4 -mno-skip-bug -fno-rtti -fno-enforce-eh-specs -fno-exceptions -o /tmp/cc2Cf5xu.s]
+  ignore line: [GNU C++11 (GCC) version 7.3.0 (avr)]
+  ignore line: [	compiled by GNU C version 4.7.2  GMP version 5.0.2  MPFR version 3.1.0  MPC version 0.9  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/avr/avr6"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/backward"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/sys-include"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/avr/avr6"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include/c++/7.3.0/backward"]
+  ignore line: [ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include"]
+  ignore line: [ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/sys-include"]
+  ignore line: [ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include]
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed]
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C++11 (GCC) version 7.3.0 (avr)]
+  ignore line: [	compiled by GNU C version 4.7.2  GMP version 5.0.2  MPFR version 3.1.0  MPC version 0.9  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 9c6d235b99e8a30dffa1915004724177]
+  ignore line: [COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu++11' '-fpermissive' '-fno-exceptions' '-ffunction-sections' '-fdata-sections' '-fno-threadsafe-statics' '-Wno-error=narrowing' '-MMD' '-flto'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6']
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/as -mmcu=avr6 -mno-skip-bug -o CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc2Cf5xu.s]
+  ignore line: [COMPILER_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/]
+  ignore line: [LIBRARY_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu++11' '-fpermissive' '-fno-exceptions' '-ffunction-sections' '-fdata-sections' '-fno-threadsafe-statics' '-Wno-error=narrowing' '-MMD' '-flto'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6']
+  ignore line: [Linking CXX static library libcmTC_2bc17.a]
+  ignore line: [/usr/bin/cmake -P CMakeFiles/cmTC_2bc17.dir/cmake_clean_target.cmake]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2bc17.dir/link.txt --verbose=1]
+  ignore line: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc-ar  rcs  libcmTC_2bc17.a  CMakeFiles/cmTC_2bc17.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [make[1]: Leaving directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp']
+  ignore line: []
+  ignore line: []
+  implicit libs: []
+  implicit dirs: []
+  implicit fwks: []
+
+
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/daphreak/workspace/pzemctl/build/CMakeFiles/3.16.3/CompilerIdC/a.out"
+
+Determining if the C compiler works passed with the following output:
+Change Dir: /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_441f5/fast && /usr/bin/make -f CMakeFiles/cmTC_441f5.dir/build.make CMakeFiles/cmTC_441f5.dir/build
+make[1]: Entering directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_441f5.dir/testCCompiler.c.o
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc  -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO=108013 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR   -DARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560   /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp/testCCompiler.c -o CMakeFiles/cmTC_441f5.dir/testCCompiler.c.o
+Linking C static library libcmTC_441f5.a
+/usr/bin/cmake -P CMakeFiles/cmTC_441f5.dir/cmake_clean_target.cmake
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_441f5.dir/link.txt --verbose=1
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc-ar  rcs  libcmTC_441f5.a  CMakeFiles/cmTC_441f5.dir/testCCompiler.c.o
+make[1]: Leaving directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+
+
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_d98b2/fast && /usr/bin/make -f CMakeFiles/cmTC_d98b2.dir/build.make CMakeFiles/cmTC_d98b2.dir/build
+make[1]: Entering directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc  -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO=108013 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR   -DARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560  -v /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -o CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o
+Using built-in specs.
+Reading specs from /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/device-specs/specs-atmega2560
+COLLECT_GCC=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc
+Target: avr
+Configured with: ../gcc/configure --enable-fixed-point --enable-languages=c,c++ --prefix=/home/jenkins/workspace/avr-gcc-staging/label/debian7-x86_64/objdir --disable-nls --disable-libssp --disable-libada --disable-shared --with-avrlibc=yes --with-dwarf2 --disable-doc --target=avr
+Thread model: single
+gcc version 7.3.0 (GCC) 
+COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu11' '-ffunction-sections' '-fdata-sections' '-MMD' '-flto' '-fno-fat-lto-objects'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6'
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/cc1 -quiet -v -imultilib avr6 -iprefix /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/ -MMD CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.d -MQ CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o -D__AVR_ATmega2560__ -D__AVR_DEVICE_NAME__=atmega2560 -D F_CPU=16000000L -D ARDUINO=108013 -D ARDUINO_AVR_MEGA2560 -D ARDUINO_ARCH_AVR -D ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560 /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -mn-flash=4 -mno-skip-bug -quiet -dumpbase CMakeCCompilerABI.c -mmcu=avr6 -auxbase-strip CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o -g -Os -w -std=gnu11 -version -ffunction-sections -fdata-sections -flto -fno-fat-lto-objects -o /tmp/ccWeML5N.s
+GNU C11 (GCC) version 7.3.0 (avr)
+	compiled by GNU C version 4.7.2, GMP version 5.0.2, MPFR version 3.1.0, MPC version 0.9, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/sys-include"
+ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include"
+ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include-fixed"
+ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/sys-include"
+ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include
+End of search list.
+GNU C11 (GCC) version 7.3.0 (avr)
+	compiled by GNU C version 4.7.2, GMP version 5.0.2, MPFR version 3.1.0, MPC version 0.9, isl version none
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: f1a5be5edc2698bbea3030b94defb7b4
+COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu11' '-ffunction-sections' '-fdata-sections' '-MMD' '-flto' '-fno-fat-lto-objects'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6'
+ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/as -mmcu=avr6 -mno-skip-bug -o CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o /tmp/ccWeML5N.s
+COMPILER_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/
+LIBRARY_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/
+COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu11' '-ffunction-sections' '-fdata-sections' '-MMD' '-flto' '-fno-fat-lto-objects'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6'
+Linking C static library libcmTC_d98b2.a
+/usr/bin/cmake -P CMakeFiles/cmTC_d98b2.dir/cmake_clean_target.cmake
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d98b2.dir/link.txt --verbose=1
+/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc-ar  rcs  libcmTC_d98b2.a  CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o
+make[1]: Leaving directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include]
+    add: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed]
+    add: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include]
+  end of search list found
+  collapse include dir [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include] ==> [/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include]
+  collapse include dir [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed] ==> [/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include-fixed]
+  collapse include dir [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include] ==> [/usr/local/arduino-1.8.13/hardware/tools/avr/avr/include]
+  implicit include dirs: [/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include;/usr/local/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include-fixed;/usr/local/arduino-1.8.13/hardware/tools/avr/avr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(avr-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/make cmTC_d98b2/fast && /usr/bin/make -f CMakeFiles/cmTC_d98b2.dir/build.make CMakeFiles/cmTC_d98b2.dir/build]
+  ignore line: [make[1]: Entering directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc  -c -g -Os -w -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega2560 -DF_CPU=16000000L -DARDUINO=108013 -DARDUINO_AVR_MEGA2560 -DARDUINO_ARCH_AVR   -DARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560  -v /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -o CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o]
+  ignore line: [Using built-in specs.]
+  ignore line: [Reading specs from /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/device-specs/specs-atmega2560]
+  ignore line: [COLLECT_GCC=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc]
+  ignore line: [Target: avr]
+  ignore line: [Configured with: ../gcc/configure --enable-fixed-point --enable-languages=c c++ --prefix=/home/jenkins/workspace/avr-gcc-staging/label/debian7-x86_64/objdir --disable-nls --disable-libssp --disable-libada --disable-shared --with-avrlibc=yes --with-dwarf2 --disable-doc --target=avr]
+  ignore line: [Thread model: single]
+  ignore line: [gcc version 7.3.0 (GCC) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu11' '-ffunction-sections' '-fdata-sections' '-MMD' '-flto' '-fno-fat-lto-objects'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6']
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/cc1 -quiet -v -imultilib avr6 -iprefix /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/ -MMD CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.d -MQ CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o -D__AVR_ATmega2560__ -D__AVR_DEVICE_NAME__=atmega2560 -D F_CPU=16000000L -D ARDUINO=108013 -D ARDUINO_AVR_MEGA2560 -D ARDUINO_ARCH_AVR -D ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560 /usr/share/cmake-3.16/Modules/CMakeCCompilerABI.c -mn-flash=4 -mno-skip-bug -quiet -dumpbase CMakeCCompilerABI.c -mmcu=avr6 -auxbase-strip CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o -g -Os -w -std=gnu11 -version -ffunction-sections -fdata-sections -flto -fno-fat-lto-objects -o /tmp/ccWeML5N.s]
+  ignore line: [GNU C11 (GCC) version 7.3.0 (avr)]
+  ignore line: [	compiled by GNU C version 4.7.2  GMP version 5.0.2  MPFR version 3.1.0  MPC version 0.9  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/sys-include"]
+  ignore line: [ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include"]
+  ignore line: [ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/sys-include"]
+  ignore line: [ignoring duplicate directory "/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/../../lib/gcc/avr/7.3.0/../../../../avr/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include]
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/include-fixed]
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C11 (GCC) version 7.3.0 (avr)]
+  ignore line: [	compiled by GNU C version 4.7.2  GMP version 5.0.2  MPFR version 3.1.0  MPC version 0.9  isl version none]
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: f1a5be5edc2698bbea3030b94defb7b4]
+  ignore line: [COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu11' '-ffunction-sections' '-fdata-sections' '-MMD' '-flto' '-fno-fat-lto-objects'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6']
+  ignore line: [ /usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/as -mmcu=avr6 -mno-skip-bug -o CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o /tmp/ccWeML5N.s]
+  ignore line: [COMPILER_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../libexec/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/bin/]
+  ignore line: [LIBRARY_PATH=/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/avr6/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/:/usr/local/arduino-1.8.13/hardware/tools/avr/bin/../lib/gcc/avr/7.3.0/../../../../avr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-c' '-g' '-Os' '-w' '-std=gnu11' '-ffunction-sections' '-fdata-sections' '-MMD' '-flto' '-fno-fat-lto-objects'  '-D' 'F_CPU=16000000L' '-D' 'ARDUINO=108013' '-D' 'ARDUINO_AVR_MEGA2560' '-D' 'ARDUINO_ARCH_AVR' '-D' 'ARDUINO_AVR_MEGA_MENU_CPU_ATMEGA2560' '-v' '-o' 'CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o' '-specs=device-specs/specs-atmega2560' '-mmcu=avr6']
+  ignore line: [Linking C static library libcmTC_d98b2.a]
+  ignore line: [/usr/bin/cmake -P CMakeFiles/cmTC_d98b2.dir/cmake_clean_target.cmake]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d98b2.dir/link.txt --verbose=1]
+  ignore line: [/usr/local/arduino-1.8.13/hardware/tools/avr/bin/avr-gcc-ar  rcs  libcmTC_d98b2.a  CMakeFiles/cmTC_d98b2.dir/CMakeCCompilerABI.c.o]
+  ignore line: [make[1]: Leaving directory '/home/daphreak/workspace/pzemctl/build/CMakeFiles/CMakeTmp']
+  ignore line: []
+  ignore line: []
+  implicit libs: []
+  implicit dirs: []
+  implicit fwks: []
+
+
+Checking whether the ASM compiler is GNU using "--version" matched "(GNU assembler)|(GCC)|(Free Software Foundation)":
+avr-gcc (GCC) 7.3.0
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
