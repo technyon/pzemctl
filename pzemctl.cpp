@@ -1,5 +1,9 @@
 // Including Arduino.h is required for using Serial functions
-#include "Arduino.h"
+#include <PZEM004Tv30.h>
+#include <Arduino.h>
+#include <HardwareSerial.h>
+
+PZEM004Tv30 pzem(&Serial3);
 
 // the setup routine runs once when you press reset:
 void setup() {
