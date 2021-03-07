@@ -17,7 +17,7 @@ target_link_arduino_libraries(pzemctl
     PRIVATE
         core
         SPI
-        Ethernet2
+        Ethernet
         PubSubClient)
 
 # This is needed for the generation of HEX binary and uploading it

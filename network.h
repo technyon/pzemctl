@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Ethernet2.h>
+#include <Ethernet.h>
 #include <PubSubClient.h>
 
 class network
