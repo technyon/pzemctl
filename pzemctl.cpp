@@ -4,11 +4,110 @@
 #include <HardwareSerial.h>
 #include "pzem004t.h"
 #include "network.h"
-
+#include <src/Arduino_FreeRTOS.h>
+#include <src/task.h>
 
 hw::pzem004t* pzem;
 
 network nw;
+
+hw::pzem004tvalues phase1Values;
+hw::pzem004tvalues phase2Values;
+hw::pzem004tvalues phase3Values;
+
+
+void TaskBlink(void *pvParameters)
+{
+    while(true)
+    {
+        digitalWrite(LED_BUILTIN, HIGH);
+        vTaskDelay( 250 / portTICK_PERIOD_MS);
+        digitalWrite(LED_BUILTIN, LOW);
+        vTaskDelay( 250 / portTICK_PERIOD_MS);
+    }
+}
+
+
+
+void TaskPollPzem(void *pvParameters)
+{
+    while(true)
+    {
+        pzem->update();
+
+        phase1Values = pzem->values1();
+//        Serial.print("Voltage: ");
+//        Serial.print(pzemValues.voltage);
+//        Serial.print("V   |    ");
+        phase2Values = pzem->values2();
+//        Serial.print("Voltage: ");
+//        Serial.print(pzemValues.voltage);
+//        Serial.print("V   |    ");
+        phase3Values = pzem->values3();
+//        Serial.print("Voltage: ");
+//        Serial.print(pzemValues.voltage);
+//        Serial.println("V");
+
+        vTaskDelay( 200 / portTICK_PERIOD_MS);
+    }
+}
+
+void TaskNetworkUpdate(void *pvParameters)
+{
+    while(true)
+    {
+        nw.update();
+
+        vTaskDelay( 100 / portTICK_PERIOD_MS);
+    }
+}
+
+void TaskNetworkPublish(void *pvParameters)
+{
+    while(true)
+    {
+        nw.publish(phase1Values, phase2Values, phase3Values);
+
+        vTaskDelay( 1000 / portTICK_PERIOD_MS);
+    }
+}
+
+
+void setupTasks()
+{
+    xTaskCreate(
+            TaskBlink
+            ,  "Blink"
+            ,  128
+            ,  NULL
+            ,  0
+            ,  NULL );
+
+    xTaskCreate(
+            TaskPollPzem
+            ,  "PzemPoll"
+            ,  128
+            ,  NULL
+            ,  2
+            ,  NULL );
+
+    xTaskCreate(
+            TaskNetworkUpdate
+            ,  "NetworkUpdate"
+            ,  512
+            ,  NULL
+            ,  3
+            ,  NULL );
+
+    xTaskCreate(
+            TaskNetworkPublish
+            ,  "Publish"
+            ,  512
+            ,  NULL
+            ,  1
+            ,  NULL );
+
+}
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -19,16 +118,16 @@ void setup() {
     pzem = new hw::pzem004t(&Serial1, &Serial2, &Serial3);
     nw.initialize();
 
-	// Setup to blink the inbuilt LED
-#ifdef LED_BUILTIN
 	pinMode(LED_BUILTIN, OUTPUT);
-#endif
 
+	setupTasks();
 }
+
 
 // the loop routine runs over and over again forever:
 void loop()
 {
+/*
     hw::pzem004tvalues pzemValues;
 
 	// Blink the inbuilt LED
@@ -53,6 +152,8 @@ void loop()
 
     digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
     delay(250);                       // wait for a second
+*/
+
 /*
 #ifdef LED_BUILTIN
     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)

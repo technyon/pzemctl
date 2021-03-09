@@ -3,15 +3,22 @@ cmake_minimum_required(VERSION 3.0.0)
 project(pzemctl CXX)
 
 include_directories(Lib/pzem004t)
-# link_directories(Lib/pzem004t)
+include_directories(Lib/FreeRTOS)
 
 add_definitions(-DPZEM004_NO_SWSERIAL)
+
+file(GLOB FreeRTOS_SRC
+    "Lib/FreeRTOS/src/*.h"
+    "Lib/FreeRTOS/src/*.c"
+    "Lib/FreeRTOS/src/*.cpp"
+)
 
 add_executable(pzemctl
         pzemctl.cpp
         Lib/pzem004t/PZEM004Tv30.cpp
         pzem004t.cpp
-        network.cpp)
+        network.cpp
+        ${FreeRTOS_SRC})
 
 # Arduino.h is included in hello_world.cpp, so link with Arduino core
 target_link_arduino_libraries(pzemctl
