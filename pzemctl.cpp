@@ -26,23 +26,12 @@ void setup() {
 
 }
 
-void loop()
-{
-    delay(1);
-    nw.update();
-}
-
 // the loop routine runs over and over again forever:
-void loopx()
+void loop()
 {
     hw::pzem004tvalues pzemValues;
 
 	// Blink the inbuilt LED
-#ifdef LED_BUILTIN
-    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-    delay(250);                       // wait for a second
-    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-    delay(250);                       // wait for a second
 
     pzem->update();
 
@@ -59,10 +48,17 @@ void loopx()
     Serial.print(pzemValues.voltage);
     Serial.println("V");
 
+    nw.publish(pzem->values1(), pzem->values2(), pzem->values3());
     nw.update();
 
     digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
     delay(250);                       // wait for a second
-
+/*
+#ifdef LED_BUILTIN
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(250);                       // wait for a second
+    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+    delay(250);                       // wait for a second
 #endif
+ */
 }

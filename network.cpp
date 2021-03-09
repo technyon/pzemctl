@@ -95,6 +95,41 @@ void network::callback(char *topic, byte *payload, unsigned int length)
     Serial.println();
 }
 
+void network::publish(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
+{
+    publishFloat("energy/phase1/voltage", phase1.voltage, 2);
+    publishFloat("energy/phase1/current", phase1.current, 2);
+    publishFloat("energy/phase1/energy", phase1.energy, 2);
+    publishFloat("energy/phase1/frequency", phase1.frequency, 2);
+    publishFloat("energy/phase1/powerfactor", phase1.pf, 2);
+
+    publishFloat("energy/phase2/voltage", phase2.voltage, 2);
+    publishFloat("energy/phase2/current", phase2.current, 2);
+    publishFloat("energy/phase2/energy", phase2.energy, 2);
+    publishFloat("energy/phase2/frequency", phase2.frequency, 2);
+    publishFloat("energy/phase2/powerfactor", phase2.pf, 2);
+
+    publishFloat("energy/phase3/voltage", phase3.voltage, 2);
+    publishFloat("energy/phase3/current", phase3.current, 2);
+    publishFloat("energy/phase3/energy", phase3.energy, 2);
+    publishFloat("energy/phase3/frequency", phase3.frequency, 2);
+    publishFloat("energy/phase3/powerfactor", phase3.pf, 2);
+}
+
+
+void network::publishFloat(const char* topic, const float &value, const float& precision)
+{
+    dtostrf(value, 20, precision, charVal);
+
+    int index = 0;
+    while(charVal[index] == ' ')
+    {
+        index++;
+    }
+
+    _mqttClient->publish(topic, charVal + index);
+}
+
 
 void network::reconnect()
 {
@@ -105,10 +140,6 @@ void network::reconnect()
         if (_mqttClient->connect("arduinoClient"))
         {
             Serial.println("connected");
-            // Once connected, publish an announcement...
-            _mqttClient->publish("outTopic","hello world");
-            // ... and resubscribe
-            _mqttClient->subscribe("inTopic");
         }
         else
         {
