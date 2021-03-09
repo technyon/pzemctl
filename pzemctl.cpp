@@ -26,10 +26,14 @@ void setup() {
 
 }
 
-
+void loop()
+{
+    delay(1);
+    nw.update();
+}
 
 // the loop routine runs over and over again forever:
-void loop()
+void loopx()
 {
     hw::pzem004tvalues pzemValues;
 

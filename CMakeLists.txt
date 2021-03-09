@@ -10,7 +10,8 @@ add_definitions(-DPZEM004_NO_SWSERIAL)
 add_executable(pzemctl
         pzemctl.cpp
         Lib/pzem004t/PZEM004Tv30.cpp
-        pzem004t.cpp network.cpp network.h)
+        pzem004t.cpp
+        network.cpp)
 
 # Arduino.h is included in hello_world.cpp, so link with Arduino core
 target_link_arduino_libraries(pzemctl
