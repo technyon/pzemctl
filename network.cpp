@@ -35,12 +35,15 @@ void network::initialize()
 
     // start the Ethernet connection:
     Serial.println("Initialize Ethernet with DHCP:");
-    if (Ethernet.begin(_mac, 1000, 1000) == 0) {
+    if (Ethernet.begin(_mac, 1000, 1000) == 0)
+    {
         Serial.println("Failed to configure Ethernet using DHCP");
         // Check for Ethernet hardware present
-        if (Ethernet.hardwareStatus() == EthernetNoHardware) {
+        if (Ethernet.hardwareStatus() == EthernetNoHardware)
+        {
             Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");
-            while (true) {
+            while (true)
+            {
                 delay(1); // do nothing, no point running without Ethernet hardware
             }
         }
@@ -49,7 +52,9 @@ void network::initialize()
         }
         // try to congifure using IP address instead of DHCP:
         Ethernet.begin(_mac, _ip, _dns);
-    } else {
+    }
+    else
+    {
         Serial.print("  DHCP assigned IP ");
         Serial.println(Ethernet.localIP());
     }
@@ -85,35 +90,35 @@ void network::update()
 
 void network::callback(char *topic, byte *payload, unsigned int length)
 {
-    Serial.print("Message arrived [");
-    Serial.print(topic);
-    Serial.print("] ");
-    for (int i=0;i<length;i++)
-    {
-        Serial.print((char)payload[i]);
-    }
-    Serial.println();
+//    Serial.print("Message arrived [");
+//    Serial.print(topic);
+//    Serial.print("] ");
+//    for (int i=0;i<length;i++)
+//    {
+//        Serial.print((char)payload[i]);
+//    }
+//    Serial.println();
 }
 
 void network::publish(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
-    publishFloat("energy/phase1/voltage", phase1.voltage, 2);
-    publishFloat("energy/phase1/current", phase1.current, 2);
-    publishFloat("energy/phase1/energy", phase1.energy, 2);
-    publishFloat("energy/phase1/frequency", phase1.frequency, 2);
-    publishFloat("energy/phase1/powerfactor", phase1.pf, 2);
+    publishFloat(phase1Voltage, phase1.voltage, 2);
+    publishFloat(phase1Current, phase1.current, 2);
+    publishFloat(phase1Energy, phase1.energy, 2);
+    publishFloat(phase1Frequency, phase1.frequency, 2);
+    publishFloat(phase1PowerFactor, phase1.pf, 2);
 
-    publishFloat("energy/phase2/voltage", phase2.voltage, 2);
-    publishFloat("energy/phase2/current", phase2.current, 2);
-    publishFloat("energy/phase2/energy", phase2.energy, 2);
-    publishFloat("energy/phase2/frequency", phase2.frequency, 2);
-    publishFloat("energy/phase2/powerfactor", phase2.pf, 2);
+    publishFloat(phase2Voltage, phase2.voltage, 2);
+    publishFloat(phase2Current, phase2.current, 2);
+    publishFloat(phase2Energy, phase2.energy, 2);
+    publishFloat(phase2Frequency, phase2.frequency, 2);
+    publishFloat(phase2PowerFactor, phase2.pf, 2);
 
-    publishFloat("energy/phase3/voltage", phase3.voltage, 2);
-    publishFloat("energy/phase3/current", phase3.current, 2);
-    publishFloat("energy/phase3/energy", phase3.energy, 2);
-    publishFloat("energy/phase3/frequency", phase3.frequency, 2);
-    publishFloat("energy/phase3/powerfactor", phase3.pf, 2);
+    publishFloat(phase3Voltage, phase3.voltage, 2);
+    publishFloat(phase3Current, phase3.current, 2);
+    publishFloat(phase3Energy, phase3.energy, 2);
+    publishFloat(phase3Frequency, phase3.frequency, 2);
+    publishFloat(phase3PowerFactor, phase3.pf, 2);
 }
 
 

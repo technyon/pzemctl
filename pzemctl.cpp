@@ -36,16 +36,17 @@ void TaskPollPzem(void *pvParameters)
         pzem->update();
 
         phase1Values = pzem->values1();
-//        Serial.print("Voltage: ");
-//        Serial.print(pzemValues.voltage);
-//        Serial.print("V   |    ");
         phase2Values = pzem->values2();
-//        Serial.print("Voltage: ");
-//        Serial.print(pzemValues.voltage);
-//        Serial.print("V   |    ");
         phase3Values = pzem->values3();
+
 //        Serial.print("Voltage: ");
-//        Serial.print(pzemValues.voltage);
+//        Serial.print(phase1Values.voltage);
+//        Serial.print("V   |    ");
+//        Serial.print("Voltage: ");
+//        Serial.print(phase2Values.voltage);
+//        Serial.print("V   |    ");
+//        Serial.print("Voltage: ");
+//        Serial.print(phase3Values.voltage);
 //        Serial.println("V");
 
         vTaskDelay( 200 / portTICK_PERIOD_MS);
@@ -102,7 +103,7 @@ void setupTasks()
     xTaskCreate(
             TaskNetworkPublish
             ,  "Publish"
-            ,  512
+            ,  1024
             ,  NULL
             ,  1
             ,  NULL );
