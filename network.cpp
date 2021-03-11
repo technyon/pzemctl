@@ -4,18 +4,27 @@
 
 #include "network.h"
 #include <Arduino.h>
+#include <src/Arduino_FreeRTOS.h>
 
 network::network()
 : _dns(192, 168, 0, 101),
   _ip(192, 168, 0, 36),
   _server(192, 168, 0, 100)
 {
-    _mac[0] = 0xDE;
-    _mac[1] = 0xAD;
-    _mac[2] = 0xBE;
-    _mac[3] = 0xEF;
-    _mac[4] = 0xFE;
-    _mac[5] = 0xED;
+//    _mac[0] = 0xDE;
+//    _mac[1] = 0xAD;
+//    _mac[2] = 0xBE;
+//    _mac[3] = 0xEF;
+//    _mac[4] = 0xFE;
+//    _mac[5] = 0xED;
+
+
+    _mac[0] = 0x00;
+    _mac[1] = 0x08;
+    _mac[2] = 0xDC;
+    _mac[3] = 0x2A;
+    _mac[4] = 0xAC;
+    _mac[5] = 0x5F;
 }
 
 network::~network()
@@ -34,37 +43,34 @@ void network::initialize()
     ethernetHardwareReset(ETHERNET_RESET_PIN);
 
     // start the Ethernet connection:
-    Serial.println("Initialize Ethernet with DHCP:");
+    Serial.println(F("Initialize Ethernet with DHCP:"));
     if (Ethernet.begin(_mac, 1000, 1000) == 0)
     {
-        Serial.println("Failed to configure Ethernet using DHCP");
+        Serial.println(F("Failed to configure Ethernet using DHCP"));
         // Check for Ethernet hardware present
         if (Ethernet.hardwareStatus() == EthernetNoHardware)
         {
-            Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");
+            Serial.println(F("Ethernet shield was not found.  Sorry, can't run without hardware. :("));
             while (true)
             {
-                delay(1); // do nothing, no point running without Ethernet hardware
+                delay(10); // do nothing, no point running without Ethernet hardware
             }
         }
-        if (Ethernet.linkStatus() == LinkOFF) {
-            Serial.println("Ethernet cable is not connected.");
+        if (Ethernet.linkStatus() == LinkOFF)
+        {
+            Serial.println(F("Ethernet cable is not connected."));
         }
         // try to congifure using IP address instead of DHCP:
         Ethernet.begin(_mac, _ip, _dns);
     }
     else
     {
-        Serial.print("  DHCP assigned IP ");
+        Serial.print(F("  DHCP assigned IP "));
         Serial.println(Ethernet.localIP());
     }
 
     _mqttClient = new PubSubClient(*_ethClient);
     _mqttClient->setServer(_server, 1883);
-    _mqttClient->setCallback(callback);
-
-    // Allow the hardware to sort itself out
-//    delay(1500);
 }
 
 void network::ethernetHardwareReset(const uint8_t resetPin)
@@ -77,82 +83,94 @@ void network::ethernetHardwareReset(const uint8_t resetPin)
     digitalWrite(resetPin, HIGH);
     delay(1000);
 }
-unsigned long byteCount = 0;
 
-void network::update()
+int cnt=0;
+
+void network::publish(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
+    cnt++;
+
+    if(cnt > 10)
+    {
+        Serial.print(Ethernet.hardwareStatus());
+        Serial.print(F(" | "));
+        Serial.println(_mqttClient->state());
+        cnt = 0;
+
+        publishFloat(phase1Voltage, phase1.voltage, 2);
+        publishFloat(phase1Current, phase1.current, 2);
+        publishFloat(phase1Energy, phase1.energy, 2);
+        publishFloat(phase1Frequency, phase1.frequency, 2);
+        publishFloat(phase1PowerFactor, phase1.pf, 2);
+
+        publishFloat(phase2Voltage, phase2.voltage, 2);
+        publishFloat(phase2Current, phase2.current, 2);
+        publishFloat(phase2Energy, phase2.energy, 2);
+        publishFloat(phase2Frequency, phase2.frequency, 2);
+        publishFloat(phase2PowerFactor, phase2.pf, 2);
+
+        publishFloat(phase3Voltage, phase3.voltage, 2);
+        publishFloat(phase3Current, phase3.current, 2);
+        publishFloat(phase3Energy, phase3.energy, 2);
+        publishFloat(phase3Frequency, phase3.frequency, 2);
+        publishFloat(phase3PowerFactor, phase3.pf, 2);
+
+    }
+
+    if(_reconnecting) return;
+
     if (!_mqttClient->connected())
     {
         reconnect();
     }
     _mqttClient->loop();
-}
 
-void network::callback(char *topic, byte *payload, unsigned int length)
-{
-//    Serial.print("Message arrived [");
-//    Serial.print(topic);
-//    Serial.print("] ");
-//    for (int i=0;i<length;i++)
-//    {
-//        Serial.print((char)payload[i]);
-//    }
-//    Serial.println();
-}
-
-void network::publish(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
-{
-    publishFloat(phase1Voltage, phase1.voltage, 2);
-    publishFloat(phase1Current, phase1.current, 2);
-    publishFloat(phase1Energy, phase1.energy, 2);
-    publishFloat(phase1Frequency, phase1.frequency, 2);
-    publishFloat(phase1PowerFactor, phase1.pf, 2);
-
-    publishFloat(phase2Voltage, phase2.voltage, 2);
-    publishFloat(phase2Current, phase2.current, 2);
-    publishFloat(phase2Energy, phase2.energy, 2);
-    publishFloat(phase2Frequency, phase2.frequency, 2);
-    publishFloat(phase2PowerFactor, phase2.pf, 2);
-
-    publishFloat(phase3Voltage, phase3.voltage, 2);
-    publishFloat(phase3Current, phase3.current, 2);
-    publishFloat(phase3Energy, phase3.energy, 2);
-    publishFloat(phase3Frequency, phase3.frequency, 2);
-    publishFloat(phase3PowerFactor, phase3.pf, 2);
 }
 
 
 void network::publishFloat(const char* topic, const float &value, const float& precision)
 {
-    dtostrf(value, 20, precision, charVal);
-
-    int index = 0;
-    while(charVal[index] == ' ')
+    if(_reconnecting)
     {
-        index++;
+        Serial.println(F("Reconnecting, abort publish."));
+        return;
     }
 
-    _mqttClient->publish(topic, charVal + index);
-}
+    if(_mqttClient->state() != 0)
+    {
+        Serial.println(F("MQTT not connected, abort publish."));
+        return;
+    }
 
+    dtostrf(value, 20, precision, _charVal);
+
+    _charIndex = 0;
+    while(_charVal[_charIndex] == _space)
+    {
+        _charIndex++;
+    }
+
+    _mqttClient->publish(topic, _charVal + _charIndex);
+}
 
 void network::reconnect()
 {
+    _reconnecting = true;
     while (!_mqttClient->connected())
     {
-        Serial.print("Attempting MQTT connection...");
-        // Attempt to connect
-        if (_mqttClient->connect("arduinoClient"))
+        Serial.print(F("Attempting MQTT connection..."));
+
+        if (_mqttClient->connect("pzem004t"))
         {
-            Serial.println("connected");
+            Serial.println(F("connected"));
         }
         else
         {
-            Serial.print("failed, rc=");
+            Serial.print(F("failed, rc="));
             Serial.print(_mqttClient->state());
-            Serial.println(" try again in 5 seconds");
-            // Wait 5 seconds before retrying
-            delay(5000);
+            Serial.println(F(" try again in 5 seconds"));
+            vTaskDelay( 5000 / portTICK_PERIOD_MS);
         }
     }
+    _reconnecting = false;
 }

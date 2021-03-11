@@ -69,10 +69,9 @@ void TaskNetworkPublish(void *pvParameters)
     {
         nw.publish(phase1Values, phase2Values, phase3Values);
 
-        vTaskDelay( 1000 / portTICK_PERIOD_MS);
+        vTaskDelay( 100 / portTICK_PERIOD_MS);
     }
 }
-
 
 void setupTasks()
 {
@@ -92,13 +91,13 @@ void setupTasks()
             ,  2
             ,  NULL );
 
-    xTaskCreate(
-            TaskNetworkUpdate
-            ,  "NetworkUpdate"
-            ,  512
-            ,  NULL
-            ,  3
-            ,  NULL );
+//    xTaskCreate(
+//            TaskNetworkUpdate
+//            ,  "NetworkUpdate"
+//            ,  1024
+//            ,  NULL
+//            ,  3
+//            ,  NULL );
 
     xTaskCreate(
             TaskNetworkPublish

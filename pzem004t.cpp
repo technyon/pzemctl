@@ -8,11 +8,12 @@ namespace hw
       _pzem3(serial3)
     {
         _pzem1.setAddress(0xf8);
-        _pzem1.resetEnergy();
-//        _pzem2.resetEnergy();
         _pzem2.setAddress(0xf8);
-//        _pzem3.resetEnergy();
         _pzem3.setAddress(0xf8);
+
+        _pzem1.resetEnergy();
+        _pzem2.resetEnergy();
+        _pzem3.resetEnergy();
     }
 
     void pzem004t::update()
@@ -23,7 +24,7 @@ namespace hw
 
     }
 
-    void pzem004t::updateValues(PZEM004Tv30 &pzem, pzem004tvalues &values)
+    void pzem004t::updateValues(PZEM004Tv30& pzem, pzem004tvalues& values)
     {
         values.voltage = pzem.voltage();
         values.current = pzem.current();
