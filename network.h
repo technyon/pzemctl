@@ -15,7 +15,7 @@ public:
     virtual ~network();
 
     void initialize();
-    void publish(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
+    void update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
 
 private:
     const char* topic = "";
@@ -53,7 +53,7 @@ private:
     char _charVal[21];
     int _charIndex;
 
-    bool _reconnecting = false;
+    uint8_t _updateCnt = 0;
 
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;

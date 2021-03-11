@@ -11,14 +11,6 @@ network::network()
   _ip(192, 168, 0, 36),
   _server(192, 168, 0, 100)
 {
-//    _mac[0] = 0xDE;
-//    _mac[1] = 0xAD;
-//    _mac[2] = 0xBE;
-//    _mac[3] = 0xEF;
-//    _mac[4] = 0xFE;
-//    _mac[5] = 0xED;
-
-
     _mac[0] = 0x00;
     _mac[1] = 0x08;
     _mac[2] = 0xDC;
@@ -84,18 +76,31 @@ void network::ethernetHardwareReset(const uint8_t resetPin)
     delay(1000);
 }
 
-int cnt=0;
+void(* nwResetFunc) (void) = 0;
 
-void network::publish(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
+void network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
-    cnt++;
+    _updateCnt++;
 
-    if(cnt > 10)
+    if(_updateCnt > 10)
     {
-        Serial.print(Ethernet.hardwareStatus());
-        Serial.print(F(" | "));
+        if(Ethernet.maintain() != 0)
+        {
+            reconnect();
+        }
+    }
+
+    if (!_mqttClient->connected())
+    {
+        reconnect();
+    }
+    _mqttClient->loop();
+
+    if(_updateCnt > 10)
+    {
         Serial.println(_mqttClient->state());
-        cnt = 0;
+
+        _updateCnt = 0;
 
         publishFloat(phase1Voltage, phase1.voltage, 2);
         publishFloat(phase1Current, phase1.current, 2);
@@ -114,28 +119,12 @@ void network::publish(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues
         publishFloat(phase3Energy, phase3.energy, 2);
         publishFloat(phase3Frequency, phase3.frequency, 2);
         publishFloat(phase3PowerFactor, phase3.pf, 2);
-
     }
-
-    if(_reconnecting) return;
-
-    if (!_mqttClient->connected())
-    {
-        reconnect();
-    }
-    _mqttClient->loop();
-
 }
 
 
 void network::publishFloat(const char* topic, const float &value, const float& precision)
 {
-    if(_reconnecting)
-    {
-        Serial.println(F("Reconnecting, abort publish."));
-        return;
-    }
-
     if(_mqttClient->state() != 0)
     {
         Serial.println(F("MQTT not connected, abort publish."));
@@ -155,9 +144,10 @@ void network::publishFloat(const char* topic, const float &value, const float& p
 
 void network::reconnect()
 {
-    _reconnecting = true;
     while (!_mqttClient->connected())
     {
+        Ethernet.maintain();
+
         Serial.print(F("Attempting MQTT connection..."));
 
         if (_mqttClient->connect("pzem004t"))
@@ -172,5 +162,4 @@ void network::reconnect()
             vTaskDelay( 5000 / portTICK_PERIOD_MS);
         }
     }
-    _reconnecting = false;
 }
