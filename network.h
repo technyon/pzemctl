@@ -18,8 +18,6 @@ public:
     void update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
 
 private:
-    const char* topic = "";
-
     const char* phase1Voltage = "energy/phase1/voltage";
     const char* phase1Current ="energy/phase1/current";
     const char* phase1Energy = "energy/phase1/energy";
@@ -38,7 +36,7 @@ private:
     const char* phase3Frequency ="energy/phase3/frequency";
     const char* phase3PowerFactor ="energy/phase3/powerfactor";
 
-    void ethernetHardwareReset(const uint8_t resetPin);
+    void ethernetHardwareReset();
     void publishFloat(const char* topic, const float& value, const float& precision);
 
     void reconnect();

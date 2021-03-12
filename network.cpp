@@ -32,7 +32,7 @@ void network::initialize()
     _ethClient = new EthernetClient();
 
     Ethernet.init(ETHERNET_CS_PIN);
-    ethernetHardwareReset(ETHERNET_RESET_PIN);
+    ethernetHardwareReset();
 
     // start the Ethernet connection:
     Serial.println(F("Initialize Ethernet with DHCP:"));
@@ -65,14 +65,14 @@ void network::initialize()
     _mqttClient->setServer(_server, 1883);
 }
 
-void network::ethernetHardwareReset(const uint8_t resetPin)
+void network::ethernetHardwareReset()
 {
-    pinMode(resetPin, OUTPUT);
-    digitalWrite(resetPin, HIGH);
+    pinMode(ETHERNET_RESET_PIN, OUTPUT);
+    digitalWrite(ETHERNET_RESET_PIN, HIGH);
     delay(250);
-    digitalWrite(resetPin, LOW);
+    digitalWrite(ETHERNET_RESET_PIN, LOW);
     delay(50);
-    digitalWrite(resetPin, HIGH);
+    digitalWrite(ETHERNET_RESET_PIN, HIGH);
     delay(1000);
 }
 
