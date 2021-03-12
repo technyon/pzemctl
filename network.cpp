@@ -34,49 +34,70 @@ void network::initialize()
     Ethernet.init(ETHERNET_CS_PIN);
     ethernetHardwareReset();
 
-    // start the Ethernet connection:
-    Serial.println(F("Initialize Ethernet with DHCP:"));
-    if (Ethernet.begin(_mac, 1000, 1000) == 0)
-    {
-        Serial.println(F("Failed to configure Ethernet using DHCP"));
-        // Check for Ethernet hardware present
-        if (Ethernet.hardwareStatus() == EthernetNoHardware)
-        {
-            Serial.println(F("Ethernet shield was not found.  Sorry, can't run without hardware. :("));
-            while (true)
-            {
-                delay(10); // do nothing, no point running without Ethernet hardware
-            }
-        }
-        if (Ethernet.linkStatus() == LinkOFF)
-        {
-            Serial.println(F("Ethernet cable is not connected."));
-        }
-        // try to congifure using IP address instead of DHCP:
-        Ethernet.begin(_mac, _ip, _dns);
-    }
-    else
-    {
-        Serial.print(F("  DHCP assigned IP "));
-        Serial.println(Ethernet.localIP());
-    }
+    initializeEthernet();
 
     _mqttClient = new PubSubClient(*_ethClient);
     _mqttClient->setServer(_server, 1883);
+
+    _fromTask = true;
 }
+
+
+void network::initializeEthernet()
+{
+    // start the Ethernet connection:
+    Serial.println(F("Initialize Ethernet with DHCP:"));
+
+    int dhcpRetryCnt = 0;
+
+    while(dhcpRetryCnt < 3)
+    {
+        Serial.print(F("DHCP connect try #"));
+        Serial.print(dhcpRetryCnt);
+        Serial.println();
+        dhcpRetryCnt++;
+        if (Ethernet.begin(_mac, 1000, 1000) == 0)
+        {
+            Serial.println(F("Failed to configure Ethernet using DHCP"));
+            // Check for Ethernet hardware present
+            if (Ethernet.hardwareStatus() == EthernetNoHardware)
+            {
+                Serial.println(F("Ethernet shield was not found.  Sorry, can't run without hardware. :("));
+                while (true)
+                {
+                    nwDelay(10); // do nothing, no point running without Ethernet hardware
+                }
+            }
+            if (Ethernet.linkStatus() == LinkOFF)
+            {
+                Serial.println(F("Ethernet cable is not connected."));
+            }
+            // try to congifure using IP address instead of DHCP:
+            Ethernet.begin(_mac, _ip, _dns);
+            nwDelay(2000);
+        }
+        else
+        {
+            dhcpRetryCnt = 1000;
+            Serial.print(F("  DHCP assigned IP "));
+            Serial.println(Ethernet.localIP());
+        }
+    }
+}
+
 
 void network::ethernetHardwareReset()
 {
     pinMode(ETHERNET_RESET_PIN, OUTPUT);
     digitalWrite(ETHERNET_RESET_PIN, HIGH);
-    delay(250);
+    nwDelay(250);
     digitalWrite(ETHERNET_RESET_PIN, LOW);
-    delay(50);
+    nwDelay(50);
     digitalWrite(ETHERNET_RESET_PIN, HIGH);
-    delay(1000);
+    nwDelay(1500);
 }
 
-void(* nwResetFunc) (void) = 0;
+//void(* nwResetFunc) (void) = 0;
 
 void network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
@@ -122,7 +143,6 @@ void network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
     }
 }
 
-
 void network::publishFloat(const char* topic, const float &value, const float& precision)
 {
     if(_mqttClient->state() != 0)
@@ -146,7 +166,8 @@ void network::reconnect()
 {
     while (!_mqttClient->connected())
     {
-        Ethernet.maintain();
+        ethernetHardwareReset();
+        initializeEthernet();
 
         Serial.print(F("Attempting MQTT connection..."));
 
@@ -159,7 +180,19 @@ void network::reconnect()
             Serial.print(F("failed, rc="));
             Serial.print(_mqttClient->state());
             Serial.println(F(" try again in 5 seconds"));
-            vTaskDelay( 5000 / portTICK_PERIOD_MS);
+            nwDelay(5000);
         }
+    }
+}
+
+void network::nwDelay(unsigned long ms)
+{
+    if(_fromTask)
+    {
+        vTaskDelay( ms / portTICK_PERIOD_MS);
+    }
+    else
+    {
+        delay(ms);
     }
 }
