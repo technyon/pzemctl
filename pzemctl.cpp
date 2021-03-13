@@ -46,18 +46,6 @@ void TaskPollPzem(void *pvParameters)
         phasesCombined.frequency = (phase1Values.frequency + phase2Values.frequency + phase3Values.frequency) / 3;
         phasesCombined.pf = (phase1Values.pf + phase2Values.pf + phase3Values.pf) / 3;
 
-
-/*
-        Serial.print("Voltage: ");
-        Serial.print(phase1Values.voltage);
-        Serial.print("V   |    ");
-        Serial.print("Voltage: ");
-        Serial.print(phase2Values.voltage);
-        Serial.print("V   |    ");
-        Serial.print("Voltage: ");
-        Serial.print(phase3Values.voltage);
-        Serial.println("V");
-*/
         vTaskDelay( 200 / portTICK_PERIOD_MS);
     }
 }
@@ -68,7 +56,7 @@ void TaskDisplay(void *pvParameters)
     {
         display.update(phasesCombined, phase1Values, phase2Values, phase3Values);
 
-        vTaskDelay( 1000 / portTICK_PERIOD_MS);
+        vTaskDelay( 250 / portTICK_PERIOD_MS);
     }
 }
 

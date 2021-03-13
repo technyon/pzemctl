@@ -20,5 +20,14 @@ namespace hw
 
     private:
         Adafruit_SSD1306 _ssd1306;
+
+        bool _isInitialized = false;
+
+        const int16_t col1x = 0;
+        const int16_t col2x = 40;
+
+        const int16_t col1y = 16;
+        const int16_t colHeight = 23;
+
     };
 }
