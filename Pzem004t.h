@@ -18,11 +18,11 @@ namespace hw
         float pf;
     };
 
-    class pzem004t
+    class Pzem004t
     {
     public:
-        explicit pzem004t(HardwareSerial* serial1, HardwareSerial* serial2, HardwareSerial* serial3);
-        virtual ~pzem004t() = default;
+        explicit Pzem004t(HardwareSerial* serial1, HardwareSerial* serial2, HardwareSerial* serial3);
+        virtual ~Pzem004t() = default;
 
         void update();
 

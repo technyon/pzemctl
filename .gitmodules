@@ -1,3 +1,3 @@
-[submodule "Lib/pzem004t"]
-	path = Lib/pzem004t
+[submodule "Lib/Pzem004t"]
+	path = Lib/Pzem004t
 	url = https://github.com/mandulaj/PZEM-004T-v30.git

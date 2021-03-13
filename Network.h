@@ -2,17 +2,17 @@
 
 #include <Ethernet.h>
 #include <PubSubClient.h>
-#include "pzem004t.h"
+#include "Pzem004t.h"
 
-class network
+class Network
 {
 private:
     static const uint8_t ETHERNET_CS_PIN = 53;
     static const uint8_t ETHERNET_RESET_PIN = 49;
 
 public:
-    explicit network();
-    virtual ~network();
+    explicit Network();
+    virtual ~Network();
 
     void initialize();
     void update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);

@@ -1,8 +1,8 @@
-#include "pzem004t.h"
+#include "Pzem004t.h"
 
 namespace hw
 {
-    pzem004t::pzem004t(HardwareSerial* serial1, HardwareSerial* serial2, HardwareSerial* serial3)
+    Pzem004t::Pzem004t(HardwareSerial* serial1, HardwareSerial* serial2, HardwareSerial* serial3)
     : _pzem1(serial1),
       _pzem2(serial2),
       _pzem3(serial3)
@@ -16,7 +16,7 @@ namespace hw
         _pzem3.resetEnergy();
     }
 
-    void pzem004t::update()
+    void Pzem004t::update()
     {
         updateValues(_pzem1, _values1);
         updateValues(_pzem2, _values2);
@@ -24,7 +24,7 @@ namespace hw
 
     }
 
-    void pzem004t::updateValues(PZEM004Tv30& pzem, pzem004tvalues& values)
+    void Pzem004t::updateValues(PZEM004Tv30& pzem, pzem004tvalues& values)
     {
         values.voltage = pzem.voltage();
         values.current = pzem.current();
@@ -34,15 +34,15 @@ namespace hw
         values.pf = pzem.pf();
     }
 
-    const pzem004tvalues &pzem004t::values1()
+    const pzem004tvalues &Pzem004t::values1()
     {
         return _values1;
     }
-    const pzem004tvalues &pzem004t::values2()
+    const pzem004tvalues &Pzem004t::values2()
     {
         return _values2;
     }
-    const pzem004tvalues &pzem004t::values3()
+    const pzem004tvalues &Pzem004t::values3()
     {
         return _values3;
     }

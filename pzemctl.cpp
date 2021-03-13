@@ -2,15 +2,18 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <HardwareSerial.h>
-#include "pzem004t.h"
-#include "network.h"
+#include "Pzem004t.h"
+#include "Network.h"
 #include <src/Arduino_FreeRTOS.h>
 #include <src/task.h>
+#include "DisplaySSD1306.h"
 
-hw::pzem004t* pzem;
+hw::Pzem004t* pzem;
 
-network nw;
+Network nw;
+hw::DisplaySSD1306 display;
 
+hw::pzem004tvalues phasesCombined;
 hw::pzem004tvalues phase1Values;
 hw::pzem004tvalues phase2Values;
 hw::pzem004tvalues phase3Values;
@@ -36,6 +39,14 @@ void TaskPollPzem(void *pvParameters)
         phase1Values = pzem->values1();
         phase2Values = pzem->values2();
         phase3Values = pzem->values3();
+
+        phasesCombined.voltage = (phase1Values.voltage + phase2Values.voltage + phase3Values.voltage) / 3;
+        phasesCombined.current = phase1Values.current + phase2Values.current + phase3Values.current;
+        phasesCombined.energy = phase1Values.energy + phase2Values.energy + phase3Values.energy;
+        phasesCombined.frequency = (phase1Values.frequency + phase2Values.frequency + phase3Values.frequency) / 3;
+        phasesCombined.pf = (phase1Values.pf + phase2Values.pf + phase3Values.pf) / 3;
+
+
 /*
         Serial.print("Voltage: ");
         Serial.print(phase1Values.voltage);
@@ -48,6 +59,16 @@ void TaskPollPzem(void *pvParameters)
         Serial.println("V");
 */
         vTaskDelay( 200 / portTICK_PERIOD_MS);
+    }
+}
+
+void TaskDisplay(void *pvParameters)
+{
+    while(true)
+    {
+        display.update(phasesCombined, phase1Values, phase2Values, phase3Values);
+
+        vTaskDelay( 1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -80,6 +101,14 @@ void setupTasks()
             ,  NULL );
 
     xTaskCreate(
+            TaskDisplay
+            ,  "Display"
+            ,  256
+            ,  NULL
+            ,  0
+            ,  NULL );
+
+    xTaskCreate(
             TaskNetwork
             ,  "Network"
             ,  1024
@@ -93,7 +122,9 @@ void setup() {
 	Serial.begin(9600);
     Serial.print("Start");
 
-    pzem = new hw::pzem004t(&Serial1, &Serial2, &Serial3);
+    display.initialize();
+
+    pzem = new hw::Pzem004t(&Serial1, &Serial2, &Serial3);
     nw.initialize();
 
 	pinMode(LED_BUILTIN, OUTPUT);

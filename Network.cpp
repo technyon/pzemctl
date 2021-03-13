@@ -2,11 +2,11 @@
 // Created by daphreak on 07.03.21.
 //
 
-#include "network.h"
+#include "Network.h"
 #include <Arduino.h>
 #include <src/Arduino_FreeRTOS.h>
 
-network::network()
+Network::Network()
 : _dns(192, 168, 0, 101),
   _ip(192, 168, 0, 36),
   _server(192, 168, 0, 100)
@@ -19,7 +19,7 @@ network::network()
     _mac[5] = 0x5F;
 }
 
-network::~network()
+Network::~Network()
 {
     delete _mqttClient;
     _mqttClient = nullptr;
@@ -27,7 +27,7 @@ network::~network()
     _ethClient = nullptr;
 }
 
-void network::initialize()
+void Network::initialize()
 {
     _ethClient = new EthernetClient();
 
@@ -43,7 +43,7 @@ void network::initialize()
 }
 
 
-void network::initializeEthernet()
+void Network::initializeEthernet()
 {
     // start the Ethernet connection:
     Serial.println(F("Initialize Ethernet with DHCP:"));
@@ -63,10 +63,7 @@ void network::initializeEthernet()
             if (Ethernet.hardwareStatus() == EthernetNoHardware)
             {
                 Serial.println(F("Ethernet shield was not found.  Sorry, can't run without hardware. :("));
-                while (true)
-                {
-                    nwDelay(10); // do nothing, no point running without Ethernet hardware
-                }
+                return;
             }
             if (Ethernet.linkStatus() == LinkOFF)
             {
@@ -86,7 +83,7 @@ void network::initializeEthernet()
 }
 
 
-void network::ethernetHardwareReset()
+void Network::ethernetHardwareReset()
 {
     pinMode(ETHERNET_RESET_PIN, OUTPUT);
     digitalWrite(ETHERNET_RESET_PIN, HIGH);
@@ -99,7 +96,7 @@ void network::ethernetHardwareReset()
 
 //void(* nwResetFunc) (void) = 0;
 
-void network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
+void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
     _updateCnt++;
 
@@ -143,7 +140,7 @@ void network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
     }
 }
 
-void network::publishFloat(const char* topic, const float &value, const float& precision)
+void Network::publishFloat(const char* topic, const float &value, const float& precision)
 {
     if(_mqttClient->state() != 0)
     {
@@ -162,7 +159,7 @@ void network::publishFloat(const char* topic, const float &value, const float& p
     _mqttClient->publish(topic, _charVal + _charIndex);
 }
 
-void network::reconnect()
+void Network::reconnect()
 {
     while (!_mqttClient->connected())
     {
@@ -171,7 +168,7 @@ void network::reconnect()
 
         Serial.print(F("Attempting MQTT connection..."));
 
-        if (_mqttClient->connect("pzem004t"))
+        if (_mqttClient->connect("Pzem004t"))
         {
             Serial.println(F("connected"));
         }
@@ -185,7 +182,7 @@ void network::reconnect()
     }
 }
 
-void network::nwDelay(unsigned long ms)
+void Network::nwDelay(unsigned long ms)
 {
     if(_fromTask)
     {
