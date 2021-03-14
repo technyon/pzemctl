@@ -7,10 +7,12 @@
 #include <src/Arduino_FreeRTOS.h>
 #include <src/task.h>
 #include "DisplaySSD1306.h"
+#include "Led.h"
 
 hw::Pzem004t* pzem;
 
-Network nw;
+hw::Led led;
+Network nw(led);
 hw::DisplaySSD1306 display;
 
 hw::pzem004tvalues phasesCombined;
@@ -60,6 +62,16 @@ void TaskDisplay(void *pvParameters)
     }
 }
 
+void TaskLed(void *pvParameters)
+{
+    while(true)
+    {
+        led.update();
+
+        vTaskDelay( 500 / portTICK_PERIOD_MS);
+    }
+}
+
 void TaskNetwork(void *pvParameters)
 {
     while(true)
@@ -97,6 +109,14 @@ void setupTasks()
             ,  NULL );
 
     xTaskCreate(
+            TaskLed
+            ,  "Led"
+            ,  128
+            ,  NULL
+            ,  0
+            ,  NULL );
+
+    xTaskCreate(
             TaskNetwork
             ,  "Network"
             ,  1024
@@ -111,6 +131,7 @@ void setup() {
     Serial.print("Start");
 
     display.initialize();
+    led.initialize();
 
     pzem = new hw::Pzem004t(&Serial1, &Serial2, &Serial3);
     nw.initialize();

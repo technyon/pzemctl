@@ -6,10 +6,11 @@
 #include <Arduino.h>
 #include <src/Arduino_FreeRTOS.h>
 
-Network::Network()
+Network::Network(hw::Led& led)
 : _dns(192, 168, 0, 101),
   _ip(192, 168, 0, 36),
-  _server(192, 168, 0, 100)
+  _server(192, 168, 0, 100),
+  _led(led)
 {
     _mac[0] = 0x00;
     _mac[1] = 0x08;
@@ -32,9 +33,9 @@ void Network::initialize()
     _ethClient = new EthernetClient();
 
     Ethernet.init(ETHERNET_CS_PIN);
-    ethernetHardwareReset();
-
-    initializeEthernet();
+//    ethernetHardwareReset();
+//
+//    initializeEthernet();
 
     _mqttClient = new PubSubClient(*_ethClient);
     _mqttClient->setServer(_server, 1883);
@@ -49,6 +50,8 @@ void Network::initializeEthernet()
     Serial.println(F("Initialize Ethernet with DHCP:"));
 
     int dhcpRetryCnt = 0;
+
+    _led.setNetworkLed(0);
 
     while(dhcpRetryCnt < 3)
     {
@@ -75,13 +78,14 @@ void Network::initializeEthernet()
         }
         else
         {
+            _led.setNetworkLed(100);
+
             dhcpRetryCnt = 1000;
             Serial.print(F("  DHCP assigned IP "));
             Serial.println(Ethernet.localIP());
         }
     }
 }
-
 
 void Network::ethernetHardwareReset()
 {
@@ -94,11 +98,48 @@ void Network::ethernetHardwareReset()
     nwDelay(1500);
 }
 
-//void(* nwResetFunc) (void) = 0;
+void Network::reconnect()
+{
+    while (!_mqttClient->connected())
+    {
+        ethernetHardwareReset();
+        initializeEthernet();
+
+        Serial.print(F("Attempting MQTT connection..."));
+
+        if (_mqttClient->connect("Pzem004t"))
+        {
+            Serial.println(F("connected"));
+            _led.setNetworkLed(255);
+        }
+        else
+        {
+            Serial.print(F("failed, rc="));
+            Serial.print(_mqttClient->state());
+            Serial.println(F(" try again in 5 seconds"));
+            _led.setNetworkLed(0);
+            nwDelay(5000);
+        }
+    }
+}
 
 void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
+    int ledVal = 0;
+
     _updateCnt++;
+
+    if(Ethernet.linkStatus() == EthernetLinkStatus::LinkON)
+    {
+        ledVal = ledVal + 128;
+    }
+
+    if(_mqttClient->state() == 0)
+    {
+        ledVal = ledVal + 127;
+    }
+
+    _led.setNetworkLed(ledVal);
 
     if(_updateCnt > 10)
     {
@@ -116,7 +157,7 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
 
     if(_updateCnt > 10)
     {
-        Serial.println(_mqttClient->state());
+//        Serial.println(_mqttClient->state());
 
         _updateCnt = 0;
 
@@ -157,29 +198,6 @@ void Network::publishFloat(const char* topic, const float &value, const float& p
     }
 
     _mqttClient->publish(topic, _charVal + _charIndex);
-}
-
-void Network::reconnect()
-{
-    while (!_mqttClient->connected())
-    {
-        ethernetHardwareReset();
-        initializeEthernet();
-
-        Serial.print(F("Attempting MQTT connection..."));
-
-        if (_mqttClient->connect("Pzem004t"))
-        {
-            Serial.println(F("connected"));
-        }
-        else
-        {
-            Serial.print(F("failed, rc="));
-            Serial.print(_mqttClient->state());
-            Serial.println(F(" try again in 5 seconds"));
-            nwDelay(5000);
-        }
-    }
 }
 
 void Network::nwDelay(unsigned long ms)

@@ -3,6 +3,7 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 #include "Pzem004t.h"
+#include "Led.h"
 
 class Network
 {
@@ -11,7 +12,7 @@ private:
     static const uint8_t ETHERNET_RESET_PIN = 49;
 
 public:
-    explicit Network();
+    explicit Network(hw::Led& led);
     virtual ~Network();
 
     void initialize();
@@ -60,4 +61,5 @@ private:
 
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;
+    hw::Led _led;
 };

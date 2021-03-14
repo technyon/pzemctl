@@ -6,7 +6,6 @@
 #include <Adafruit_SSD1306.h>
 #include "Pzem004t.h"
 
-
 namespace hw
 {
     class DisplaySSD1306
@@ -28,6 +27,5 @@ namespace hw
 
         const int16_t col1y = 16;
         const int16_t colHeight = 23;
-
     };
 }

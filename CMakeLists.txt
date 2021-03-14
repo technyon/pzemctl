@@ -25,7 +25,7 @@ add_executable(pzemctl
         Pzem004t.cpp
         Network.cpp
         DisplaySSD1306.cpp
-        DisplaySSD1306.h
+        Led.cpp
 )
 
 # Arduino.h is included in hello_world.cpp, so link with Arduino core
