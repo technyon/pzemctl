@@ -5,12 +5,12 @@
 #include "Network.h"
 #include <Arduino.h>
 #include <src/Arduino_FreeRTOS.h>
+#include "Led.h"
 
-Network::Network(hw::Led& led)
+Network::Network()
 : _dns(192, 168, 0, 101),
   _ip(192, 168, 0, 36),
-  _server(192, 168, 0, 100),
-  _led(led)
+  _server(192, 168, 0, 100)
 {
     _mac[0] = 0x00;
     _mac[1] = 0x08;
@@ -40,6 +40,8 @@ void Network::initialize()
     _mqttClient = new PubSubClient(*_ethClient);
     _mqttClient->setServer(_server, 1883);
 
+    _mqttClient->setCallback(onMqttDataReceived);
+
     _fromTask = true;
 }
 
@@ -51,7 +53,7 @@ void Network::initializeEthernet()
 
     int dhcpRetryCnt = 0;
 
-    _led.setNetworkLed(0);
+    hw::Led::setNetworkLed(0);
 
     while(dhcpRetryCnt < 3)
     {
@@ -78,7 +80,7 @@ void Network::initializeEthernet()
         }
         else
         {
-            _led.setNetworkLed(100);
+            hw::Led::setNetworkLed(100);
 
             dhcpRetryCnt = 1000;
             Serial.print(F("  DHCP assigned IP "));
@@ -110,14 +112,16 @@ void Network::reconnect()
         if (_mqttClient->connect("Pzem004t"))
         {
             Serial.println(F("connected"));
-            _led.setNetworkLed(255);
+            hw::Led::setNetworkLed(255);
+            _mqttClient->publish(ledBrightness, "0\0x00");
+            _mqttClient->subscribe(ledBrightness);
         }
         else
         {
             Serial.print(F("failed, rc="));
             Serial.print(_mqttClient->state());
             Serial.println(F(" try again in 5 seconds"));
-            _led.setNetworkLed(0);
+            hw::Led::setNetworkLed(0);
             nwDelay(5000);
         }
     }
@@ -139,7 +143,7 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
         ledVal = ledVal + 127;
     }
 
-    _led.setNetworkLed(ledVal);
+    hw::Led::setNetworkLed(ledVal);
 
     if(_updateCnt > 10)
     {
@@ -179,6 +183,11 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
         publishFloat(phase3Frequency, phase3.frequency, 2);
         publishFloat(phase3PowerFactor, phase3.pf, 2);
     }
+}
+
+void Network::onMqttDataReceived(char* topic, byte* payload, unsigned int length)
+{
+    hw::Led::setBrightnessWhite((int) atof((char *) payload) * 2.55);
 }
 
 void Network::publishFloat(const char* topic, const float &value, const float& precision)

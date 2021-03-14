@@ -11,9 +11,9 @@
 
 hw::Pzem004t* pzem;
 
-hw::Led led;
-Network nw(led);
 hw::DisplaySSD1306 display;
+Network nw;
+hw::Led led;
 
 hw::pzem004tvalues phasesCombined;
 hw::pzem004tvalues phase1Values;

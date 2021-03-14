@@ -17,12 +17,18 @@ namespace hw
         void initialize();
         void update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1Values, const hw::pzem004tvalues& phase2Values, const hw::pzem004tvalues& phase3Values);
 
+        void tst()
+        {
+            col1x = 30;
+        };
+
     private:
         Adafruit_SSD1306 _ssd1306;
 
         bool _isInitialized = false;
 
-        const int16_t col1x = 0;
+
+        int16_t col1x = 0;
         const int16_t col2x = 40;
 
         const int16_t col1y = 16;

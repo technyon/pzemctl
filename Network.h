@@ -3,7 +3,7 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 #include "Pzem004t.h"
-#include "Led.h"
+#include "DisplaySSD1306.h"
 
 class Network
 {
@@ -12,13 +12,15 @@ private:
     static const uint8_t ETHERNET_RESET_PIN = 49;
 
 public:
-    explicit Network(hw::Led& led);
+    explicit Network();
     virtual ~Network();
 
     void initialize();
     void update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
 
 private:
+    static Network _instance;
+
     const char* phase1Voltage = "energy/phase1/voltage";
     const char* phase1Current ="energy/phase1/current";
     const char* phase1Energy = "energy/phase1/energy";
@@ -37,10 +39,13 @@ private:
     const char* phase3Frequency ="energy/phase3/frequency";
     const char* phase3PowerFactor ="energy/phase3/powerfactor";
 
+    const char* ledBrightness ="energy/ledBrightness";
+
     void initializeEthernet();
 
     void ethernetHardwareReset();
     void publishFloat(const char* topic, const float& value, const float& precision);
+    static void onMqttDataReceived(char* topic, byte* payload, unsigned int length);
 
     void reconnect();
 
@@ -61,5 +66,4 @@ private:
 
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;
-    hw::Led _led;
 };
