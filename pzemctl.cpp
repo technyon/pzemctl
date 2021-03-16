@@ -12,7 +12,7 @@
 
 hw::Pzem004t* pzem;
 
-hw::Input input;
+hw::Input* input;
 hw::DisplaySSD1306 display;
 Network nw;
 hw::Led led;
@@ -78,9 +78,9 @@ void TaskInput(void *pvParameters)
 {
     while(true)
     {
-        input.update();
+        input->update();
 
-        vTaskDelay( 50 / portTICK_PERIOD_MS);
+        vTaskDelay( 25 / portTICK_PERIOD_MS);
     }
 }
 
@@ -146,11 +146,18 @@ void setupTasks()
 
 }
 
+void buttonPressed(hw::ButtonId buttonId)
+{
+    display.switchPhase();
+}
+
 void setup() {
 	Serial.begin(9600);
     Serial.print("Start");
 
-    input.initialize();
+    input = new hw::Input(buttonPressed);
+
+    input->initialize();
     display.initialize();
     led.initialize();
 

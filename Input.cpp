@@ -3,6 +3,12 @@
 
 namespace hw
 {
+    Input::Input(void (*buttonPressed)(ButtonId))
+    :_buttonPressed(buttonPressed)
+    {
+
+    }
+
 
     void Input::initialize()
     {
@@ -11,6 +17,15 @@ namespace hw
 
     void Input::update()
     {
-//        Serial.println(digitalRead(22));
+        int switchPhaseValue = digitalRead(SWITCH_PHASE_PIN);
+
+        if(_lastSwitchPhasePinValue ==1 && switchPhaseValue == 0)
+        {
+            _buttonPressed(ButtonId::SwitchPhase);
+        }
+
+        _lastSwitchPhasePinValue = switchPhaseValue;
     }
+
+
 }
