@@ -44,7 +44,9 @@ namespace hw
         pzem004tvalues values = getSelectedValues(phasesCombined, phase1Values, phase2Values, phase3Values);
 
         drawSelectedPhase();
-        drawBarGraph(5, 0, 25, 18, 10, 20, 19);
+        drawBarGraph(5, 0, 25, 18, 0, 32, phase1Values.current);
+        drawBarGraph(5, colHeight * 1, 25, 18, 0, 32, phase2Values.current);
+        drawBarGraph(5, colHeight * 2, 25, 18, 0, 32, phase3Values.current);
 
         _ssd1306.setCursor(col1x,col1y);
         _ssd1306.print(F("V:"));
@@ -57,9 +59,9 @@ namespace hw
         _ssd1306.print(values.power, 1);
 
         _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
-        _ssd1306.print(F("Hz:"));
+        _ssd1306.print(F("kW:"));
         _ssd1306.setCursor(col2x,col1y + 2 * colHeight);
-        _ssd1306.print(values.frequency, 1);
+        _ssd1306.print(values.energy, 1);
 
         _ssd1306.display();
     }
