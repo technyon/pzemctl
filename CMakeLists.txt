@@ -8,7 +8,7 @@ include_directories(Lib/Adafruit_BusIO)
 include_directories(Lib/Adafruit_GFX)
 include_directories(Lib/Adafruit_SSD1306)
 
-add_definitions(-DPZEM004_NO_SWSERIAL)
+add_definitions(-DPZEM004_NO_SWSERIAL -DPZEM004T_DISABLE_SEARCH)
 
 file(GLOB SRCFILES
     "Lib/FreeRTOS/src/*.c"
@@ -26,7 +26,7 @@ add_executable(pzemctl
         Network.cpp
         DisplaySSD1306.cpp
         Led.cpp
-)
+        Input.cpp)
 
 # Arduino.h is included in hello_world.cpp, so link with Arduino core
 target_link_arduino_libraries(pzemctl

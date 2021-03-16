@@ -8,9 +8,11 @@
 #include <src/task.h>
 #include "DisplaySSD1306.h"
 #include "Led.h"
+#include "Input.h"
 
 hw::Pzem004t* pzem;
 
+hw::Input input;
 hw::DisplaySSD1306 display;
 Network nw;
 hw::Led led;
@@ -72,6 +74,16 @@ void TaskLed(void *pvParameters)
     }
 }
 
+void TaskInput(void *pvParameters)
+{
+    while(true)
+    {
+        input.update();
+
+        vTaskDelay( 50 / portTICK_PERIOD_MS);
+    }
+}
+
 void TaskNetwork(void *pvParameters)
 {
     while(true)
@@ -117,6 +129,14 @@ void setupTasks()
             ,  NULL );
 
     xTaskCreate(
+            TaskInput
+            ,  "Input"
+            ,  128
+            ,  NULL
+            ,  0
+            ,  NULL );
+
+    xTaskCreate(
             TaskNetwork
             ,  "Network"
             ,  1024
@@ -130,6 +150,7 @@ void setup() {
 	Serial.begin(9600);
     Serial.print("Start");
 
+    input.initialize();
     display.initialize();
     led.initialize();
 
