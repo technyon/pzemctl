@@ -3,7 +3,6 @@
 
 namespace hw
 {
-
     DisplaySSD1306::DisplaySSD1306()
     : _ssd1306(128, 64, &Wire, -1)
     {
@@ -48,23 +47,26 @@ namespace hw
         drawBarGraph(5, colHeight * 1, 25, 18, 0, 32, phase2Values.current);
         drawBarGraph(5, colHeight * 2, 25, 18, 0, 32, phase3Values.current);
 
-        _ssd1306.setCursor(col1x,col1y);
-        _ssd1306.print(F("V:"));
-        _ssd1306.setCursor(col2x,col1y);
-        _ssd1306.print(values.voltage, 1);
-
-        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
-        _ssd1306.print(F("W:"));
-        _ssd1306.setCursor(col2x,col1y + 1 * colHeight);
-        _ssd1306.print(values.power, 1);
-
-        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
-        _ssd1306.print(F("kW:"));
-        _ssd1306.setCursor(col2x,col1y + 2 * colHeight);
-        _ssd1306.print(values.energy, 1);
+        switch(_selectedView)
+        {
+            case View::VoltagePowerFrequency:
+                drawVoltagePowerFrequency(values);
+                break;
+            case View::VoltageCurrentFrequency:
+                drawVoltageCurrentFrequency(values);
+                break;
+            case View::CurrentPowerEnergy:
+                drawCurrentPowerEnergy(values);
+                break;
+            case View:: VoltageFrequencyPowerFactor:
+                drawVoltageFrequencyPowerFactor(values);
+                break;
+        }
 
         _ssd1306.display();
     }
+
+
 
     void DisplaySSD1306::drawBarGraph(int16_t x, int16_t y, int16_t width, int16_t height, float min, float max, float value)
     {
@@ -92,6 +94,76 @@ namespace hw
             case 3:
                 _ssd1306.fillRect(0,2 * colHeight,3,18,SSD1306_WHITE);
                 break;
+        }
+    }
+
+    void DisplaySSD1306::drawVoltagePowerFrequency(const pzem004tvalues& values)
+    {
+        _ssd1306.setCursor(col1x,col1y);
+        _ssd1306.print(values.voltage, 1);
+        _ssd1306.print(F(" V"));
+
+        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
+        _ssd1306.print((float)values.power, (int)(values.power < 1000 ? 1 : 0));
+        _ssd1306.print(F(" W"));
+
+        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
+        _ssd1306.print(values.frequency, 1);
+        _ssd1306.print(F(" Hz"));
+    }
+
+    void DisplaySSD1306::drawVoltageCurrentFrequency(const pzem004tvalues& values)
+    {
+        _ssd1306.setCursor(col1x,col1y);
+        _ssd1306.print(values.voltage, 1);
+        _ssd1306.print(F(" V"));
+
+        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
+        _ssd1306.print((float)values.current, 1);
+        _ssd1306.print(F(" A"));
+
+        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
+        _ssd1306.print(values.frequency, 1);
+        _ssd1306.print(F(" Hz"));
+    }
+
+    void DisplaySSD1306::drawCurrentPowerEnergy(const pzem004tvalues& values)
+    {
+        _ssd1306.setCursor(col1x,col1y);
+        _ssd1306.print(values.current, 1);
+        _ssd1306.print(F(" A"));
+
+        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
+        _ssd1306.print((float)values.power, 1);
+        _ssd1306.print(F(" W"));
+
+        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
+        _ssd1306.print(values.energy, values.energy < 1000 ? 1 : 0);
+        _ssd1306.print(F(" kw"));
+    }
+
+    void DisplaySSD1306::drawVoltageFrequencyPowerFactor(const pzem004tvalues& values)
+    {
+        _ssd1306.setCursor(col1x,col1y);
+        _ssd1306.print(values.voltage, 1);
+        _ssd1306.print(F(" V"));
+
+        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
+        _ssd1306.print((float)values.frequency, 1);
+        _ssd1306.print(F(" Hz"));
+
+        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
+        _ssd1306.print(values.pf, 1);
+//        _ssd1306.print(F(" Hz"));
+    }
+
+    void DisplaySSD1306::switchView()
+    {
+        _selectedView = (View)((int)_selectedView + 1);
+        if(_selectedView == View::Last)
+        {
+            _selectedView = View::First;
+            _selectedView = (View)((int)_selectedView + 1);
         }
     }
 

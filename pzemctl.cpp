@@ -148,7 +148,15 @@ void setupTasks()
 
 void buttonPressed(hw::ButtonId buttonId)
 {
-    display.switchPhase();
+    switch(buttonId)
+    {
+        case hw::ButtonId::SwitchPhase:
+            display.switchPhase();
+            break;
+        case hw::ButtonId::SwitchView:
+            display.switchView();
+            break;
+    }
 }
 
 void setup() {

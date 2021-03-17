@@ -10,12 +10,12 @@ namespace hw
 {
     struct pzem004tvalues
     {
-        float voltage;   // Volt
-        float current;   // Ampere
-        float power;     // Watt
-        float energy;    // kw/h
-        float frequency; // Hz
-        float pf;
+        float voltage;   // Volt     1  2     4
+        float current;   // Ampere   1     3
+        float power;     // Watt        2  3
+        float energy;    // kw/h           3
+        float frequency; // Hz       1  2     4
+        float pf;        //                   4
     };
 
     class Pzem004t
