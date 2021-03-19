@@ -7,10 +7,8 @@
 #include <src/Arduino_FreeRTOS.h>
 #include "Led.h"
 
-Network::Network()
-: _dns(192, 168, 0, 101),
-  _ip(192, 168, 0, 36),
-  _server(192, 168, 0, 100)
+Network::Network(Configuration* configuration)
+: _configuration(configuration)
 {
     _mac[0] = 0x00;
     _mac[1] = 0x08;
@@ -33,12 +31,12 @@ void Network::initialize()
     _ethClient = new EthernetClient();
 
     Ethernet.init(ETHERNET_CS_PIN);
-//    ethernetHardwareReset();
-//
-//    initializeEthernet();
+
+    IPAddress server;
+    server.fromString(_configuration->mqttServerAddress);
 
     _mqttClient = new PubSubClient(*_ethClient);
-    _mqttClient->setServer(_server, 1883);
+    _mqttClient->setServer(server, 1883);
 
     _mqttClient->setCallback(onMqttDataReceived);
 
@@ -61,6 +59,7 @@ void Network::initializeEthernet()
         Serial.print(dhcpRetryCnt);
         Serial.println();
         dhcpRetryCnt++;
+
         if (Ethernet.begin(_mac, 1000, 1000) == 0)
         {
             Serial.println(F("Failed to configure Ethernet using DHCP"));
@@ -74,8 +73,24 @@ void Network::initializeEthernet()
             {
                 Serial.println(F("Ethernet cable is not connected."));
             }
+
+            IPAddress ip;
+            ip.fromString(_configuration->ipAddress);
+
+            IPAddress subnet;
+            subnet.fromString(_configuration->subnetMask);
+
+            IPAddress dns;
+            dns.fromString(_configuration->dnsServerAddress);
+
+            IPAddress gateway;
+            gateway.fromString(_configuration->gatewayAddress);
+
             // try to congifure using IP address instead of DHCP:
-            Ethernet.begin(_mac, _ip, _dns);
+            Ethernet.begin(_mac, ip, dns);
+            Ethernet.setSubnetMask(subnet);
+            Ethernet.setGatewayIP(gateway);
+
             nwDelay(2000);
         }
         else
@@ -224,4 +239,9 @@ void Network::nwDelay(unsigned long ms)
 EthernetClient *Network::ethernetClient()
 {
     return _ethClient;
+}
+
+void Network::configurationChanged()
+{
+    reconnect();
 }

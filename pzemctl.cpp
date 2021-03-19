@@ -180,17 +180,22 @@ void buttonPressed(hw::ButtonId buttonId)
     }
 }
 
+void configurationChanged()
+{
+    nw->configurationChanged();
+}
+
 void setup() {
 	Serial.begin(9600);
     Serial.print("Start");
 
-    configuration = new Configuration();
+    configuration = new Configuration(configurationChanged);
 
 //    Serial.print("# MQTT: ");
 //    Serial.println(configuration->mqttServerAddress);
 
     input = new hw::Input(buttonPressed);
-    nw = new Network();
+    nw = new Network(configuration);
     webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();

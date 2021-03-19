@@ -3,7 +3,8 @@
 #include <string.h>
 #include <Arduino.h>
 
-Configuration::Configuration()
+Configuration::Configuration(void (*callback)())
+: _callback(callback)
 {
     initialize();
 
@@ -100,6 +101,8 @@ void Configuration::writeEeprom()
     {
         EEPROM.update(SUBNET_MASK_OFFSET + i, subnetMask[i]);
     }
+
+    _callback();
 }
 
 void Configuration::writeSignature()

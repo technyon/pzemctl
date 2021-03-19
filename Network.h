@@ -4,6 +4,7 @@
 #include <PubSubClient.h>
 #include "Pzem004t.h"
 #include "DisplaySSD1306.h"
+#include "Configuration.h"
 
 class Network
 {
@@ -12,16 +13,23 @@ private:
     static const uint8_t ETHERNET_RESET_PIN = 49;
 
 public:
-    explicit Network();
+    explicit Network(Configuration* configuration);
     virtual ~Network();
 
     void initialize();
     void update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
+    void configurationChanged();
 
     EthernetClient* ethernetClient();
 
 private:
-    static Network _instance;
+    void initializeEthernet();
+    void ethernetHardwareReset();
+    void publishFloat(const char* topic, const float& value, const float& precision);
+    static void onMqttDataReceived(char* topic, byte* payload, unsigned int length);
+
+    void reconnect();
+    void nwDelay(unsigned long ms);
 
     const char* phase1Voltage = "energy/phase1/voltage";
     const char* phase1Current ="energy/phase1/current";
@@ -43,21 +51,7 @@ private:
 
     const char* ledBrightness ="energy/ledBrightness";
 
-    void initializeEthernet();
-
-    void ethernetHardwareReset();
-    void publishFloat(const char* topic, const float& value, const float& precision);
-    static void onMqttDataReceived(char* topic, byte* payload, unsigned int length);
-
-    void reconnect();
-
-    void nwDelay(unsigned long ms);
-
-    IPAddress _dns;
-
     byte _mac[6];
-    IPAddress _ip;
-    IPAddress _server;
 
     const char _space = ' ';
     char _charVal[21];
@@ -68,4 +62,6 @@ private:
 
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;
+
+    Configuration* _configuration;
 };

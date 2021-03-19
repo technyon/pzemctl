@@ -7,7 +7,6 @@ include_directories(Lib/FreeRTOS)
 include_directories(Lib/Adafruit_BusIO)
 include_directories(Lib/Adafruit_GFX)
 include_directories(Lib/Adafruit_SSD1306)
-include_directories(Lib/arduino-event)
 
 add_definitions(-DPZEM004_NO_SWSERIAL -DPZEM004T_DISABLE_SEARCH)
 
@@ -23,7 +22,6 @@ add_executable(pzemctl
         pzemctl.cpp
         Lib/pzem004t/PZEM004Tv30.cpp
         Lib/Adafruit_SSD1306/Adafruit_SSD1306.cpp
-        Lib/arduino-event/Event.cpp
         Pzem004t.cpp
         Network.cpp
         DisplaySSD1306.cpp

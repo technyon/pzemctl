@@ -3,7 +3,7 @@
 class Configuration
 {
 public:
-    Configuration();
+    Configuration(void (*callback)());
     virtual ~Configuration() = default;
 
     char mqttServerAddress[40] = "";
@@ -13,7 +13,6 @@ public:
     char subnetMask[17] = "255.255.255.0";
 
     void writeEeprom();
-
 
 private:
     const int MQTT_EEPROM_OFFSET = 10;
@@ -27,4 +26,6 @@ private:
     bool hasValidSignature();
 
     void initialize();
+
+    void (*_callback)();
 };
