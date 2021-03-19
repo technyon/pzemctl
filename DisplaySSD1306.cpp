@@ -40,29 +40,36 @@ namespace hw
 
         _ssd1306.clearDisplay();
 
-        pzem004tvalues values = getSelectedValues(phasesCombined, phase1Values, phase2Values, phase3Values);
-
-        drawSelectedPhase();
-        drawBarGraph(5, 0, 25, 18, 0, 32, phase1Values.current);
-        drawBarGraph(5, colHeight * 1, 25, 18, 0, 32, phase2Values.current);
-        drawBarGraph(5, colHeight * 2, 25, 18, 0, 32, phase3Values.current);
-
-        switch(_selectedView)
+        if(_message != nullptr)
         {
-            case View::VoltagePowerFrequency:
-                drawVoltagePowerFrequency(values);
-                break;
-            case View::VoltageCurrentFrequency:
-                drawVoltageCurrentFrequency(values);
-                break;
-            case View::CurrentPowerEnergy:
-                drawCurrentPowerEnergy(values);
-                break;
-            case View:: VoltageFrequencyPowerFactor:
-                drawVoltageFrequencyPowerFactor(values);
-                break;
+            drawMessage();
         }
+        else
+        {
+            pzem004tvalues values = getSelectedValues(phasesCombined, phase1Values, phase2Values, phase3Values);
 
+            drawSelectedPhase();
+            drawBarGraph(5, 0, 25, 18, 0, 32, phase1Values.current);
+            drawBarGraph(5, colHeight * 1, 25, 18, 0, 32, phase2Values.current);
+            drawBarGraph(5, colHeight * 2, 25, 18, 0, 32, phase3Values.current);
+
+            switch (_selectedView)
+            {
+                case View::VoltagePowerFrequency:
+                    drawVoltagePowerFrequency(values);
+                    break;
+                case View::VoltageCurrentFrequency:
+                    drawVoltageCurrentFrequency(values);
+                    break;
+                case View::CurrentPowerEnergy:
+                    drawCurrentPowerEnergy(values);
+                    break;
+                case View::VoltageFrequencyPowerFactor:
+                    drawVoltageFrequencyPowerFactor(values);
+                    break;
+            }
+
+        }
         _ssd1306.display();
     }
 
@@ -188,5 +195,21 @@ namespace hw
                 return phase3Values;
         }
         return phasesCombined;
+    }
+
+    void DisplaySSD1306::drawMessage()
+    {
+        _ssd1306.setCursor(0,col1y);
+        _ssd1306.print(_message);
+    }
+
+    void DisplaySSD1306::showMessage(char *message)
+    {
+        _message = message;
+    }
+
+    void DisplaySSD1306::clearMessage()
+    {
+        _message = nullptr;
     }
 }

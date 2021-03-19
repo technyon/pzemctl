@@ -25,16 +25,28 @@ hw::pzem004tvalues phase1Values;
 hw::pzem004tvalues phase2Values;
 hw::pzem004tvalues phase3Values;
 
+bool startSetupMode = false;
 
-void TaskBlink(void *pvParameters)
+void setupMode()
 {
-    while(true)
+    Serial.println(F("SETUP"));
+    display.showMessage("Starting\nSetup");
+    nw->enableConfigMode();
+
+    IPAddress ip = nw->ipAddress();
+    char message[20];
+    sprintf(message, "%i.%i.\ņ%i.%i", ip[0], ip[1], ip[2], ip[3]);
+    display.showMessage(message);
+
+    webServer->enable();
+    while(webServer->enabled())
     {
-        digitalWrite(LED_BUILTIN, HIGH);
-        vTaskDelay( 250 / portTICK_PERIOD_MS);
-        digitalWrite(LED_BUILTIN, LOW);
-        vTaskDelay( 250 / portTICK_PERIOD_MS);
+        vTaskDelay( 500 / portTICK_PERIOD_MS);
     }
+    display.showMessage("Configu\nsaved.");
+    nw->disableConfigMode();
+    vTaskDelay( 2000 / portTICK_PERIOD_MS);
+    display.clearMessage();
 }
 
 void TaskPollPzem(void *pvParameters)
@@ -83,6 +95,12 @@ void TaskInput(void *pvParameters)
     {
         input->update();
 
+        if(startSetupMode)
+        {
+            setupMode();
+            startSetupMode = false;
+        }
+
         vTaskDelay( 25 / portTICK_PERIOD_MS);
     }
 }
@@ -106,17 +124,8 @@ void TaskWebServer(void *pvParameters)
     }
 }
 
-
 void setupTasks()
 {
-    xTaskCreate(
-            TaskBlink
-            ,  "Blink"
-            ,  128
-            ,  NULL
-            ,  0
-            ,  NULL );
-
     xTaskCreate(
             TaskPollPzem
             ,  "PzemPoll"
@@ -144,7 +153,7 @@ void setupTasks()
     xTaskCreate(
             TaskInput
             ,  "Input"
-            ,  128
+            ,  512
             ,  NULL
             ,  0
             ,  NULL );
@@ -152,7 +161,7 @@ void setupTasks()
     xTaskCreate(
             TaskNetwork
             ,  "Network"
-            ,  1024
+            ,  512
             ,  NULL
             ,  1
             ,  NULL );
@@ -167,6 +176,8 @@ void setupTasks()
 
 }
 
+//void(* reset) (void) = 0;
+
 void buttonPressed(hw::ButtonId buttonId)
 {
     switch(buttonId)
@@ -174,6 +185,11 @@ void buttonPressed(hw::ButtonId buttonId)
         case hw::ButtonId::SwitchPhase:
             display.switchPhase();
             break;
+        case hw::ButtonId::SwitchPhaseLong:
+        {
+            setupMode();
+            break;
+        }
         case hw::ButtonId::SwitchView:
             display.switchView();
             break;
@@ -185,14 +201,14 @@ void configurationChanged()
     nw->configurationChanged();
 }
 
-void setup() {
+void setup()
+{
 	Serial.begin(9600);
-    Serial.print("Start");
+    Serial.println(F("Start"));
+
+    randomSeed(analogRead(0));
 
     configuration = new Configuration(configurationChanged);
-
-//    Serial.print("# MQTT: ");
-//    Serial.println(configuration->mqttServerAddress);
 
     input = new hw::Input(buttonPressed);
     nw = new Network(configuration);
@@ -204,11 +220,12 @@ void setup() {
 
     pzem = new hw::Pzem004t(&Serial1, &Serial2, &Serial3);
     nw->initialize();
-    webServer->initialize();
 
 	pinMode(LED_BUILTIN, OUTPUT);
 
 	setupTasks();
+
+    startSetupMode = !configuration->hasValidSignature();
 }
 
 void loop()

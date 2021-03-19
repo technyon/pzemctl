@@ -23,9 +23,12 @@ namespace web
 
         virtual ~WebServer() = default;
 
-        void initialize();
-
         void update();
+
+        void enable();
+        void disable();
+
+        bool enabled();
 
     private:
         void serveHtml(EthernetClient& client);
@@ -35,7 +38,6 @@ namespace web
         EthernetServer _server;
 
         Configuration* _configuration;
-
-
+        bool _enabled = false;
     };
 }

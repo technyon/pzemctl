@@ -9,14 +9,7 @@
 
 Network::Network(Configuration* configuration)
 : _configuration(configuration)
-{
-    _mac[0] = 0x00;
-    _mac[1] = 0x08;
-    _mac[2] = 0xDC;
-    _mac[3] = 0x2A;
-    _mac[4] = 0xAC;
-    _mac[5] = 0x5F;
-}
+{}
 
 Network::~Network()
 {
@@ -32,12 +25,7 @@ void Network::initialize()
 
     Ethernet.init(ETHERNET_CS_PIN);
 
-    IPAddress server;
-    server.fromString(_configuration->mqttServerAddress);
-
     _mqttClient = new PubSubClient(*_ethClient);
-    _mqttClient->setServer(server, 1883);
-
     _mqttClient->setCallback(onMqttDataReceived);
 
     _fromTask = true;
@@ -60,7 +48,7 @@ void Network::initializeEthernet()
         Serial.println();
         dhcpRetryCnt++;
 
-        if (Ethernet.begin(_mac, 1000, 1000) == 0)
+        if (Ethernet.begin(_configuration->mac, 1000, 1000) == 0)
         {
             Serial.println(F("Failed to configure Ethernet using DHCP"));
             // Check for Ethernet hardware present
@@ -87,7 +75,7 @@ void Network::initializeEthernet()
             gateway.fromString(_configuration->gatewayAddress);
 
             // try to congifure using IP address instead of DHCP:
-            Ethernet.begin(_mac, ip, dns);
+            Ethernet.begin(_configuration->mac, ip, dns);
             Ethernet.setSubnetMask(subnet);
             Ethernet.setGatewayIP(gateway);
 
@@ -117,21 +105,27 @@ void Network::ethernetHardwareReset()
 
 void Network::reconnect()
 {
-    while (!_mqttClient->connected())
+    IPAddress server;
+    server.fromString(_configuration->mqttServerAddress);
+    _mqttClient->setServer(server, 1883);
+
+    Serial.print(F("Connecting to server: "));
+    Serial.println(server);
+
+    while (!_mqttClient->connected() && !_configMode)
     {
         ethernetHardwareReset();
         initializeEthernet();
 
         Serial.print(F("Attempting MQTT connection..."));
 
-        if (_mqttClient->connect("Pzem004t"))
+        if (_mqttClient->connect("pzem004t"))
         {
             Serial.println(F("connected"));
             hw::Led::setNetworkLed(255);
             _mqttClient->publish(ledBrightness, "0\0x00");
             _mqttClient->subscribe(ledBrightness);
-        }
-        else
+        } else
         {
             Serial.print(F("failed, rc="));
             Serial.print(_mqttClient->state());
@@ -144,6 +138,9 @@ void Network::reconnect()
 
 void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
+    if(_configMode) return;
+    _updating = true;
+
     int ledVal = 0;
 
     _updateCnt++;
@@ -198,6 +195,8 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
         publishFloat(phase3Frequency, phase3.frequency, 2);
         publishFloat(phase3PowerFactor, phase3.pf, 2);
     }
+
+    _updating = false;
 }
 
 void Network::onMqttDataReceived(char* topic, byte* payload, unsigned int length)
@@ -244,4 +243,27 @@ EthernetClient *Network::ethernetClient()
 void Network::configurationChanged()
 {
     reconnect();
+}
+
+void Network::enableConfigMode()
+{
+    _configMode = true;
+
+    while(_updating)
+    {
+        vTaskDelay( 200 / portTICK_PERIOD_MS);
+    }
+
+    ethernetHardwareReset();
+    initializeEthernet();
+}
+
+void Network::disableConfigMode()
+{
+    _configMode = false;
+}
+
+const IPAddress Network::ipAddress()
+{
+    return Ethernet.localIP();
 }

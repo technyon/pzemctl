@@ -22,6 +22,11 @@ public:
 
     EthernetClient* ethernetClient();
 
+    void enableConfigMode();
+    void disableConfigMode();
+
+    const IPAddress ipAddress();
+
 private:
     void initializeEthernet();
     void ethernetHardwareReset();
@@ -51,12 +56,13 @@ private:
 
     const char* ledBrightness ="energy/ledBrightness";
 
-    byte _mac[6];
-
     const char _space = ' ';
     char _charVal[21];
     int _charIndex;
     bool _fromTask = false;
+
+    bool _configMode = false;
+    bool _updating = false;
 
     uint8_t _updateCnt = 0;
 

@@ -11,13 +11,10 @@ namespace web
 
     }
 
-    void WebServer::initialize()
-    {
-
-    }
-
     void WebServer::update()
     {
+       if(!_enabled) return;
+
         // Create a client connection
         EthernetClient client = _server.available();
         if (client)
@@ -46,8 +43,6 @@ namespace web
                     }
                 }
             }
-
-            Serial.println(message);
 
             char *token = strtok(message, "?=&");
             char *lastToken = nullptr;
@@ -93,6 +88,7 @@ namespace web
             if(configChanged)
             {
                 _configuration->writeEeprom();
+                _enabled = false;
             }
         }
     }
@@ -168,5 +164,20 @@ namespace web
             return TokenType::SUBNET_MASK;
         }
         return TokenType::NONE;
+    }
+
+    void WebServer::enable()
+    {
+        _enabled = true;
+    }
+
+    void WebServer::disable()
+    {
+        _enabled = false;
+    }
+
+    bool WebServer::enabled()
+    {
+        return _enabled;
     }
 }

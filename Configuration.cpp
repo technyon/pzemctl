@@ -43,6 +43,8 @@ void Configuration::readEeprom()
     if(!hasValidSignature())
     {
         Serial.println(F("No valid signature found in eeprom."));
+        generateMacAddress();
+        return;
     }
 
     for(int i=0; i < sizeof(mqttServerAddress); i++)
@@ -65,6 +67,10 @@ void Configuration::readEeprom()
     {
         subnetMask[i] = EEPROM[SUBNET_MASK_OFFSET + i];
     }
+    for(int i=0; i < sizeof(mac); i++)
+    {
+        mac[i] = EEPROM[MAC_OFFSET + i];
+    }
 }
 
 void Configuration::writeEeprom()
@@ -79,7 +85,10 @@ void Configuration::writeEeprom()
 
     Serial.println(F(" --"));
 
-    writeSignature();
+    if(!hasValidSignature())
+    {
+        writeSignature();
+    }
 
     for(int i=0; i < sizeof(mqttServerAddress); i++)
     {
@@ -100,6 +109,10 @@ void Configuration::writeEeprom()
     for(int i=0; i < sizeof(subnetMask); i++)
     {
         EEPROM.update(SUBNET_MASK_OFFSET + i, subnetMask[i]);
+    }
+    for(int i=0; i < sizeof(mac); i++)
+    {
+        EEPROM.update(MAC_OFFSET + i, mac[i]);
     }
 
     _callback();
@@ -123,4 +136,21 @@ bool Configuration::hasValidSignature()
     }
 
     return strcmp(sig, "pzem004t") == 0;
+}
+
+void Configuration::generateMacAddress()
+{
+    mac[0] = 0x00;  // wiznet prefix
+    mac[1] = 0x08;  // wiznet prefix
+    mac[2] = 0xDC;  // wiznet prefix
+    mac[3] = random(0,255);
+    mac[4] = random(0,255);
+    mac[5] = random(0,255);
+}
+
+void Configuration::clearEeprom()
+{
+    for (int i = 0 ; i < EEPROM.length() ; i++) {
+        EEPROM.update(i, 0);
+    }
 }

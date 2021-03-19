@@ -19,20 +19,60 @@ namespace hw
 
     void Input::update()
     {
+        checkSwitchPhase();
+
+        int value = digitalRead(SWITCH_VIEW_PIN);
+        if(_lastSwitchViewPinValue == 1 && value == 0)
+        {
+            switchViewPressedTs = millis();
+//            _buttonPressed(ButtonId::SwitchView);
+        }
+
+
+
+        _lastSwitchViewPinValue = value;
+    }
+
+    void Input::checkSwitchPhase()
+    {
         int value = digitalRead(SWITCH_PHASE_PIN);
         if(_lastSwitchPhasePinValue == 1 && value == 0)
         {
-            _buttonPressed(ButtonId::SwitchPhase);
+            switchPhasePressedTs = millis();
+        }
+        if(_lastSwitchPhasePinValue == 0 && value == 1)
+        {
+            if(millis() - switchPhasePressedTs < LONG_PRESS_THRESHOLD)
+            {
+                _buttonPressed(ButtonId::SwitchPhase);
+            }
+            else
+            {
+                _buttonPressed(ButtonId::SwitchPhaseLong);
+            }
         }
         _lastSwitchPhasePinValue = value;
+    }
 
-        value = digitalRead(SWITCH_VIEW_PIN);
+    void Input::checkSwitchView()
+    {
+        int value = digitalRead(SWITCH_VIEW_PIN);
         if(_lastSwitchViewPinValue == 1 && value == 0)
         {
-            _buttonPressed(ButtonId::SwitchView);
+            switchViewPressedTs = millis();
+        }
+        if(_lastSwitchViewPinValue == 0 && value == 1)
+        {
+            if(millis() - switchViewPressedTs < LONG_PRESS_THRESHOLD)
+            {
+                _buttonPressed(ButtonId::SwitchView);
+            }
+            else
+            {
+                _buttonPressed(ButtonId::SwitchViewLong);
+            }
         }
         _lastSwitchViewPinValue = value;
-
     }
 
 
