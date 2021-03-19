@@ -28,7 +28,7 @@ namespace hw
 
             _ssd1306.clearDisplay();
 
-            _ssd1306.setCursor(10, 40);
+            _ssd1306.setCursor(15, 40);
             _ssd1306.print(F("Initializing"));
             _ssd1306.display();
         }
@@ -65,8 +65,6 @@ namespace hw
 
         _ssd1306.display();
     }
-
-
 
     void DisplaySSD1306::drawBarGraph(int16_t x, int16_t y, int16_t width, int16_t height, float min, float max, float value)
     {

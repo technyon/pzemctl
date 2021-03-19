@@ -9,12 +9,15 @@
 #include "DisplaySSD1306.h"
 #include "Led.h"
 #include "Input.h"
+#include "WebServer.h"
+#include "Configuration.h"
 
+Configuration* configuration;
 hw::Pzem004t* pzem;
-
 hw::Input* input;
 hw::DisplaySSD1306 display;
-Network nw;
+Network *nw;
+web::WebServer* webServer;
 hw::Led led;
 
 hw::pzem004tvalues phasesCombined;
@@ -88,11 +91,21 @@ void TaskNetwork(void *pvParameters)
 {
     while(true)
     {
-        nw.update(phase1Values, phase2Values, phase3Values);
+        nw->update(phase1Values, phase2Values, phase3Values);
 
         vTaskDelay( 100 / portTICK_PERIOD_MS);
     }
 }
+
+void TaskWebServer(void *pvParameters)
+{
+    while(true)
+    {
+        webServer->update();
+        vTaskDelay( 500 / portTICK_PERIOD_MS);
+    }
+}
+
 
 void setupTasks()
 {
@@ -144,6 +157,14 @@ void setupTasks()
             ,  1
             ,  NULL );
 
+    xTaskCreate(
+            TaskWebServer
+            ,  "WebServer"
+            ,  512
+            ,  NULL
+            ,  0
+            ,  NULL );
+
 }
 
 void buttonPressed(hw::ButtonId buttonId)
@@ -163,14 +184,22 @@ void setup() {
 	Serial.begin(9600);
     Serial.print("Start");
 
+    configuration = new Configuration();
+
+//    Serial.print("# MQTT: ");
+//    Serial.println(configuration->mqttServerAddress);
+
     input = new hw::Input(buttonPressed);
+    nw = new Network();
+    webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();
     display.initialize();
     led.initialize();
 
     pzem = new hw::Pzem004t(&Serial1, &Serial2, &Serial3);
-    nw.initialize();
+    nw->initialize();
+    webServer->initialize();
 
 	pinMode(LED_BUILTIN, OUTPUT);
 

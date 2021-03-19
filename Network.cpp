@@ -220,3 +220,8 @@ void Network::nwDelay(unsigned long ms)
         delay(ms);
     }
 }
+
+EthernetClient *Network::ethernetClient()
+{
+    return _ethClient;
+}
