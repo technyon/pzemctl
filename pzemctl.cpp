@@ -169,7 +169,7 @@ void setupTasks()
     xTaskCreate(
             TaskLed
             ,  "Led"
-            ,  48
+            ,  64
             ,  NULL
             ,  0
             ,  NULL );
@@ -185,7 +185,7 @@ void setupTasks()
     xTaskCreate(
             TaskNetwork
             ,  "Nw"
-            ,  448
+            ,  768
             ,  NULL
             ,  1
             ,  NULL );
