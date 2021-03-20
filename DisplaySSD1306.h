@@ -36,6 +36,7 @@ namespace hw
         void clearMessage();
 
         void changeView(int value);
+        void changePhase(int value);
 
         const byte selectedPhase();
         const View selectedView();

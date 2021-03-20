@@ -200,6 +200,7 @@ void buttonPressed(hw::ButtonId buttonId)
     {
         case hw::ButtonId::SwitchPhase:
             display.switchPhase();
+            nw->publishPhase(display.selectedPhase());
             break;
         case hw::ButtonId::SwitchPhaseLong:
         {
@@ -216,6 +217,7 @@ void buttonPressed(hw::ButtonId buttonId)
         }
         case hw::ButtonId::SwitchView:
             display.switchView();
+            nw->publishView((int)display.selectedView() - 1);
             led.setBrightnessSwitchState(switchState ? 0 : 255);
             break;
         case hw::ButtonId::SwitchOnOff:
@@ -236,6 +238,11 @@ void viewChanged(int value)
     display.changeView(value);
 }
 
+void phaseChanged(int value)
+{
+    display.changeView(value);
+}
+
 void setup()
 {
 	Serial.begin(9600);
@@ -249,7 +256,7 @@ void setup()
     configuration = new Configuration(configurationChanged);
 
     input = new hw::Input(buttonPressed);
-    nw = new Network(configuration, viewChanged);
+    nw = new Network(configuration, viewChanged, phaseChanged);
     webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();

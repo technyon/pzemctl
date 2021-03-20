@@ -220,11 +220,16 @@ namespace hw
 
     const View DisplaySSD1306::selectedView()
     {
-        _selectedView;
+        return _selectedView;
     }
 
     void DisplaySSD1306::changeView(int value)
     {
         _selectedView = (View)constrain(value+1, (int)View::First + 1, (int)View::Last - 1);
+    }
+
+    void DisplaySSD1306::changePhase(int value)
+    {
+        _selectedPhase = constrain(value, 0, 3);
     }
 }

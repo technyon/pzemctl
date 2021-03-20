@@ -13,7 +13,7 @@ private:
     static const uint8_t ETHERNET_RESET_PIN = 49;
 
 public:
-    explicit Network(Configuration* configuration, void (*viewChangedCallback)(int value));
+    explicit Network(Configuration* configuration, void (*viewChangedCallback)(int value), void (*_phaseChangedCallback)(int value));
     virtual ~Network();
 
     void initialize();
@@ -26,6 +26,9 @@ public:
     void disableConfigMode();
 
     const IPAddress ipAddress();
+
+    void publishView(int value);
+    void publishPhase(int value);
 
 private:
     void initializeEthernet();
@@ -55,9 +58,10 @@ private:
     const char* phase3Frequency ="energy/phase3/frequency";
     const char* phase3PowerFactor ="energy/phase3/powerfactor";
 
-    static const char* _led1Brightness;
-    static const char* _led2Brightness;
-    static const char* _selectedView;
+    const char* _led1Brightness = "energy/led1Brightness";
+    const char* _led2Brightness = "energy/led2Brightness";
+    const char* _selectedView = "energy/view";
+    const char* _selectedPhase = "energy/phase";
 
     const char _space = ' ';
     char _charVal[21];
@@ -70,6 +74,13 @@ private:
     uint8_t _updateCnt = 0;
 
     void (*_viewChangedCallback)(int value);
+    void (*_phaseChangedCallback)(int value);
+
+    int _currentView = 0;
+    int _currentPhase = 0;
+
+    bool _viewChanged = false;
+    bool _phaseChanged = false;
 
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;

@@ -7,15 +7,14 @@
 #include <src/Arduino_FreeRTOS.h>
 #include "Led.h"
 
-const char* Network::_led1Brightness = "energy/led1Brightness";
-const char* Network::_led2Brightness = "energy/led2Brightness";
-const char* Network::_selectedView = "energy/view";
+
 
 Network* nwInst;
 
-Network::Network(Configuration* configuration, void (*viewChangedCallback)(int value))
+Network::Network(Configuration* configuration, void (*viewChangedCallback)(int value), void (*phaseChangedCallback)(int value))
 : _configuration(configuration),
-  _viewChangedCallback(viewChangedCallback)
+  _viewChangedCallback(viewChangedCallback),
+  _phaseChangedCallback(phaseChangedCallback)
 {
     nwInst = this;
 }
@@ -134,12 +133,16 @@ void Network::reconnect()
         {
             Serial.println(F("connected"));
             hw::Led::setNetworkLed(255);
-            _mqttClient->publish(_led1Brightness, "0\0x00");
+            _mqttClient->publish(_led1Brightness, "0");
             _mqttClient->subscribe(_led1Brightness);
-            _mqttClient->publish(_led2Brightness, "0\0x00");
+            _mqttClient->publish(_led2Brightness, "0");
             _mqttClient->subscribe(_led2Brightness);
-            _mqttClient->publish(_selectedView, "0\0x00");
+
             _mqttClient->subscribe(_selectedView);
+            _mqttClient->subscribe(_selectedPhase);
+
+            publishView(0);
+            publishPhase(0);
         }
         else
         {
@@ -189,8 +192,6 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
 
     if(_updateCnt > 10)
     {
-//        Serial.println(_mqttClient->state());
-
         _updateCnt = 0;
 
         publishFloat(phase1Voltage, phase1.voltage, 2);
@@ -210,6 +211,22 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
         publishFloat(phase3Energy, phase3.energy, 2);
         publishFloat(phase3Frequency, phase3.frequency, 2);
         publishFloat(phase3PowerFactor, phase3.pf, 2);
+    }
+
+    if(_viewChanged)
+    {
+        _viewChanged = false;
+        char cstr[5];
+        itoa(_currentView, cstr, 5);
+        _mqttClient->publish(_selectedView, cstr);
+    }
+
+    if(_phaseChanged)
+    {
+        _phaseChanged = false;
+        char cstr[5];
+        itoa(_currentPhase, cstr, 5);
+        _mqttClient->publish(_selectedPhase, cstr);
     }
 
     _updating = false;
@@ -234,6 +251,10 @@ void Network::onMqttDataReceived(char *&topic, byte *&payload, unsigned int &len
     if(strcmp(topic, _selectedView) == 0)
     {
         Network::_viewChangedCallback((int) atof((char *) payload));
+    }
+    if(strcmp(topic, _selectedPhase) == 0)
+    {
+        Network::_phaseChangedCallback((int) atof((char *) payload));
     }
 }
 
@@ -299,4 +320,16 @@ void Network::disableConfigMode()
 const IPAddress Network::ipAddress()
 {
     return Ethernet.localIP();
+}
+
+void Network::publishView(int value)
+{
+    _currentView = value;
+    _viewChanged = true;
+}
+
+void Network::publishPhase(int value)
+{
+    _currentPhase = value;
+    _phaseChanged = true;
 }
