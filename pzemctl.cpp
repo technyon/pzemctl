@@ -12,8 +12,6 @@
 #include "WebServer.h"
 #include "Configuration.h"
 
-const int SWITCH_PIN = 28;
-
 Configuration* configuration;
 hw::Pzem004t* pzem;
 hw::Input* input;
@@ -29,7 +27,6 @@ hw::pzem004tvalues phase3Values;
 
 bool setupModeRequested = false;
 bool setupModeEnabled = false;
-bool switchState = false;
 
 void setupMode()
 {
@@ -156,9 +153,9 @@ void setupTasks()
     xTaskCreate(
             TaskPollPzem
             ,  "Pzm"
-            ,  128
+            ,  64
             ,  NULL
-            ,  1
+            ,  2
             ,  NULL );
 
     xTaskCreate(
@@ -166,15 +163,15 @@ void setupTasks()
             ,  "Dsp"
             ,  256
             ,  NULL
-            ,  2
+            ,  0
             ,  NULL );
 
     xTaskCreate(
             TaskLed
             ,  "Led"
-            ,  64
+            ,  48
             ,  NULL
-            ,  2
+            ,  0
             ,  NULL );
 
     xTaskCreate(
@@ -188,9 +185,9 @@ void setupTasks()
     xTaskCreate(
             TaskNetwork
             ,  "Nw"
-            ,  512
+            ,  448
             ,  NULL
-            ,  0
+            ,  1
             ,  NULL );
 
     xTaskCreate(
@@ -198,7 +195,7 @@ void setupTasks()
             ,  "Setup"
             ,  256
             ,  NULL
-            ,  2
+            ,  0
             ,  NULL );
 
     xTaskCreate(
@@ -206,7 +203,7 @@ void setupTasks()
             ,  "WS"
             ,  448
             ,  NULL
-            ,  2
+            ,  0
             ,  NULL );
 
 }
@@ -234,10 +231,6 @@ void buttonPressed(hw::ButtonId buttonId)
         case hw::ButtonId::SwitchView:
             display.switchView();
             break;
-        case hw::ButtonId::OnOff:
-            switchState = !switchState;
-            digitalWrite(SWITCH_PIN, switchState);
-            break;
     }
 }
 
@@ -250,9 +243,6 @@ void setup()
 {
 	Serial.begin(9600);
     Serial.println(F("Start"));
-
-    pinMode(SWITCH_PIN, OUTPUT);
-    digitalWrite(SWITCH_PIN, LOW);
 
     randomSeed(analogRead(0));
 

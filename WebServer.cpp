@@ -99,49 +99,33 @@ namespace web
         client.println("Content-Type: text/html");
         client.println();
 
-        client.println("<!DOCTYPE html>");
         client.println("<HTML>");
         client.println("<HEAD>");
         client.println("<TITLE>PZEM004t Energy Monitor</TITLE>");
         client.println("</HEAD>");
         client.println("<BODY>");
 
-        client.println("<FORM ACTION=\"method=get\">");
+        client.println("<FORM ACTION=method=get >");
 
-        client.println("<table>");
-        client.println("<tr>");
-
-        client.print("<td>MQTT Server:</td> <td><INPUT TYPE=TEXT VALUE=\"");
+        client.print("MQTT Server: <INPUT TYPE=TEXT VALUE=\"");
         client.print(_configuration->mqttServerAddress);
-        client.println("\" NAME=\"MQTTSERVER\" SIZE=\"25\" MAXLENGTH=\"40\"></td>");
+        client.println("\" NAME=\"MQTTSERVER\" SIZE=\"25\" MAXLENGTH=\"50\"><BR>");
 
-        client.println("</tr><tr>");
-
-        client.print("<td>DNS Server:</td> <td><INPUT TYPE=TEXT VALUE=\"");
+        client.print("DNS Server: <INPUT TYPE=TEXT VALUE=\"");
         client.print(_configuration->dnsServerAddress);
-        client.println("\" NAME=\"DNSSERVER\" SIZE=\"25\" MAXLENGTH=\"16\"></td>");
+        client.println("\" NAME=\"DNSSERVER\" SIZE=\"25\" MAXLENGTH=\"16\"><BR>");
 
-        client.println("</tr><tr>");
-
-        client.print("<td>Gateway:</td> <td><INPUT TYPE=TEXT VALUE=\"");
+        client.print("Gateway: <INPUT TYPE=TEXT VALUE=\"");
         client.print(_configuration->gatewayAddress);
-        client.println("\" NAME=\"GATEWAY\" SIZE=\"25\" MAXLENGTH=\"16\"></td>");
+        client.println("\" NAME=\"GATEWAY\" SIZE=\"25\" MAXLENGTH=\"16\"><BR>");
 
-        client.println("</tr><tr>");
-
-        client.print("<td>IP Address:</td> <td><INPUT TYPE=TEXT VALUE=\"");
+        client.print("IP Address: <INPUT TYPE=TEXT VALUE=\"");
         client.print(_configuration->ipAddress);
-        client.println("\" NAME=\"IPADDRESS\" SIZE=\"25\" MAXLENGTH=\"16\"></td>");
+        client.println("\" NAME=\"IPADDRESS\" SIZE=\"25\" MAXLENGTH=\"16\"><BR>");
 
-        client.println("</tr><tr>");
-
-        client.print("<td>Subnet mask</td> <td><INPUT TYPE=TEXT VALUE=\"");
+        client.print("Subnet mask: <INPUT TYPE=TEXT VALUE=\"");
         client.print(_configuration->subnetMask);
-        client.println("\" NAME=\"SUBNET\" SIZE=\"25\" MAXLENGTH=\"16\"></td>");
-
-        client.println("</tr>");
-        client.println("</table>");
-
+        client.println("\" NAME=\"SUBNET\" SIZE=\"25\" MAXLENGTH=\"16\"><BR>");
 
         client.println("<INPUT TYPE=SUBMIT NAME=\"submit\" VALUE=\"Save\">");
 

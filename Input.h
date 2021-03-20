@@ -1,11 +1,5 @@
 #pragma once
 
-#define SWITCH_PHASE_PIN 22
-#define SWITCH_VIEW_PIN 24
-#define SWITCH_ON_OFF_PIN 26
-
-#define LONG_PRESS_THRESHOLD 1000
-
 namespace hw
 {
     enum class ButtonId
@@ -14,8 +8,6 @@ namespace hw
         SwitchView,
         SwitchPhaseLong,
         SwitchViewLong,
-        OnOff,
-        OnOffLong
     };
 
     class Input
@@ -28,18 +20,20 @@ namespace hw
         void update();
 
     private:
+        const int LONG_PRESS_THRESHOLD = 1000;
+
         void checkSwitchPhase();
         void checkSwitchView();
-        void checkOnOff();
+
+        const int SWITCH_PHASE_PIN = 22;
+        const int SWITCH_VIEW_PIN = 24;
 
         void (*_buttonPressed)(ButtonId);
 
         int _lastSwitchPhasePinValue = 1;
         int _lastSwitchViewPinValue = 1;
-        int _lastOnOffPinValue = 1;
 
         long switchPhasePressedTs = -1;
         long switchViewPressedTs = -1;
-        long switchOnOffPressedTs = -1;
     };
 }

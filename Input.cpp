@@ -14,7 +14,6 @@ namespace hw
     {
         pinMode(SWITCH_PHASE_PIN, INPUT_PULLUP);
         pinMode(SWITCH_VIEW_PIN, INPUT_PULLUP);
-        pinMode(SWITCH_ON_OFF_PIN, INPUT_PULLUP);
 
     }
 
@@ -22,7 +21,6 @@ namespace hw
     {
         checkSwitchPhase();
         checkSwitchView();
-        checkOnOff();
     }
 
     void Input::checkSwitchPhase()
@@ -67,25 +65,5 @@ namespace hw
         _lastSwitchViewPinValue = value;
     }
 
-    void Input::checkOnOff()
-    {
-        int value = digitalRead(SWITCH_ON_OFF_PIN);
-        if(_lastOnOffPinValue == 1 && value == 0)
-        {
-            switchOnOffPressedTs = millis();
-        }
-        if(_lastOnOffPinValue == 0 && value == 1)
-        {
-            if(millis() - switchOnOffPressedTs < LONG_PRESS_THRESHOLD)
-            {
-                _buttonPressed(ButtonId::OnOff);
-            }
-            else
-            {
-                _buttonPressed(ButtonId::OnOffLong);
-            }
-        }
-        _lastOnOffPinValue = value;
-    }
 
 }
