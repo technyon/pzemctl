@@ -264,27 +264,37 @@ void Network::onMqttDataReceivedCallback(char* topic, byte* payload, unsigned in
 }
 
 
-void Network::onMqttDataReceived(char *&topic, byte *&payload, unsigned int &length)
+void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& length)
 {
+    char value[10];
+    size_t l = min(length, sizeof(value)-1);
+
+    for(int i=0; i<length; i++)
+    {
+        value[i] = payload[i];
+    }
+
+    value[length] = 0;
+
     if(strcmp(topic, _led1BrightnessTopic) == 0)
     {
-        hw::Led::setBrightnessWhite((int) atof((char *) payload) * 2.55);
+        hw::Led::setBrightnessWhite((int) atof(value) * 2.55);
     }
     if(strcmp(topic, _led2BrightnessTopic) == 0)
     {
-        hw::Led::setBrightnessBlue((int) atof((char *) payload) * 2.55);
+        hw::Led::setBrightnessBlue((int) atof(value) * 2.55);
     }
     if(strcmp(topic, _selectedViewTopic) == 0)
     {
-        Network::_viewChangedCallback((int) atof((char *) payload));
+        Network::_viewChangedCallback((int) atof(value));
     }
     if(strcmp(topic, _selectedPhaseTopic) == 0)
     {
-        Network::_phaseChangedCallback((int) atof((char *) payload));
+        Network::_phaseChangedCallback((int) atof(value));
     }
     if(strcmp(topic, _switchStateTopic) == 0)
     {
-        Network::_switchStateChangedCallback((int) atof((char *) payload) > 0);
+        Network::_switchStateChangedCallback((int) atof(value) > 0);
     }
 }
 
