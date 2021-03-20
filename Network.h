@@ -54,7 +54,8 @@ private:
     const char* phase3Frequency ="energy/phase3/frequency";
     const char* phase3PowerFactor ="energy/phase3/powerfactor";
 
-    const char* ledBrightness ="energy/ledBrightness";
+    static const char* led1Brightness;
+    static const char* led2Brightness;
 
     const char _space = ' ';
     char _charVal[21];

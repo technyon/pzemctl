@@ -7,6 +7,9 @@
 #include <src/Arduino_FreeRTOS.h>
 #include "Led.h"
 
+const char* Network::led1Brightness = "energy/led1Brightness";
+const char* Network::led2Brightness = "energy/led2Brightness";
+
 Network::Network(Configuration* configuration)
 : _configuration(configuration)
 {}
@@ -123,8 +126,10 @@ void Network::reconnect()
         {
             Serial.println(F("connected"));
             hw::Led::setNetworkLed(255);
-            _mqttClient->publish(ledBrightness, "0\0x00");
-            _mqttClient->subscribe(ledBrightness);
+            _mqttClient->publish(led1Brightness, "0\0x00");
+            _mqttClient->subscribe(led1Brightness);
+            _mqttClient->publish(led2Brightness, "0\0x00");
+            _mqttClient->subscribe(led2Brightness);
         } else
         {
             Serial.print(F("failed, rc="));
@@ -201,7 +206,14 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
 
 void Network::onMqttDataReceived(char* topic, byte* payload, unsigned int length)
 {
-    hw::Led::setBrightnessWhite((int) atof((char *) payload) * 2.55);
+    if(strcmp(topic, led1Brightness) == 0)
+    {
+        hw::Led::setBrightnessWhite((int) atof((char *) payload) * 2.55);
+    }
+    if(strcmp(topic, led2Brightness) == 0)
+    {
+        hw::Led::setBrightnessBlue((int) atof((char *) payload) * 2.55);
+    }
 }
 
 void Network::publishFloat(const char* topic, const float &value, const float& precision)

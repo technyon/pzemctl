@@ -28,4 +28,9 @@ namespace hw
     {
         analogWrite(LED1_PIN, constrain(value, 0, 255));
     }
+
+    void Led::setBrightnessSwitchState(const int &value)
+    {
+        analogWrite(LED4_PIN, constrain(value, 0, 255));
+    }
 }

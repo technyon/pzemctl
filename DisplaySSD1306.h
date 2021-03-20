@@ -27,7 +27,7 @@ namespace hw
         void initialize();
         void update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1Values, const hw::pzem004tvalues& phase2Values, const hw::pzem004tvalues& phase3Values);
 
-        void drawBarGraph(int16_t x, int16_t y, int16_t width, int16_t height, float min, float max, float value);
+        void drawBarGraph(const int16_t& x, const int16_t& y, const int16_t& width, const int16_t& height, const float& min, const float& max, const float& value);
 
         void switchView();
         void switchPhase();
@@ -51,9 +51,9 @@ namespace hw
 
         char* _message = nullptr;
 
-        int16_t col1x = 35;
-        const int16_t col2x = 70;
+        float _maxCurrent = 1;
 
+        int16_t col1x = 35;
         const int16_t col1y = 16;
         const int16_t colHeight = 23;
 

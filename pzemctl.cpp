@@ -12,6 +12,8 @@
 #include "WebServer.h"
 #include "Configuration.h"
 
+const int SWITCH_PIN = 28;
+
 Configuration* configuration;
 hw::Pzem004t* pzem;
 hw::Input* input;
@@ -27,6 +29,8 @@ hw::pzem004tvalues phase3Values;
 
 bool setupModeRequested = false;
 bool setupModeEnabled = false;
+
+bool switchState = false;
 
 void setupMode()
 {
@@ -230,6 +234,12 @@ void buttonPressed(hw::ButtonId buttonId)
         }
         case hw::ButtonId::SwitchView:
             display.switchView();
+            led.setBrightnessSwitchState(switchState ? 0 : 255);
+            break;
+        case hw::ButtonId::SwitchOnOff:
+            Serial.println("ON_OFF");
+            switchState = !switchState;
+            digitalWrite(SWITCH_PIN, switchState);
             break;
     }
 }
@@ -243,6 +253,9 @@ void setup()
 {
 	Serial.begin(9600);
     Serial.println(F("Start"));
+
+    pinMode(SWITCH_PIN, OUTPUT);
+    digitalWrite(SWITCH_PIN, switchState);
 
     randomSeed(analogRead(0));
 
