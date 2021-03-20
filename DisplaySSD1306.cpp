@@ -199,7 +199,7 @@ namespace hw
 
     void DisplaySSD1306::drawMessage()
     {
-        _ssd1306.setCursor(0,col1y);
+        _ssd1306.setCursor(0,col1y+3);
         _ssd1306.print(_message);
     }
 

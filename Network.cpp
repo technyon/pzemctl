@@ -169,12 +169,12 @@ void Network::reconnect()
 
 void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
+    long ts = millis();
+
     if(_configMode) return;
     _updating = true;
 
     int ledVal = 0;
-
-    _updateCnt++;
 
     if(Ethernet.linkStatus() == EthernetLinkStatus::LinkON)
     {
@@ -188,8 +188,9 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
 
     hw::Led::setNetworkLed(ledVal);
 
-    if(_updateCnt > 10)
+    if((ts - _lastMaintain) > 1000)
     {
+        _lastMaintain = ts;
         if(Ethernet.maintain() != 0)
         {
             reconnect();
@@ -202,9 +203,9 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
     }
     _mqttClient->loop();
 
-    if(_updateCnt > 10)
+    if((ts - _lastPublish) > _configuration->numericMqttPublishInterval())
     {
-        _updateCnt = 0;
+        _lastPublish = ts;
 
         publishFloat(phase1VoltageTopic, phase1.voltage, 2);
         publishFloat(phase1CurrentTopic, phase1.current, 2);

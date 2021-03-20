@@ -69,6 +69,8 @@ private:
     const char* _selectedPhaseTopic = "energy/control/phase";
     const char* _switchStateTopic = "energy/control/switchState";
 
+    long _lastPublish = 0;
+    long _lastMaintain = 0;
     const char _space = ' ';
     char _charVal[21];
     int _charIndex;
@@ -76,8 +78,6 @@ private:
 
     bool _configMode = false;
     bool _updating = false;
-
-    uint8_t _updateCnt = 0;
 
     void (*_viewChangedCallback)(int value);
     void (*_phaseChangedCallback)(int value);

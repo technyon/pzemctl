@@ -13,7 +13,8 @@ namespace web
         DNS_SERVER,
         GATEWAY,
         IP_ADDRESS,
-        SUBNET_MASK
+        SUBNET_MASK,
+        MQTT_PUBLISH_INTERVAL
     };
 
     class WebServer

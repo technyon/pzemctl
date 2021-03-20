@@ -179,7 +179,7 @@ void setupTasks()
     xTaskCreate(
             TaskSetupMode
             ,  "Setup"
-            ,  256
+            ,  320
             ,  NULL
             ,  0
             ,  NULL );
@@ -187,7 +187,7 @@ void setupTasks()
     xTaskCreate(
             TaskWebServer
             ,  "WS"
-            ,  448
+            ,  512
             ,  NULL
             ,  0
             ,  NULL );

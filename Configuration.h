@@ -14,10 +14,17 @@ public:
     char ipAddress[17] = "192.168.168.168";
     char subnetMask[17] = "255.255.255.0";
     uint8_t mac[6];
+    char mqttPublishInterval[7] = "5000";
 
     void writeEeprom();
     void clearEeprom();
     bool hasValidSignature();
+
+    long numericMqttPublishInterval()
+    {
+        return _numericMqttPublishInterval;
+    }
+
 
 private:
     const int MQTT_EEPROM_OFFSET = 10;
@@ -26,13 +33,17 @@ private:
     const int IP_EEPROM_OFFSET = GATEWAY_EEPROM_OFFSET + sizeof(gatewayAddress);
     const int SUBNET_MASK_OFFSET = IP_EEPROM_OFFSET + sizeof(ipAddress);
     const int MAC_OFFSET = SUBNET_MASK_OFFSET + sizeof(subnetMask);
+    const int MQTT_PUBLISH_INTERVAL = MAC_OFFSET + sizeof(mac);
 
     void readEeprom();
     void writeSignature();
-
     void initialize();
+
+    void parseMqttPublishInterval();
 
     void (*_callback)();
 
     void generateMacAddress();
+
+    long _numericMqttPublishInterval = 1000;
 };

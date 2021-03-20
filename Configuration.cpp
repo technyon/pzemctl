@@ -71,6 +71,11 @@ void Configuration::readEeprom()
     {
         mac[i] = EEPROM[MAC_OFFSET + i];
     }
+    for(int i=0; i < sizeof(mqttPublishInterval); i++)
+    {
+        mqttPublishInterval[i] = EEPROM[MQTT_PUBLISH_INTERVAL + i];
+    }
+    parseMqttPublishInterval();
 }
 
 void Configuration::writeEeprom()
@@ -114,6 +119,12 @@ void Configuration::writeEeprom()
     {
         EEPROM.update(MAC_OFFSET + i, mac[i]);
     }
+    for(int i=0; i < sizeof(mqttPublishInterval); i++)
+    {
+        EEPROM.update(MQTT_PUBLISH_INTERVAL + i, mqttPublishInterval[i]);
+    }
+
+    parseMqttPublishInterval();
 
     _callback();
 }
@@ -153,4 +164,9 @@ void Configuration::clearEeprom()
     for (int i = 0 ; i < EEPROM.length() ; i++) {
         EEPROM.update(i, 0);
     }
+}
+
+void Configuration::parseMqttPublishInterval()
+{
+    _numericMqttPublishInterval = max(atoi(mqttPublishInterval), 200);
 }

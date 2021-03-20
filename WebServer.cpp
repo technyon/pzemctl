@@ -80,6 +80,11 @@ namespace web
                         configChanged = true;
                         strcpy(_configuration->subnetMask, token);
                     }
+                    else if(lastTokenType == TokenType::MQTT_PUBLISH_INTERVAL && tokenType == TokenType::NONE)
+                    {
+                        configChanged = true;
+                        strcpy(_configuration->mqttPublishInterval, token);
+                    }
                 }
                 lastToken = token;
                 token = strtok(nullptr, "?=&");
@@ -127,6 +132,10 @@ namespace web
         client.print(_configuration->subnetMask);
         client.println("\" NAME=\"SUBNET\" SIZE=\"25\" MAXLENGTH=\"16\"><BR>");
 
+        client.print("MQTT publish interval (ms): <INPUT TYPE=TEXT VALUE=\"");
+        client.print(_configuration->mqttPublishInterval);
+        client.println("\" NAME=\"INTERVAL\" SIZE=\"25\" MAXLENGTH=\"6\"><BR>");
+
         client.println("<INPUT TYPE=SUBMIT NAME=\"submit\" VALUE=\"Save\">");
 
         client.println("</FORM>");
@@ -163,6 +172,11 @@ namespace web
         {
             return TokenType::SUBNET_MASK;
         }
+        if (strcmp(token, "INTERVAL") == 0)
+        {
+            return TokenType::MQTT_PUBLISH_INTERVAL;
+        }
+
         return TokenType::NONE;
     }
 
