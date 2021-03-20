@@ -19,7 +19,6 @@ namespace hw
 
     void Led::setBrightnessWhite(const int &value)
     {
-        Serial.println(value);
         analogWrite(LED2_PIN, constrain(value, 0, 255));
     }
 

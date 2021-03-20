@@ -47,4 +47,12 @@ namespace hw
         return _values3;
     }
 
+    void Pzem004t::resetEnergy()
+    {
+        Serial.println(F("Resetting energy"));
+        _pzem1.resetEnergy();
+        _pzem2.resetEnergy();
+        _pzem3.resetEnergy();
+    }
+
 }

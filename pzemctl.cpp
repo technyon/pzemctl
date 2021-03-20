@@ -261,6 +261,11 @@ void switchStateChanged(bool value)
     led.setBrightnessSwitchState(switchState ? 255 : 0);
 }
 
+void resetEnergy()
+{
+    pzem->resetEnergy();
+}
+
 void setup()
 {
 	Serial.begin(9600);
@@ -271,7 +276,7 @@ void setup()
     configuration = new Configuration(configurationChanged);
 
     input = new hw::Input(buttonPressed);
-    nw = new Network(configuration, viewChanged, phaseChanged, switchStateChanged);
+    nw = new Network(configuration, viewChanged, phaseChanged, switchStateChanged, resetEnergy);
     webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();

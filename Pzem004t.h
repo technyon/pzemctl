@@ -25,6 +25,7 @@ namespace hw
         virtual ~Pzem004t() = default;
 
         void update();
+        void resetEnergy();
 
         const pzem004tvalues& values1();
         const pzem004tvalues& values2();

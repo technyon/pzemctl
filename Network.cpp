@@ -14,11 +14,13 @@ Network* nwInst;
 Network::Network(Configuration* configuration,
                  void (*viewChangedCallback)(int value),
                  void (*phaseChangedCallback)(int value),
-                 void (*switchStateChangedCallback)(bool value))
+                 void (*switchStateChangedCallback)(bool value),
+                 void (*resetEnergyCallback)())
 : _configuration(configuration),
   _viewChangedCallback(viewChangedCallback),
   _phaseChangedCallback(phaseChangedCallback),
-  _switchStateChangedCallback(switchStateChangedCallback)
+  _switchStateChangedCallback(switchStateChangedCallback),
+  _resetEnergyCallback(resetEnergyCallback)
 {
     nwInst = this;
 }
@@ -133,6 +135,7 @@ void Network::reconnect()
         _mqttClient->unsubscribe(_selectedViewTopic);
         _mqttClient->unsubscribe(_selectedPhaseTopic);
         _mqttClient->unsubscribe(_switchStateTopic);
+        _mqttClient->subscribe(_resetEnergyTopic);
 
         ethernetHardwareReset();
         initializeEthernet();
@@ -149,12 +152,14 @@ void Network::reconnect()
             publishView(_currentView);
             publishPhase(_currentPhase);
             publishSwitchState(_switchState);
+            _mqttClient->publish(_resetEnergyTopic, "");
 
             _mqttClient->subscribe(_led2BrightnessTopic);
             _mqttClient->subscribe(_led1BrightnessTopic);
             _mqttClient->subscribe(_selectedViewTopic);
             _mqttClient->subscribe(_selectedPhaseTopic);
             _mqttClient->subscribe(_switchStateTopic);
+            _mqttClient->subscribe(_resetEnergyTopic);
         }
         else
         {
@@ -269,12 +274,12 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
     char value[10];
     size_t l = min(length, sizeof(value)-1);
 
-    for(int i=0; i<length; i++)
+    for(int i=0; i<l; i++)
     {
         value[i] = payload[i];
     }
 
-    value[length] = 0;
+    value[l] = 0;
 
     if(strcmp(topic, _led1BrightnessTopic) == 0)
     {
@@ -295,6 +300,14 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
     if(strcmp(topic, _switchStateTopic) == 0)
     {
         Network::_switchStateChangedCallback((int) atof(value) > 0);
+    }
+    if(strcmp(topic, _resetEnergyTopic) == 0)
+    {
+        if(strcmp(value, "confirm") == 0)
+        {
+            _resetEnergyCallback();
+        }
+        _mqttClient->publish(_resetEnergyTopic, "");
     }
 }
 

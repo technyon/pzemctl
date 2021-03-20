@@ -10,7 +10,7 @@ namespace hw
     void DisplaySSD1306::initialize()
     {
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-        Serial.println(F("Inititalizig Display"));
+        Serial.println(F("Initializing Display"));
 
         _isInitialized = _ssd1306.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
         if(!_isInitialized)

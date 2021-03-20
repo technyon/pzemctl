@@ -16,7 +16,8 @@ public:
     explicit Network(Configuration* configuration,
                      void (*viewChangedCallback)(int value),
                      void (*_phaseChangedCallback)(int value),
-                     void (*switchStateChangedCallback)(bool value));
+                     void (*switchStateChangedCallback)(bool value),
+                     void (*resetEnergyCallback)());
 
     virtual ~Network();
 
@@ -68,6 +69,7 @@ private:
     const char* _selectedViewTopic = "energy/control/view";
     const char* _selectedPhaseTopic = "energy/control/phase";
     const char* _switchStateTopic = "energy/control/switchState";
+    const char* _resetEnergyTopic = "energy/control/resetEnergy";
 
     long _lastPublish = 0;
     long _lastMaintain = 0;
@@ -82,6 +84,7 @@ private:
     void (*_viewChangedCallback)(int value);
     void (*_phaseChangedCallback)(int value);
     void (*_switchStateChangedCallback)(bool value);
+    void (*_resetEnergyCallback)();
 
     int _currentView = 0;
     int _currentPhase = 0;
