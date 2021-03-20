@@ -25,28 +25,41 @@ hw::pzem004tvalues phase1Values;
 hw::pzem004tvalues phase2Values;
 hw::pzem004tvalues phase3Values;
 
-bool startSetupMode = false;
+bool setupModeRequested = false;
+bool setupModeEnabled = false;
 
 void setupMode()
 {
+    setupModeEnabled = true;
     Serial.println(F("SETUP"));
     display.showMessage("Starting\nSetup");
     nw->enableConfigMode();
 
     IPAddress ip = nw->ipAddress();
-    char message[20];
+    char message[18];
     sprintf(message, "%i.%i.\ņ%i.%i", ip[0], ip[1], ip[2], ip[3]);
     display.showMessage(message);
 
     webServer->enable();
-    while(webServer->enabled())
+    while(webServer->enabled() && setupModeEnabled)
     {
         vTaskDelay( 500 / portTICK_PERIOD_MS);
     }
-    display.showMessage("Configu\nsaved.");
+    if(setupModeEnabled)
+    {
+        display.showMessage("Configu\nsaved");
+    }
+    else
+    {
+        display.showMessage("Setup\ncancelled");
+    }
+
+    webServer->disable();
     nw->disableConfigMode();
-    vTaskDelay( 2000 / portTICK_PERIOD_MS);
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
     display.clearMessage();
+
+    setupModeEnabled = false;
 }
 
 void TaskPollPzem(void *pvParameters)
@@ -95,12 +108,6 @@ void TaskInput(void *pvParameters)
     {
         input->update();
 
-        if(startSetupMode)
-        {
-            setupMode();
-            startSetupMode = false;
-        }
-
         vTaskDelay( 25 / portTICK_PERIOD_MS);
     }
 }
@@ -112,6 +119,23 @@ void TaskNetwork(void *pvParameters)
         nw->update(phase1Values, phase2Values, phase3Values);
 
         vTaskDelay( 100 / portTICK_PERIOD_MS);
+    }
+}
+
+void TaskSetupMode(void *pvParameters)
+{
+    while(true)
+    {
+        if(setupModeRequested)
+        {
+            setupModeRequested = false;
+            if(!setupModeEnabled)
+            {
+                setupMode();
+            }
+        }
+
+        vTaskDelay( 200 / portTICK_PERIOD_MS);
     }
 }
 
@@ -128,15 +152,15 @@ void setupTasks()
 {
     xTaskCreate(
             TaskPollPzem
-            ,  "PzemPoll"
-            ,  128
+            ,  "Pzm"
+            ,  64
             ,  NULL
             ,  2
             ,  NULL );
 
     xTaskCreate(
             TaskDisplay
-            ,  "Display"
+            ,  "Dsp"
             ,  256
             ,  NULL
             ,  0
@@ -145,7 +169,7 @@ void setupTasks()
     xTaskCreate(
             TaskLed
             ,  "Led"
-            ,  128
+            ,  48
             ,  NULL
             ,  0
             ,  NULL );
@@ -153,30 +177,36 @@ void setupTasks()
     xTaskCreate(
             TaskInput
             ,  "Input"
-            ,  512
+            ,  64
             ,  NULL
             ,  0
             ,  NULL );
 
     xTaskCreate(
             TaskNetwork
-            ,  "Network"
-            ,  512
+            ,  "Nw"
+            ,  448
             ,  NULL
             ,  1
             ,  NULL );
 
     xTaskCreate(
+            TaskSetupMode
+            ,  "Setup"
+            ,  256
+            ,  NULL
+            ,  0
+            ,  NULL );
+
+    xTaskCreate(
             TaskWebServer
-            ,  "WebServer"
-            ,  512
+            ,  "WS"
+            ,  448
             ,  NULL
             ,  0
             ,  NULL );
 
 }
-
-//void(* reset) (void) = 0;
 
 void buttonPressed(hw::ButtonId buttonId)
 {
@@ -187,7 +217,15 @@ void buttonPressed(hw::ButtonId buttonId)
             break;
         case hw::ButtonId::SwitchPhaseLong:
         {
-            setupMode();
+            if(setupModeEnabled)
+            {
+                setupModeEnabled = false;
+            }
+            else
+            {
+                setupModeRequested = true;
+            }
+
             break;
         }
         case hw::ButtonId::SwitchView:
@@ -221,11 +259,9 @@ void setup()
     pzem = new hw::Pzem004t(&Serial1, &Serial2, &Serial3);
     nw->initialize();
 
-	pinMode(LED_BUILTIN, OUTPUT);
-
 	setupTasks();
 
-    startSetupMode = !configuration->hasValidSignature();
+    setupModeRequested = !configuration->hasValidSignature();
 }
 
 void loop()

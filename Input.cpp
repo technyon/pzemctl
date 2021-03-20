@@ -20,17 +20,7 @@ namespace hw
     void Input::update()
     {
         checkSwitchPhase();
-
-        int value = digitalRead(SWITCH_VIEW_PIN);
-        if(_lastSwitchViewPinValue == 1 && value == 0)
-        {
-            switchViewPressedTs = millis();
-//            _buttonPressed(ButtonId::SwitchView);
-        }
-
-
-
-        _lastSwitchViewPinValue = value;
+        checkSwitchView();
     }
 
     void Input::checkSwitchPhase()

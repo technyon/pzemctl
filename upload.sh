@@ -3,5 +3,3 @@
 export SERIAL_PORT=/dev/ttyACM0
 cd cmake-build-debug
 ninja upload-pzemctl
-
-tail -f /dev/ttyACM0
