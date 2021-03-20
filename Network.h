@@ -29,6 +29,7 @@ public:
 
     void publishView(int value);
     void publishPhase(int value);
+    void publishSwitchState(bool value);
 
 private:
     void initializeEthernet();
@@ -40,28 +41,29 @@ private:
     void reconnect();
     void nwDelay(unsigned long ms);
 
-    const char* phase1Voltage = "energy/phase1/voltage";
-    const char* phase1Current ="energy/phase1/current";
-    const char* phase1Energy = "energy/phase1/energy";
-    const char* phase1Frequency ="energy/phase1/frequency";
-    const char* phase1PowerFactor ="energy/phase1/powerfactor";
+    const char* phase1VoltageTopic = "energy/phase1/voltage";
+    const char* phase1CurrentTopic ="energy/phase1/current";
+    const char* phase1EnergyTopic = "energy/phase1/energy";
+    const char* phase1FrequencyTopic ="energy/phase1/frequency";
+    const char* phase1PowerFactorTopic ="energy/phase1/powerfactor";
 
-    const char* phase2Voltage = "energy/phase2/voltage";
-    const char* phase2Current ="energy/phase2/current";
-    const char* phase2Energy = "energy/phase2/energy";
-    const char* phase2Frequency ="energy/phase2/frequency";
-    const char* phase2PowerFactor ="energy/phase2/powerfactor";
+    const char* phase2VoltageTopic = "energy/phase2/voltage";
+    const char* phase2CurrentTopic ="energy/phase2/current";
+    const char* phase2EnergyTopic = "energy/phase2/energy";
+    const char* phase2FrequencyTopic ="energy/phase2/frequency";
+    const char* phase2PowerFactorTopic ="energy/phase2/powerfactor";
 
-    const char* phase3Voltage = "energy/phase3/voltage";
-    const char* phase3Current ="energy/phase3/current";
-    const char* phase3Energy = "energy/phase3/energy";
-    const char* phase3Frequency ="energy/phase3/frequency";
-    const char* phase3PowerFactor ="energy/phase3/powerfactor";
+    const char* phase3VoltageTopic = "energy/phase3/voltage";
+    const char* phase3CurrentTopic ="energy/phase3/current";
+    const char* phase3EnergyTopic = "energy/phase3/energy";
+    const char* phase3FrequencyTopic ="energy/phase3/frequency";
+    const char* phase3PowerFactorTopic ="energy/phase3/powerfactor";
 
-    const char* _led1Brightness = "energy/led1Brightness";
-    const char* _led2Brightness = "energy/led2Brightness";
-    const char* _selectedView = "energy/view";
-    const char* _selectedPhase = "energy/phase";
+    const char* _led1BrightnessTopic = "energy/led1Brightness";
+    const char* _led2BrightnessTopic = "energy/led2Brightness";
+    const char* _selectedViewTopic = "energy/view";
+    const char* _selectedPhaseTopic = "energy/phase";
+    const char* _switchStateTopic = "energy/switchState";
 
     const char _space = ' ';
     char _charVal[21];
@@ -78,9 +80,11 @@ private:
 
     int _currentView = 0;
     int _currentPhase = 0;
+    bool _switchState = true;
 
     bool _viewChanged = false;
     bool _phaseChanged = false;
+    bool _switchStateChanged = false;
 
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;

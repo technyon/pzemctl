@@ -30,7 +30,7 @@ hw::pzem004tvalues phase3Values;
 bool setupModeRequested = false;
 bool setupModeEnabled = false;
 
-bool switchState = false;
+bool switchState = true;
 
 void setupMode()
 {
@@ -218,12 +218,23 @@ void buttonPressed(hw::ButtonId buttonId)
         case hw::ButtonId::SwitchView:
             display.switchView();
             nw->publishView((int)display.selectedView() - 1);
-            led.setBrightnessSwitchState(switchState ? 0 : 255);
             break;
         case hw::ButtonId::SwitchOnOff:
-            Serial.println("ON_OFF");
             switchState = !switchState;
             digitalWrite(SWITCH_PIN, switchState);
+            led.setBrightnessSwitchState(switchState ? 255 : 0);
+            nw->publishSwitchState(!switchState);
+
+            if(switchState)
+            {
+                display.showMessage("\n       ON");
+            }
+            else
+            {
+                display.showMessage("\n      OFF");
+            }
+            vTaskDelay( 2000 / portTICK_PERIOD_MS);
+            display.clearMessage();
             break;
     }
 }
@@ -240,16 +251,13 @@ void viewChanged(int value)
 
 void phaseChanged(int value)
 {
-    display.changeView(value);
+    display.changePhase(value);
 }
 
 void setup()
 {
 	Serial.begin(9600);
     Serial.println(F("Start"));
-
-    pinMode(SWITCH_PIN, OUTPUT);
-    digitalWrite(SWITCH_PIN, switchState);
 
     randomSeed(analogRead(0));
 
@@ -262,6 +270,10 @@ void setup()
     input->initialize();
     display.initialize();
     led.initialize();
+
+    pinMode(SWITCH_PIN, OUTPUT);
+    digitalWrite(SWITCH_PIN, switchState);
+    led.setBrightnessSwitchState(switchState ? 255 : 0);
 
     pzem = new hw::Pzem004t(&Serial1, &Serial2, &Serial3);
     nw->initialize();

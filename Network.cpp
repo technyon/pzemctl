@@ -124,6 +124,12 @@ void Network::reconnect()
 
     while (!_mqttClient->connected() && !_configMode)
     {
+        _mqttClient->unsubscribe(_led2BrightnessTopic);
+        _mqttClient->unsubscribe(_led1BrightnessTopic);
+        _mqttClient->unsubscribe(_selectedViewTopic);
+        _mqttClient->unsubscribe(_selectedPhaseTopic);
+        _mqttClient->unsubscribe(_switchStateTopic);
+
         ethernetHardwareReset();
         initializeEthernet();
 
@@ -133,16 +139,18 @@ void Network::reconnect()
         {
             Serial.println(F("connected"));
             hw::Led::setNetworkLed(255);
-            _mqttClient->publish(_led1Brightness, "0");
-            _mqttClient->subscribe(_led1Brightness);
-            _mqttClient->publish(_led2Brightness, "0");
-            _mqttClient->subscribe(_led2Brightness);
+            _mqttClient->publish(_led1BrightnessTopic, "0");
+            _mqttClient->publish(_led2BrightnessTopic, "0");
 
-            _mqttClient->subscribe(_selectedView);
-            _mqttClient->subscribe(_selectedPhase);
+            publishView(_currentView);
+            publishPhase(_currentPhase);
+            publishSwitchState(_switchState);
 
-            publishView(0);
-            publishPhase(0);
+            _mqttClient->subscribe(_led2BrightnessTopic);
+            _mqttClient->subscribe(_led1BrightnessTopic);
+            _mqttClient->subscribe(_selectedViewTopic);
+            _mqttClient->subscribe(_selectedPhaseTopic);
+            _mqttClient->subscribe(_switchStateTopic);
         }
         else
         {
@@ -194,23 +202,23 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
     {
         _updateCnt = 0;
 
-        publishFloat(phase1Voltage, phase1.voltage, 2);
-        publishFloat(phase1Current, phase1.current, 2);
-        publishFloat(phase1Energy, phase1.energy, 2);
-        publishFloat(phase1Frequency, phase1.frequency, 2);
-        publishFloat(phase1PowerFactor, phase1.pf, 2);
+        publishFloat(phase1VoltageTopic, phase1.voltage, 2);
+        publishFloat(phase1CurrentTopic, phase1.current, 2);
+        publishFloat(phase1EnergyTopic, phase1.energy, 2);
+        publishFloat(phase1FrequencyTopic, phase1.frequency, 2);
+        publishFloat(phase1PowerFactorTopic, phase1.pf, 2);
 
-        publishFloat(phase2Voltage, phase2.voltage, 2);
-        publishFloat(phase2Current, phase2.current, 2);
-        publishFloat(phase2Energy, phase2.energy, 2);
-        publishFloat(phase2Frequency, phase2.frequency, 2);
-        publishFloat(phase2PowerFactor, phase2.pf, 2);
+        publishFloat(phase2VoltageTopic, phase2.voltage, 2);
+        publishFloat(phase2CurrentTopic, phase2.current, 2);
+        publishFloat(phase2EnergyTopic, phase2.energy, 2);
+        publishFloat(phase2FrequencyTopic, phase2.frequency, 2);
+        publishFloat(phase2PowerFactorTopic, phase2.pf, 2);
 
-        publishFloat(phase3Voltage, phase3.voltage, 2);
-        publishFloat(phase3Current, phase3.current, 2);
-        publishFloat(phase3Energy, phase3.energy, 2);
-        publishFloat(phase3Frequency, phase3.frequency, 2);
-        publishFloat(phase3PowerFactor, phase3.pf, 2);
+        publishFloat(phase3VoltageTopic, phase3.voltage, 2);
+        publishFloat(phase3CurrentTopic, phase3.current, 2);
+        publishFloat(phase3EnergyTopic, phase3.energy, 2);
+        publishFloat(phase3FrequencyTopic, phase3.frequency, 2);
+        publishFloat(phase3PowerFactorTopic, phase3.pf, 2);
     }
 
     if(_viewChanged)
@@ -218,7 +226,7 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
         _viewChanged = false;
         char cstr[5];
         itoa(_currentView, cstr, 5);
-        _mqttClient->publish(_selectedView, cstr);
+        _mqttClient->publish(_selectedViewTopic, cstr);
     }
 
     if(_phaseChanged)
@@ -226,7 +234,20 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
         _phaseChanged = false;
         char cstr[5];
         itoa(_currentPhase, cstr, 5);
-        _mqttClient->publish(_selectedPhase, cstr);
+        _mqttClient->publish(_selectedPhaseTopic, cstr);
+    }
+
+    if(_switchStateChanged)
+    {
+        _switchStateChanged = false;
+        if(_switchState)
+        {
+            _mqttClient->publish(_switchStateTopic, "1");
+        }
+        else
+        {
+            _mqttClient->publish(_switchStateTopic, "0");
+        }
     }
 
     _updating = false;
@@ -240,19 +261,19 @@ void Network::onMqttDataReceivedCallback(char* topic, byte* payload, unsigned in
 
 void Network::onMqttDataReceived(char *&topic, byte *&payload, unsigned int &length)
 {
-    if(strcmp(topic, _led1Brightness) == 0)
+    if(strcmp(topic, _led1BrightnessTopic) == 0)
     {
         hw::Led::setBrightnessWhite((int) atof((char *) payload) * 2.55);
     }
-    if(strcmp(topic, _led2Brightness) == 0)
+    if(strcmp(topic, _led2BrightnessTopic) == 0)
     {
         hw::Led::setBrightnessBlue((int) atof((char *) payload) * 2.55);
     }
-    if(strcmp(topic, _selectedView) == 0)
+    if(strcmp(topic, _selectedViewTopic) == 0)
     {
         Network::_viewChangedCallback((int) atof((char *) payload));
     }
-    if(strcmp(topic, _selectedPhase) == 0)
+    if(strcmp(topic, _selectedPhaseTopic) == 0)
     {
         Network::_phaseChangedCallback((int) atof((char *) payload));
     }
@@ -332,4 +353,10 @@ void Network::publishPhase(int value)
 {
     _currentPhase = value;
     _phaseChanged = true;
+}
+
+void Network::publishSwitchState(bool value)
+{
+    _switchState = value;
+    _switchStateChanged = true;
 }
