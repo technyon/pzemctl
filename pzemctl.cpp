@@ -96,16 +96,6 @@ void TaskDisplay(void *pvParameters)
     }
 }
 
-void TaskLed(void *pvParameters)
-{
-    while(true)
-    {
-        led.update();
-
-        vTaskDelay( 500 / portTICK_PERIOD_MS);
-    }
-}
-
 void TaskInput(void *pvParameters)
 {
     while(true)
@@ -166,14 +156,6 @@ void setupTasks()
             TaskDisplay
             ,  "Dsp"
             ,  256
-            ,  NULL
-            ,  0
-            ,  NULL );
-
-    xTaskCreate(
-            TaskLed
-            ,  "Led"
-            ,  64
             ,  NULL
             ,  0
             ,  NULL );

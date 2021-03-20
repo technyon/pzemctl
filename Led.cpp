@@ -6,12 +6,10 @@ namespace hw
 
     void Led::initialize()
     {
-
-    }
-
-    void Led::update()
-    {
-
+        setNetworkLed(0);
+        setBrightnessWhite(0);
+        setBrightnessBlue(0);
+        setBrightnessSwitchState(0);
     }
 
     void Led::setNetworkLed(const int& value)

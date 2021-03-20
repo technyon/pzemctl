@@ -6,7 +6,6 @@ namespace hw
     {
     public:
         void initialize();
-        void update();
 
         static void setNetworkLed(const int& value);
         static void setBrightnessWhite(const int& value);
