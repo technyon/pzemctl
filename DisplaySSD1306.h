@@ -57,6 +57,8 @@ namespace hw
         const int16_t col1y = 16;
         const int16_t colHeight = 23;
 
+        float _maxCurrent = 1;
+
         byte _selectedPhase = 0; // 0 = all; 1-3 = phase1,2,3
         View _selectedView = View::VoltagePowerFrequency;
     };

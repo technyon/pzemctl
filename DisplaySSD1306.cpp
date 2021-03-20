@@ -38,6 +38,8 @@ namespace hw
     {
         if(!_isInitialized) return;
 
+        _maxCurrent = max(_maxCurrent, max(max(phase1Values.current, phase2Values.current), phase3Values.current));
+
         _ssd1306.clearDisplay();
 
         if(_message != nullptr)
@@ -49,9 +51,9 @@ namespace hw
             pzem004tvalues values = getSelectedValues(phasesCombined, phase1Values, phase2Values, phase3Values);
 
             drawSelectedPhase();
-            drawBarGraph(5, 0, 25, 18, 0, 32, phase1Values.current);
-            drawBarGraph(5, colHeight * 1, 25, 18, 0, 32, phase2Values.current);
-            drawBarGraph(5, colHeight * 2, 25, 18, 0, 32, phase3Values.current);
+            drawBarGraph(5, 0, 25, 18, 0, _maxCurrent, phase1Values.current);
+            drawBarGraph(5, colHeight * 1, 25, 18, 0, _maxCurrent, phase2Values.current);
+            drawBarGraph(5, colHeight * 2, 25, 18, 0, _maxCurrent, phase3Values.current);
 
             switch (_selectedView)
             {

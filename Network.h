@@ -55,6 +55,7 @@ private:
     const char* phase3PowerFactor ="energy/phase3/powerfactor";
 
     const char* ledBrightness ="energy/ledBrightness";
+    const char* switchState ="energy/switchState";
 
     const char _space = ' ';
     char _charVal[21];
@@ -63,6 +64,7 @@ private:
 
     bool _configMode = false;
     bool _updating = false;
+    bool _switchState = false;
 
     uint8_t _updateCnt = 0;
 
