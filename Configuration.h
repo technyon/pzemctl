@@ -8,7 +8,7 @@ public:
     Configuration(void (*callback)());
     virtual ~Configuration() = default;
 
-    char mqttServerAddress[40] = "";
+    char mqttServerAddress[41] = "";
     char dnsServerAddress[17] = "";
     char gatewayAddress[17] = "";
     char ipAddress[17] = "192.168.168.168";

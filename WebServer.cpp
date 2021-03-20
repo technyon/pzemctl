@@ -109,7 +109,7 @@ namespace web
 
         client.print("MQTT Server: <INPUT TYPE=TEXT VALUE=\"");
         client.print(_configuration->mqttServerAddress);
-        client.println("\" NAME=\"MQTTSERVER\" SIZE=\"25\" MAXLENGTH=\"50\"><BR>");
+        client.println("\" NAME=\"MQTTSERVER\" SIZE=\"25\" MAXLENGTH=\"40\"><BR>");
 
         client.print("DNS Server: <INPUT TYPE=TEXT VALUE=\"");
         client.print(_configuration->dnsServerAddress);
