@@ -63,11 +63,11 @@ private:
     const char* phase3FrequencyTopic ="energy/phase3/frequency";
     const char* phase3PowerFactorTopic ="energy/phase3/powerfactor";
 
-    const char* _led1BrightnessTopic = "energy/led1Brightness";
-    const char* _led2BrightnessTopic = "energy/led2Brightness";
-    const char* _selectedViewTopic = "energy/view";
-    const char* _selectedPhaseTopic = "energy/phase";
-    const char* _switchStateTopic = "energy/switchState";
+    const char* _led1BrightnessTopic = "energy/control/led1Brightness";
+    const char* _led2BrightnessTopic = "energy/control/led2Brightness";
+    const char* _selectedViewTopic = "energy/control/view";
+    const char* _selectedPhaseTopic = "energy/control/phase";
+    const char* _switchStateTopic = "energy/control/switchState";
 
     const char _space = ' ';
     char _charVal[21];
