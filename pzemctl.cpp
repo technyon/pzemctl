@@ -223,7 +223,7 @@ void buttonPressed(hw::ButtonId buttonId)
             switchState = !switchState;
             digitalWrite(SWITCH_PIN, switchState);
             led.setBrightnessSwitchState(switchState ? 255 : 0);
-            nw->publishSwitchState(!switchState);
+            nw->publishSwitchState(switchState);
 
             if(switchState)
             {
@@ -254,6 +254,13 @@ void phaseChanged(int value)
     display.changePhase(value);
 }
 
+void switchStateChanged(bool value)
+{
+    switchState = value;
+    digitalWrite(SWITCH_PIN, switchState);
+    led.setBrightnessSwitchState(switchState ? 255 : 0);
+}
+
 void setup()
 {
 	Serial.begin(9600);
@@ -264,7 +271,7 @@ void setup()
     configuration = new Configuration(configurationChanged);
 
     input = new hw::Input(buttonPressed);
-    nw = new Network(configuration, viewChanged, phaseChanged);
+    nw = new Network(configuration, viewChanged, phaseChanged, switchStateChanged);
     webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();

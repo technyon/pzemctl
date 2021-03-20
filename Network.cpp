@@ -11,10 +11,14 @@
 
 Network* nwInst;
 
-Network::Network(Configuration* configuration, void (*viewChangedCallback)(int value), void (*phaseChangedCallback)(int value))
+Network::Network(Configuration* configuration,
+                 void (*viewChangedCallback)(int value),
+                 void (*phaseChangedCallback)(int value),
+                 void (*switchStateChangedCallback)(bool value))
 : _configuration(configuration),
   _viewChangedCallback(viewChangedCallback),
-  _phaseChangedCallback(phaseChangedCallback)
+  _phaseChangedCallback(phaseChangedCallback),
+  _switchStateChangedCallback(switchStateChangedCallback)
 {
     nwInst = this;
 }
@@ -276,6 +280,10 @@ void Network::onMqttDataReceived(char *&topic, byte *&payload, unsigned int &len
     if(strcmp(topic, _selectedPhaseTopic) == 0)
     {
         Network::_phaseChangedCallback((int) atof((char *) payload));
+    }
+    if(strcmp(topic, _switchStateTopic) == 0)
+    {
+        Network::_switchStateChangedCallback((int) atof((char *) payload) > 0);
     }
 }
 

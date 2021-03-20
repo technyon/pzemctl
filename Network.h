@@ -13,7 +13,11 @@ private:
     static const uint8_t ETHERNET_RESET_PIN = 49;
 
 public:
-    explicit Network(Configuration* configuration, void (*viewChangedCallback)(int value), void (*_phaseChangedCallback)(int value));
+    explicit Network(Configuration* configuration,
+                     void (*viewChangedCallback)(int value),
+                     void (*_phaseChangedCallback)(int value),
+                     void (*switchStateChangedCallback)(bool value));
+
     virtual ~Network();
 
     void initialize();
@@ -77,6 +81,7 @@ private:
 
     void (*_viewChangedCallback)(int value);
     void (*_phaseChangedCallback)(int value);
+    void (*_switchStateChangedCallback)(bool value);
 
     int _currentView = 0;
     int _currentPhase = 0;
