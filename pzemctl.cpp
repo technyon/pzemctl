@@ -231,6 +231,11 @@ void configurationChanged()
     nw->configurationChanged();
 }
 
+void viewChanged(int value)
+{
+    display.changeView(value);
+}
+
 void setup()
 {
 	Serial.begin(9600);
@@ -244,7 +249,7 @@ void setup()
     configuration = new Configuration(configurationChanged);
 
     input = new hw::Input(buttonPressed);
-    nw = new Network(configuration);
+    nw = new Network(configuration, viewChanged);
     webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();

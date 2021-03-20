@@ -7,12 +7,18 @@
 #include <src/Arduino_FreeRTOS.h>
 #include "Led.h"
 
-const char* Network::led1Brightness = "energy/led1Brightness";
-const char* Network::led2Brightness = "energy/led2Brightness";
+const char* Network::_led1Brightness = "energy/led1Brightness";
+const char* Network::_led2Brightness = "energy/led2Brightness";
+const char* Network::_selectedView = "energy/view";
 
-Network::Network(Configuration* configuration)
-: _configuration(configuration)
-{}
+Network* nwInst;
+
+Network::Network(Configuration* configuration, void (*viewChangedCallback)(int value))
+: _configuration(configuration),
+  _viewChangedCallback(viewChangedCallback)
+{
+    nwInst = this;
+}
 
 Network::~Network()
 {
@@ -29,7 +35,9 @@ void Network::initialize()
     Ethernet.init(ETHERNET_CS_PIN);
 
     _mqttClient = new PubSubClient(*_ethClient);
-    _mqttClient->setCallback(onMqttDataReceived);
+//    _mqttClient->setCallback(onMqttDataReceivedCallback);
+
+    _mqttClient->setCallback(Network::onMqttDataReceivedCallback);
 
     _fromTask = true;
 }
@@ -126,11 +134,14 @@ void Network::reconnect()
         {
             Serial.println(F("connected"));
             hw::Led::setNetworkLed(255);
-            _mqttClient->publish(led1Brightness, "0\0x00");
-            _mqttClient->subscribe(led1Brightness);
-            _mqttClient->publish(led2Brightness, "0\0x00");
-            _mqttClient->subscribe(led2Brightness);
-        } else
+            _mqttClient->publish(_led1Brightness, "0\0x00");
+            _mqttClient->subscribe(_led1Brightness);
+            _mqttClient->publish(_led2Brightness, "0\0x00");
+            _mqttClient->subscribe(_led2Brightness);
+            _mqttClient->publish(_selectedView, "0\0x00");
+            _mqttClient->subscribe(_selectedView);
+        }
+        else
         {
             Serial.print(F("failed, rc="));
             Serial.print(_mqttClient->state());
@@ -204,15 +215,25 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
     _updating = false;
 }
 
-void Network::onMqttDataReceived(char* topic, byte* payload, unsigned int length)
+void Network::onMqttDataReceivedCallback(char* topic, byte* payload, unsigned int length)
 {
-    if(strcmp(topic, led1Brightness) == 0)
+    nwInst->onMqttDataReceived(topic, payload, length);
+}
+
+
+void Network::onMqttDataReceived(char *&topic, byte *&payload, unsigned int &length)
+{
+    if(strcmp(topic, _led1Brightness) == 0)
     {
         hw::Led::setBrightnessWhite((int) atof((char *) payload) * 2.55);
     }
-    if(strcmp(topic, led2Brightness) == 0)
+    if(strcmp(topic, _led2Brightness) == 0)
     {
         hw::Led::setBrightnessBlue((int) atof((char *) payload) * 2.55);
+    }
+    if(strcmp(topic, _selectedView) == 0)
+    {
+        Network::_viewChangedCallback((int) atof((char *) payload));
     }
 }
 

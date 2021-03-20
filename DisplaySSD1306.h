@@ -35,6 +35,11 @@ namespace hw
         void showMessage(char* message);
         void clearMessage();
 
+        void changeView(int value);
+
+        const byte selectedPhase();
+        const View selectedView();
+
     private:
         void drawVoltagePowerFrequency(const pzem004tvalues& values);
         void drawVoltageCurrentFrequency(const pzem004tvalues& values);

@@ -5,9 +5,7 @@ namespace hw
 {
     DisplaySSD1306::DisplaySSD1306()
     : _ssd1306(128, 64, &Wire, -1)
-    {
-
-    }
+    { }
 
     void DisplaySSD1306::initialize()
     {
@@ -213,5 +211,20 @@ namespace hw
     void DisplaySSD1306::clearMessage()
     {
         _message = nullptr;
+    }
+
+    const byte DisplaySSD1306::selectedPhase()
+    {
+        return _selectedPhase;
+    }
+
+    const View DisplaySSD1306::selectedView()
+    {
+        _selectedView;
+    }
+
+    void DisplaySSD1306::changeView(int value)
+    {
+        _selectedView = (View)constrain(value+1, (int)View::First + 1, (int)View::Last - 1);
     }
 }

@@ -13,7 +13,7 @@ private:
     static const uint8_t ETHERNET_RESET_PIN = 49;
 
 public:
-    explicit Network(Configuration* configuration);
+    explicit Network(Configuration* configuration, void (*viewChangedCallback)(int value));
     virtual ~Network();
 
     void initialize();
@@ -31,7 +31,8 @@ private:
     void initializeEthernet();
     void ethernetHardwareReset();
     void publishFloat(const char* topic, const float& value, const float& precision);
-    static void onMqttDataReceived(char* topic, byte* payload, unsigned int length);
+    static void onMqttDataReceivedCallback(char* topic, byte* payload, unsigned int length);
+    void onMqttDataReceived(char*& topic, byte*& payload, unsigned int& length);
 
     void reconnect();
     void nwDelay(unsigned long ms);
@@ -54,8 +55,9 @@ private:
     const char* phase3Frequency ="energy/phase3/frequency";
     const char* phase3PowerFactor ="energy/phase3/powerfactor";
 
-    static const char* led1Brightness;
-    static const char* led2Brightness;
+    static const char* _led1Brightness;
+    static const char* _led2Brightness;
+    static const char* _selectedView;
 
     const char _space = ' ';
     char _charVal[21];
@@ -66,6 +68,8 @@ private:
     bool _updating = false;
 
     uint8_t _updateCnt = 0;
+
+    void (*_viewChangedCallback)(int value);
 
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;
