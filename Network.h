@@ -11,7 +11,10 @@ enum class NetworkEventType
     viewChange,
     phaseChange,
     switchStateChange,
-    resetEnergy
+    resetEnergy,
+    customViewValue1Changed,
+    customViewValue2Changed,
+    customViewValue3Changed
 };
 
 struct NetworkEvent
@@ -76,7 +79,6 @@ private:
     const char* phase3EnergyTopic = "energy/phase3/energy";
     const char* phase3FrequencyTopic ="energy/phase3/frequency";
     const char* phase3PowerFactorTopic ="energy/phase3/powerfactor";
-
     const char* _led1BrightnessTopic = "energy/control/led1Brightness";
     const char* _led2BrightnessTopic = "energy/control/led2Brightness";
     const char* _selectedViewTopic = "energy/control/view";
@@ -84,13 +86,17 @@ private:
     const char* _switchStateTopic = "energy/control/switchState";
     const char* _resetEnergyTopic = "energy/control/resetEnergy";
 
+    const char* _customViewValue1Topic = "energy/control/customValue1";
+    const char* _customViewValue2Topic = "energy/control/customValue2";
+    const char* _customViewValue3Topic = "energy/control/customValue3";
+
+
     long _lastPublish = 0;
     long _lastMaintain = 0;
     const char _space = ' ';
     char _charVal[21];
     int _charIndex;
     bool _fromTask = false;
-    long _connectedTs = 0;
 
     bool _configMode = false;
     bool _updating = false;

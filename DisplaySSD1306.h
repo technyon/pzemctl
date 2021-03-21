@@ -34,7 +34,7 @@ namespace hw
         void initialize();
         void update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1Values, const hw::pzem004tvalues& phase2Values, const hw::pzem004tvalues& phase3Values);
 
-        void drawBarGraph(const int16_t& x, const int16_t& y, const int16_t& width, const int16_t& height, const float& min, const float& max, const float& value);
+        void setCustomViewConfiguration(const ViewConfiguration& customViewConfiguration);
 
         void switchView();
         void switchPhase();
@@ -47,10 +47,12 @@ namespace hw
 
         const byte selectedPhase();
         const int selectedView();
+        const ViewConfiguration& customViewConfiguration();
 
     private:
         void drawSelectedPhase();
         void drawMessage();
+        void drawBarGraph(const int16_t& x, const int16_t& y, const int16_t& width, const int16_t& height, const float& min, const float& max, const float& value);
         void drawValueByType(int16_t x, int16_t y, const ViewValueType& type, const pzem004tvalues& values);
 
         const hw::pzem004tvalues& getSelectedValues(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1Values, const hw::pzem004tvalues& phase2Values, const hw::pzem004tvalues& phase3Values);
@@ -66,6 +68,8 @@ namespace hw
                 { ViewValueType::Current, ViewValueType::Power, ViewValueType::Energy },
                 { ViewValueType::Voltage, ViewValueType::Frequency, ViewValueType::PowerFactor },
             };
+
+        ViewConfiguration _customViewConfiguration;
 
         bool _isInitialized = false;
         char* _message = nullptr;

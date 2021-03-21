@@ -33,6 +33,18 @@ void Configuration::initialize()
     {
         ipAddress[i] = 0;
     }
+    for(int i=0; i < sizeof(subnetMask); i++)
+    {
+        subnetMask[i] = 0;
+    }
+    for(int i=0; i < sizeof(mac); i++)
+    {
+        mac[i] = 0;
+    }
+    for(int i=0; i < sizeof(mqttPublishInterval); i++)
+    {
+        mqttPublishInterval[i] = 0;
+    }
 
     readEeprom();
 }
@@ -44,9 +56,6 @@ void Configuration::readEeprom()
     {
         Serial.println(F("No valid signature found in eeprom."));
         generateMacAddress();
-        customView[0] = 0;
-        customView[1] = 1;
-        customView[2] = 2;
         return;
     }
 

@@ -244,6 +244,7 @@ void buttonPressed(hw::ButtonId buttonId)
             setSwitchState(!switchState, true);
             nw->publishSwitchState(switchState);
             break;
+
     }
 }
 
@@ -271,6 +272,27 @@ void onNetworkEventReceived(const NetworkEvent& event)
             vTaskDelay( 1000 / portTICK_PERIOD_MS);
             display.clearMessage();
             break;
+        case NetworkEventType::customViewValue1Changed:
+        {
+            hw::ViewConfiguration viewConfiguration = display.customViewConfiguration();
+            viewConfiguration.value1 = (hw::ViewValueType) event.paramInt;
+            display.setCustomViewConfiguration(viewConfiguration);
+            break;
+        }
+        case NetworkEventType::customViewValue2Changed:
+        {
+            hw::ViewConfiguration viewConfiguration = display.customViewConfiguration();
+            viewConfiguration.value2 = (hw::ViewValueType) event.paramInt;
+            display.setCustomViewConfiguration(viewConfiguration);
+            break;
+        }
+        case NetworkEventType::customViewValue3Changed:
+        {
+            hw::ViewConfiguration viewConfiguration = display.customViewConfiguration();
+            viewConfiguration.value3 = (hw::ViewValueType) event.paramInt;
+            display.setCustomViewConfiguration(viewConfiguration);
+            break;
+        }
         default:
             Serial.print(F("Unhandled network event type: "));
             Serial.print((int) event.type);
@@ -293,7 +315,14 @@ void setup()
     webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();
+
+    hw::ViewConfiguration viewConfiguration;
+    viewConfiguration.value1 = hw::ViewValueType::Voltage;
+    viewConfiguration.value2 = hw::ViewValueType::Current;
+    viewConfiguration.value3 = hw::ViewValueType::PowerFactor;
+
     display.initialize();
+    display.setCustomViewConfiguration(viewConfiguration);
     led.initialize();
 
     pinMode(SWITCH_PIN, OUTPUT);

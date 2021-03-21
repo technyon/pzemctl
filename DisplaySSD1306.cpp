@@ -53,9 +53,11 @@ namespace hw
             drawBarGraph(5, colHeight * 1, 25, 18, 0, _maxCurrent, phase2Values.current);
             drawBarGraph(5, colHeight * 2, 25, 18, 0, _maxCurrent, phase3Values.current);
 
-            drawValueByType(col1x,col1y,                    _viewConfigurations[_selectedView].value1, values);
-            drawValueByType(col1x,col1y + 1 * colHeight, _viewConfigurations[_selectedView].value2, values);
-            drawValueByType(col1x,col1y + 2 * colHeight, _viewConfigurations[_selectedView].value3, values);
+            ViewConfiguration viewConfiguration = _selectedView == NUM_VIEW_CONFIGURATIONS ? _customViewConfiguration : _viewConfigurations[_selectedView];
+
+            drawValueByType(col1x,col1y,                    viewConfiguration.value1, values);
+            drawValueByType(col1x,col1y + 1 * colHeight, viewConfiguration.value2, values);
+            drawValueByType(col1x,col1y + 2 * colHeight, viewConfiguration.value3, values);
         }
         _ssd1306.display();
     }
@@ -125,7 +127,7 @@ namespace hw
     {
         _selectedView++;
 
-        if(_selectedView >= NUM_VIEW_CONFIGURATIONS)
+        if(_selectedView > NUM_VIEW_CONFIGURATIONS)
         {
             _selectedView = 0;
         }
@@ -184,11 +186,23 @@ namespace hw
 
     void DisplaySSD1306::changeView(int value)
     {
-        _selectedView = constrain(value+1, 0, NUM_VIEW_CONFIGURATIONS - 1);
+        _selectedView = constrain(value+1, 0, NUM_VIEW_CONFIGURATIONS); // This is correct. View number 4 is custom view
     }
 
     void DisplaySSD1306::changePhase(int value)
     {
         _selectedPhase = constrain(value, 0, 3);
+    }
+
+    void DisplaySSD1306::setCustomViewConfiguration(const ViewConfiguration& customViewConfiguration)
+    {
+        _customViewConfiguration.value1 = (ViewValueType)constrain((int)customViewConfiguration.value1, 0, 5);
+        _customViewConfiguration.value2 = (ViewValueType)constrain((int)customViewConfiguration.value2, 0, 5);
+        _customViewConfiguration.value3 = (ViewValueType)constrain((int)customViewConfiguration.value3, 0, 5);
+    }
+
+    const ViewConfiguration &DisplaySSD1306::customViewConfiguration()
+    {
+        return _customViewConfiguration;
     }
 }
