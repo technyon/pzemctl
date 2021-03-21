@@ -85,7 +85,7 @@ private:
     const char* _selectedPhaseTopic = "energy/control/phase";
     const char* _switchStateTopic = "energy/control/switchState";
     const char* _resetEnergyTopic = "energy/control/resetEnergy";
-
+    const char* _reconnectCountTopic = "energy/control/reconnectCount";
     const char* _customViewValue1Topic = "energy/control/customValue1";
     const char* _customViewValue2Topic = "energy/control/customValue2";
     const char* _customViewValue3Topic = "energy/control/customValue3";
@@ -97,6 +97,7 @@ private:
     char _charVal[21];
     int _charIndex;
     bool _fromTask = false;
+    uint32_t _reconnectCount = 0;
 
     bool _configMode = false;
     bool _updating = false;
@@ -107,7 +108,6 @@ private:
     int _currentView = 0;
     int _currentPhase = 0;
     bool _switchState = true;
-
     bool _viewChanged = false;
     bool _phaseChanged = false;
     bool _switchStateChanged = false;

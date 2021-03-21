@@ -166,6 +166,11 @@ void Network::reconnect()
             nwDelay(5000);
         }
     }
+
+    _reconnectCount++;
+    char reconnectStr[12];
+    itoa(_reconnectCount, reconnectStr, 10);
+    _mqttClient->publish(_reconnectCountTopic, reconnectStr);
 }
 
 void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)

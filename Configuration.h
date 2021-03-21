@@ -38,12 +38,9 @@ private:
     void readEeprom();
     void writeSignature();
     void initialize();
-
+    void generateMacAddress();
     void parseMqttPublishInterval();
 
     void (*_callback)();
-
-    void generateMacAddress();
-
     long _numericMqttPublishInterval = 1000;
 };

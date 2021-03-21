@@ -57,8 +57,6 @@ namespace hw
 
         const hw::pzem004tvalues& getSelectedValues(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1Values, const hw::pzem004tvalues& phase2Values, const hw::pzem004tvalues& phase3Values);
 
-        Adafruit_SSD1306 _ssd1306;
-
         #define NUM_VIEW_CONFIGURATIONS 4
 
         ViewConfiguration _viewConfigurations[NUM_VIEW_CONFIGURATIONS]
@@ -80,5 +78,7 @@ namespace hw
 
         byte _selectedPhase = 0; // 0 = all; 1-3 = phase1,2,3
         int _selectedView = 0;
+
+        Adafruit_SSD1306 _ssd1306;
     };
 }
