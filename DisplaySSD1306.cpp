@@ -53,22 +53,9 @@ namespace hw
             drawBarGraph(5, colHeight * 1, 25, 18, 0, _maxCurrent, phase2Values.current);
             drawBarGraph(5, colHeight * 2, 25, 18, 0, _maxCurrent, phase3Values.current);
 
-            switch (_selectedView)
-            {
-                case View::VoltagePowerFrequency:
-                    drawVoltagePowerFrequency(values);
-                    break;
-                case View::VoltageCurrentFrequency:
-                    drawVoltageCurrentFrequency(values);
-                    break;
-                case View::CurrentPowerEnergy:
-                    drawCurrentPowerEnergy(values);
-                    break;
-                case View::VoltageFrequencyPowerFactor:
-                    drawVoltageFrequencyPowerFactor(values);
-                    break;
-            }
-
+            drawValueByType(col1x,col1y,                    _viewConfigurations[_selectedView].value1, values);
+            drawValueByType(col1x,col1y + 1 * colHeight, _viewConfigurations[_selectedView].value2, values);
+            drawValueByType(col1x,col1y + 2 * colHeight, _viewConfigurations[_selectedView].value3, values);
         }
         _ssd1306.display();
     }
@@ -102,73 +89,45 @@ namespace hw
         }
     }
 
-    void DisplaySSD1306::drawVoltagePowerFrequency(const pzem004tvalues& values)
+    void DisplaySSD1306::drawValueByType(int16_t x, int16_t y, const ViewValueType &type, const pzem004tvalues& values)
     {
-        _ssd1306.setCursor(col1x,col1y);
-        _ssd1306.print(values.voltage, 1);
-        _ssd1306.print(F(" V"));
+        _ssd1306.setCursor(x, y);
 
-        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
-        _ssd1306.print((float)values.power, (int)(values.power < 1000 ? 1 : 0));
-        _ssd1306.print(F(" W"));
-
-        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
-        _ssd1306.print(values.frequency, 1);
-        _ssd1306.print(F(" Hz"));
-    }
-
-    void DisplaySSD1306::drawVoltageCurrentFrequency(const pzem004tvalues& values)
-    {
-        _ssd1306.setCursor(col1x,col1y);
-        _ssd1306.print(values.voltage, 1);
-        _ssd1306.print(F(" V"));
-
-        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
-        _ssd1306.print((float)values.current, 1);
-        _ssd1306.print(F(" A"));
-
-        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
-        _ssd1306.print(values.frequency, 1);
-        _ssd1306.print(F(" Hz"));
-    }
-
-    void DisplaySSD1306::drawCurrentPowerEnergy(const pzem004tvalues& values)
-    {
-        _ssd1306.setCursor(col1x,col1y);
-        _ssd1306.print(values.current, 1);
-        _ssd1306.print(F(" A"));
-
-        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
-        _ssd1306.print((float)values.power, 1);
-        _ssd1306.print(F(" W"));
-
-        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
-        _ssd1306.print(values.energy, values.energy < 1000 ? 1 : 0);
-        _ssd1306.print(F(" kw"));
-    }
-
-    void DisplaySSD1306::drawVoltageFrequencyPowerFactor(const pzem004tvalues& values)
-    {
-        _ssd1306.setCursor(col1x,col1y);
-        _ssd1306.print(values.voltage, 1);
-        _ssd1306.print(F(" V"));
-
-        _ssd1306.setCursor(col1x,col1y + 1 * colHeight);
-        _ssd1306.print((float)values.frequency, 1);
-        _ssd1306.print(F(" Hz"));
-
-        _ssd1306.setCursor(col1x,col1y + 2 * colHeight);
-        _ssd1306.print(values.pf, 1);
-//        _ssd1306.print(F(" Hz"));
+        switch(type)
+        {
+            case ViewValueType::Voltage:
+                _ssd1306.print(values.voltage, 1);
+                _ssd1306.print(F(" V"));
+                break;
+            case ViewValueType::Current:
+                _ssd1306.print((float)values.current, 1);
+                _ssd1306.print(F(" A"));
+                break;
+            case ViewValueType::Power:
+                _ssd1306.print((float)values.power, (int)(values.power < 1000 ? 1 : 0));
+                _ssd1306.print(F(" W"));
+                break;
+            case ViewValueType::Energy:
+                _ssd1306.print(values.energy, values.energy < 1000 ? 1 : 0);
+                _ssd1306.print(F(" kw"));
+                break;
+            case ViewValueType::Frequency:
+                _ssd1306.print(values.frequency, 1);
+                _ssd1306.print(F(" Hz"));
+                break;
+            case ViewValueType::PowerFactor:
+                _ssd1306.print(values.pf, 1);
+                break;
+        }
     }
 
     void DisplaySSD1306::switchView()
     {
-        _selectedView = (View)((int)_selectedView + 1);
-        if(_selectedView == View::Last)
+        _selectedView++;
+
+        if(_selectedView >= NUM_VIEW_CONFIGURATIONS)
         {
-            _selectedView = View::First;
-            _selectedView = (View)((int)_selectedView + 1);
+            _selectedView = 0;
         }
     }
 
@@ -218,14 +177,14 @@ namespace hw
         return _selectedPhase;
     }
 
-    const View DisplaySSD1306::selectedView()
+    const int DisplaySSD1306::selectedView()
     {
         return _selectedView;
     }
 
     void DisplaySSD1306::changeView(int value)
     {
-        _selectedView = (View)constrain(value+1, (int)View::First + 1, (int)View::Last - 1);
+        _selectedView = constrain(value+1, 0, NUM_VIEW_CONFIGURATIONS - 1);
     }
 
     void DisplaySSD1306::changePhase(int value)

@@ -44,6 +44,9 @@ void Configuration::readEeprom()
     {
         Serial.println(F("No valid signature found in eeprom."));
         generateMacAddress();
+        customView[0] = 0;
+        customView[1] = 1;
+        customView[2] = 2;
         return;
     }
 

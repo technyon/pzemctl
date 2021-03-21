@@ -15,6 +15,7 @@ public:
     char subnetMask[17] = "255.255.255.0";
     uint8_t mac[6];
     char mqttPublishInterval[7] = "5000";
+    int customView[3];
 
     void writeEeprom();
     void clearEeprom();
@@ -34,6 +35,7 @@ private:
     const int SUBNET_MASK_OFFSET = IP_EEPROM_OFFSET + sizeof(ipAddress);
     const int MAC_OFFSET = SUBNET_MASK_OFFSET + sizeof(subnetMask);
     const int MQTT_PUBLISH_INTERVAL = MAC_OFFSET + sizeof(mac);
+    const int CUSTOM_VIEW_OFFSET = MQTT_PUBLISH_INTERVAL + sizeof(mqttPublishInterval);
 
     void readEeprom();
     void writeSignature();

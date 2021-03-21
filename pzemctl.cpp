@@ -171,7 +171,7 @@ void setupTasks()
     xTaskCreate(
             TaskNetwork
             ,  "Nw"
-            ,  1024 // 768 is stable
+            ,  832 // 768 is stable
             ,  NULL
             ,  1
             ,  NULL );
@@ -187,7 +187,7 @@ void setupTasks()
     xTaskCreate(
             TaskWebServer
             ,  "WS"
-            ,  512
+            ,  448
             ,  NULL
             ,  0
             ,  NULL );
