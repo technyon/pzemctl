@@ -17,8 +17,5 @@ namespace hw
         static const int LED2_PIN = 6;
         static const int LED3_PIN = 7;
         static const int LED4_PIN = 8;
-
-        int _val = 0;
-        bool _direction = true;
     };
 }

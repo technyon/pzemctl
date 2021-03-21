@@ -3,7 +3,6 @@
 #include <EthernetClient.h>
 #include "Configuration.h"
 
-
 namespace web
 {
     enum class TokenType
@@ -21,15 +20,13 @@ namespace web
     {
     public:
         explicit WebServer(EthernetClient *ethClient, Configuration* configuration);
-
         virtual ~WebServer() = default;
 
         void update();
-
         void enable();
         void disable();
 
-        bool enabled();
+        [[nodiscard]] bool enabled();
 
     private:
         void serveHtml(EthernetClient& client);
