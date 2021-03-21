@@ -129,13 +129,6 @@ void Network::reconnect()
 
     while (!_mqttClient->connected() && !_configMode)
     {
-//        _mqttClient->unsubscribe(_led2BrightnessTopic);
-//        _mqttClient->unsubscribe(_led1BrightnessTopic);
-//        _mqttClient->unsubscribe(_selectedViewTopic);
-//        _mqttClient->unsubscribe(_selectedPhaseTopic);
-//        _mqttClient->unsubscribe(_switchStateTopic);
-//        _mqttClient->subscribe(_resetEnergyTopic);
-
         ethernetHardwareReset();
         initializeEthernet();
 
@@ -143,15 +136,22 @@ void Network::reconnect()
 
         if (_mqttClient->connect("pzem004t"))
         {
+            _connectedTs = millis();
+
             Serial.println(F("connected"));
             hw::Led::setNetworkLed(255);
-            _mqttClient->publish(_led1BrightnessTopic, "0");
-            _mqttClient->publish(_led2BrightnessTopic, "0");
 
-            publishView(_currentView);
-            publishPhase(_currentPhase);
-            publishSwitchState(_switchState);
-            _mqttClient->publish(_resetEnergyTopic, "");
+            if(_firstConnect)
+            {
+                _firstConnect = false;
+                _mqttClient->publish(_led1BrightnessTopic, "0");
+                _mqttClient->publish(_led2BrightnessTopic, "0");
+
+                publishView(_currentView);
+                publishPhase(_currentPhase);
+                publishSwitchState(_switchState);
+                _mqttClient->publish(_resetEnergyTopic, "");
+            }
         }
         else
         {
@@ -263,6 +263,8 @@ void Network::onMqttDataReceivedCallback(char* topic, byte* payload, unsigned in
 
 void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& length)
 {
+    if(millis() - _connectedTs < 5000) return;  // ignore incoming updates for 5 seconds after connection established
+
     char value[10];
     size_t l = min(length, sizeof(value)-1);
 
@@ -272,16 +274,21 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
     }
 
     value[l] = 0;
-
+/*
+    Serial.println(F("MQTT Message: "));
+    Serial.print(topic);
+    Serial.print(F(" = "));
+    Serial.println(value);
+*/
     if(strcmp(topic, _led1BrightnessTopic) == 0)
     {
         hw::Led::setBrightnessWhite((int) atof(value) * 2.55);
     }
-    if(strcmp(topic, _led2BrightnessTopic) == 0)
+    else if(strcmp(topic, _led2BrightnessTopic) == 0)
     {
         hw::Led::setBrightnessBlue((int) atof(value) * 2.55);
     }
-    if(strcmp(topic, _selectedViewTopic) == 0)
+    else if(strcmp(topic, _selectedViewTopic) == 0)
     {
         NetworkEvent event
                 {
@@ -290,7 +297,7 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                 };
         _networkEventCallback(event);
     }
-    if(strcmp(topic, _selectedPhaseTopic) == 0)
+    else if(strcmp(topic, _selectedPhaseTopic) == 0)
     {
         NetworkEvent event
                 {
@@ -299,16 +306,16 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                 };
         _networkEventCallback(event);
     }
-    if(strcmp(topic, _switchStateTopic) == 0)
+    else if(strcmp(topic, _switchStateTopic) == 0)
     {
         NetworkEvent event
                 {
                         type: NetworkEventType::switchStateChange,
-                        paramInt: atoi(value) > 0
                 };
+        event.paramBool = atoi(value) > 0;
         _networkEventCallback(event);
     }
-    if(strcmp(topic, _resetEnergyTopic) == 0)
+    else if(strcmp(topic, _resetEnergyTopic) == 0)
     {
         if(strcmp(value, "confirm") == 0)
         {

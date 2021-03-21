@@ -30,7 +30,7 @@ hw::pzem004tvalues phase3Values;
 bool setupModeRequested = false;
 bool setupModeEnabled = false;
 
-bool switchState = true;
+bool switchState = false;
 
 void setupMode()
 {
@@ -194,6 +194,27 @@ void setupTasks()
 
 }
 
+void setSwitchState(bool value, bool showMessage)
+{
+    if(switchState == value) return;
+
+    switchState = value;
+    digitalWrite(SWITCH_PIN, switchState);
+    led.setBrightnessSwitchState(switchState ? 255 : 0);
+    if(showMessage)
+    {
+        if (switchState)
+        {
+            display.showMessage("\n       ON");
+        } else
+        {
+            display.showMessage("\n      OFF");
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        display.clearMessage();
+    }
+}
+
 void buttonPressed(hw::ButtonId buttonId)
 {
     switch(buttonId)
@@ -220,21 +241,8 @@ void buttonPressed(hw::ButtonId buttonId)
             nw->publishView((int)display.selectedView() - 1);
             break;
         case hw::ButtonId::SwitchOnOff:
-            switchState = !switchState;
-            digitalWrite(SWITCH_PIN, switchState);
-            led.setBrightnessSwitchState(switchState ? 255 : 0);
+            setSwitchState(!switchState, true);
             nw->publishSwitchState(switchState);
-
-            if(switchState)
-            {
-                display.showMessage("\n       ON");
-            }
-            else
-            {
-                display.showMessage("\n      OFF");
-            }
-            vTaskDelay( 2000 / portTICK_PERIOD_MS);
-            display.clearMessage();
             break;
     }
 }
@@ -255,9 +263,7 @@ void onNetworkEventReceived(const NetworkEvent& event)
             display.changePhase(event.paramInt);
             break;
         case NetworkEventType::switchStateChange:
-            switchState = event.paramBool;
-            digitalWrite(SWITCH_PIN, switchState);
-            led.setBrightnessSwitchState(switchState ? 255 : 0);
+            setSwitchState(event.paramBool, true);
             break;
         case NetworkEventType::resetEnergy:
             pzem->resetEnergy();
@@ -291,8 +297,7 @@ void setup()
     led.initialize();
 
     pinMode(SWITCH_PIN, OUTPUT);
-    digitalWrite(SWITCH_PIN, switchState);
-    led.setBrightnessSwitchState(switchState ? 255 : 0);
+    setSwitchState(true, false);
 
     pzem = new hw::Pzem004t(&Serial1, &Serial2, &Serial3);
     nw->initialize();

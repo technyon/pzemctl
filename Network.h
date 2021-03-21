@@ -90,9 +90,11 @@ private:
     char _charVal[21];
     int _charIndex;
     bool _fromTask = false;
+    long _connectedTs = 0;
 
     bool _configMode = false;
     bool _updating = false;
+    bool _firstConnect = true;
 
     void (*_networkEventCallback)(const NetworkEvent& value);
 
