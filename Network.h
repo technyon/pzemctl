@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Ethernet.h>
-#include <PubSubClient.h>
+#include <src/PubSubClient.h>
 #include "Pzem004t.h"
 #include "DisplaySSD1306.h"
 #include "Configuration.h"
