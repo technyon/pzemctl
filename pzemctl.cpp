@@ -191,7 +191,6 @@ void setupTasks()
             ,  NULL
             ,  0
             ,  NULL );
-
 }
 
 void setSwitchState(bool value, bool showMessage)
@@ -306,7 +305,7 @@ void setup()
 	Serial.begin(9600);
     Serial.println(F("Start"));
 
-    randomSeed(analogRead(0));
+    randomSeed(analogRead(0) + analogRead(1) + analogRead(2));
 
     configuration = new Configuration(configurationChanged);
 

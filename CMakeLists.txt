@@ -31,7 +31,6 @@ add_executable(pzemctl
         Led.cpp
         Input.cpp WebServer.cpp WebServer.h Configuration.cpp Configuration.h)
 
-# Arduino.h is included in hello_world.cpp, so link with Arduino core
 target_link_arduino_libraries(pzemctl
     PRIVATE
         core
@@ -41,6 +40,4 @@ target_link_arduino_libraries(pzemctl
         Wire
 )
 
-# This is needed for the generation of HEX binary and uploading it
 target_enable_arduino_upload(pzemctl)
-

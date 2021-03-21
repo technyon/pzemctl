@@ -173,7 +173,8 @@ void Configuration::generateMacAddress()
 
 void Configuration::clearEeprom()
 {
-    for (int i = 0 ; i < EEPROM.length() ; i++) {
+    for (int i = 0 ; i < EEPROM.length() ; i++)
+    {
         EEPROM.update(i, 0);
     }
 }

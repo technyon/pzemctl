@@ -203,6 +203,11 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
         }
     }
 
+    if(_reconnectRequested)
+    {
+        _reconnectRequested = false;
+        reconnect();
+    }
     if (!_mqttClient->connected())
     {
         reconnect();
@@ -401,7 +406,7 @@ EthernetClient *Network::ethernetClient()
 
 void Network::configurationChanged()
 {
-    reconnect();
+    _reconnectRequested = true;
 }
 
 void Network::enableConfigMode()

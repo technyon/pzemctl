@@ -13,7 +13,7 @@ namespace web
 
     void WebServer::update()
     {
-       if(!_enabled) return;
+        if(!_enabled) return;
 
         // Create a client connection
         EthernetClient client = _server.available();

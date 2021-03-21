@@ -90,14 +90,15 @@ private:
     const char* _customViewValue2Topic = "energy/control/customValue2";
     const char* _customViewValue3Topic = "energy/control/customValue3";
 
-
     long _lastPublish = 0;
     long _lastMaintain = 0;
     const char _space = ' ';
     char _charVal[21];
     int _charIndex;
     bool _fromTask = false;
+    bool _reconnectRequested = false;
     uint32_t _reconnectCount = 0;
+
 
     bool _configMode = false;
     bool _updating = false;
