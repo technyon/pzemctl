@@ -244,26 +244,33 @@ void configurationChanged()
     nw->configurationChanged();
 }
 
-void viewChanged(int value)
+void onNetworkEventReceived(const NetworkEvent& event)
 {
-    display.changeView(value);
-}
-
-void phaseChanged(int value)
-{
-    display.changePhase(value);
-}
-
-void switchStateChanged(bool value)
-{
-    switchState = value;
-    digitalWrite(SWITCH_PIN, switchState);
-    led.setBrightnessSwitchState(switchState ? 255 : 0);
-}
-
-void resetEnergy()
-{
-    pzem->resetEnergy();
+    switch(event.type)
+    {
+        case NetworkEventType::viewChange:
+            display.changeView(event.paramInt);
+            break;
+        case NetworkEventType::phaseChange:
+            display.changePhase(event.paramInt);
+            break;
+        case NetworkEventType::switchStateChange:
+            switchState = event.paramBool;
+            digitalWrite(SWITCH_PIN, switchState);
+            led.setBrightnessSwitchState(switchState ? 255 : 0);
+            break;
+        case NetworkEventType::resetEnergy:
+            pzem->resetEnergy();
+            display.showMessage("Energy\nreset");
+            vTaskDelay( 1000 / portTICK_PERIOD_MS);
+            display.clearMessage();
+            break;
+        default:
+            Serial.print(F("Unhandled network event type: "));
+            Serial.print((int) event.type);
+            Serial.println();
+            break;
+    }
 }
 
 void setup()
@@ -276,7 +283,7 @@ void setup()
     configuration = new Configuration(configurationChanged);
 
     input = new hw::Input(buttonPressed);
-    nw = new Network(configuration, viewChanged, phaseChanged, switchStateChanged, resetEnergy);
+    nw = new Network(configuration, onNetworkEventReceived);
     webServer = new web::WebServer(nw->ethernetClient(), configuration);
 
     input->initialize();

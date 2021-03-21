@@ -6,6 +6,21 @@
 #include "DisplaySSD1306.h"
 #include "Configuration.h"
 
+enum class NetworkEventType
+{
+    viewChange,
+    phaseChange,
+    switchStateChange,
+    resetEnergy
+};
+
+struct NetworkEvent
+{
+    NetworkEventType type;
+    int paramInt;
+    bool paramBool;
+};
+
 class Network
 {
 private:
@@ -14,10 +29,8 @@ private:
 
 public:
     explicit Network(Configuration* configuration,
-                     void (*viewChangedCallback)(int value),
-                     void (*_phaseChangedCallback)(int value),
-                     void (*switchStateChangedCallback)(bool value),
-                     void (*resetEnergyCallback)());
+                     void (*networkEventCallback)(const NetworkEvent& value)
+);
 
     virtual ~Network();
 
@@ -81,10 +94,7 @@ private:
     bool _configMode = false;
     bool _updating = false;
 
-    void (*_viewChangedCallback)(int value);
-    void (*_phaseChangedCallback)(int value);
-    void (*_switchStateChangedCallback)(bool value);
-    void (*_resetEnergyCallback)();
+    void (*_networkEventCallback)(const NetworkEvent& value);
 
     int _currentView = 0;
     int _currentPhase = 0;

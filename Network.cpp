@@ -12,15 +12,9 @@
 Network* nwInst;
 
 Network::Network(Configuration* configuration,
-                 void (*viewChangedCallback)(int value),
-                 void (*phaseChangedCallback)(int value),
-                 void (*switchStateChangedCallback)(bool value),
-                 void (*resetEnergyCallback)())
+                 void (*networkEventCallback)(const NetworkEvent& value))
 : _configuration(configuration),
-  _viewChangedCallback(viewChangedCallback),
-  _phaseChangedCallback(phaseChangedCallback),
-  _switchStateChangedCallback(switchStateChangedCallback),
-  _resetEnergyCallback(resetEnergyCallback)
+  _networkEventCallback(networkEventCallback)
 {
     nwInst = this;
 }
@@ -75,7 +69,7 @@ void Network::initializeEthernet()
             // Check for Ethernet hardware present
             if (Ethernet.hardwareStatus() == EthernetNoHardware)
             {
-                Serial.println(F("Ethernet shield was not found.  Sorry, can't run without hardware. :("));
+                Serial.println(F("Ethernet module not found"));
                 return;
             }
             if (Ethernet.linkStatus() == LinkOFF)
@@ -289,21 +283,40 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
     }
     if(strcmp(topic, _selectedViewTopic) == 0)
     {
-        Network::_viewChangedCallback((int) atof(value));
+        NetworkEvent event
+                {
+                    type: NetworkEventType::viewChange,
+                    paramInt: atoi(value)
+                };
+        _networkEventCallback(event);
     }
     if(strcmp(topic, _selectedPhaseTopic) == 0)
     {
-        Network::_phaseChangedCallback((int) atof(value));
+        NetworkEvent event
+                {
+                        type: NetworkEventType::phaseChange,
+                        paramInt: atoi(value)
+                };
+        _networkEventCallback(event);
     }
     if(strcmp(topic, _switchStateTopic) == 0)
     {
-        Network::_switchStateChangedCallback((int) atof(value) > 0);
+        NetworkEvent event
+                {
+                        type: NetworkEventType::switchStateChange,
+                        paramInt: atoi(value) > 0
+                };
+        _networkEventCallback(event);
     }
     if(strcmp(topic, _resetEnergyTopic) == 0)
     {
         if(strcmp(value, "confirm") == 0)
         {
-            _resetEnergyCallback();
+            NetworkEvent event
+                    {
+                            type: NetworkEventType::resetEnergy
+                    };
+            _networkEventCallback(event);
         }
         _mqttClient->publish(_resetEnergyTopic, "");
     }
