@@ -40,9 +40,14 @@ void Network::initialize()
     Ethernet.init(ETHERNET_CS_PIN);
 
     _mqttClient = new PubSubClient(*_ethClient);
-//    _mqttClient->setCallback(onMqttDataReceivedCallback);
-
     _mqttClient->setCallback(Network::onMqttDataReceivedCallback);
+
+    _mqttClient->subscribe(_led2BrightnessTopic);
+    _mqttClient->subscribe(_led1BrightnessTopic);
+    _mqttClient->subscribe(_selectedViewTopic);
+    _mqttClient->subscribe(_selectedPhaseTopic);
+    _mqttClient->subscribe(_switchStateTopic);
+    _mqttClient->subscribe(_resetEnergyTopic);
 
     _fromTask = true;
 }
@@ -130,12 +135,12 @@ void Network::reconnect()
 
     while (!_mqttClient->connected() && !_configMode)
     {
-        _mqttClient->unsubscribe(_led2BrightnessTopic);
-        _mqttClient->unsubscribe(_led1BrightnessTopic);
-        _mqttClient->unsubscribe(_selectedViewTopic);
-        _mqttClient->unsubscribe(_selectedPhaseTopic);
-        _mqttClient->unsubscribe(_switchStateTopic);
-        _mqttClient->subscribe(_resetEnergyTopic);
+//        _mqttClient->unsubscribe(_led2BrightnessTopic);
+//        _mqttClient->unsubscribe(_led1BrightnessTopic);
+//        _mqttClient->unsubscribe(_selectedViewTopic);
+//        _mqttClient->unsubscribe(_selectedPhaseTopic);
+//        _mqttClient->unsubscribe(_switchStateTopic);
+//        _mqttClient->subscribe(_resetEnergyTopic);
 
         ethernetHardwareReset();
         initializeEthernet();
@@ -153,13 +158,6 @@ void Network::reconnect()
             publishPhase(_currentPhase);
             publishSwitchState(_switchState);
             _mqttClient->publish(_resetEnergyTopic, "");
-
-            _mqttClient->subscribe(_led2BrightnessTopic);
-            _mqttClient->subscribe(_led1BrightnessTopic);
-            _mqttClient->subscribe(_selectedViewTopic);
-            _mqttClient->subscribe(_selectedPhaseTopic);
-            _mqttClient->subscribe(_switchStateTopic);
-            _mqttClient->subscribe(_resetEnergyTopic);
         }
         else
         {
