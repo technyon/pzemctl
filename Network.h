@@ -38,7 +38,7 @@ public:
     virtual ~Network();
 
     void initialize();
-    void update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
+    void update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
     void configurationChanged();
 
     EthernetClient* ethernetClient();
@@ -64,21 +64,32 @@ private:
 
     const char* phase1VoltageTopic = "energy/phase1/voltage";
     const char* phase1CurrentTopic ="energy/phase1/current";
+    const char* phase1PowerTopic ="energy/phase1/power";
     const char* phase1EnergyTopic = "energy/phase1/energy";
     const char* phase1FrequencyTopic ="energy/phase1/frequency";
     const char* phase1PowerFactorTopic ="energy/phase1/powerfactor";
 
     const char* phase2VoltageTopic = "energy/phase2/voltage";
     const char* phase2CurrentTopic ="energy/phase2/current";
+    const char* phase2PowerTopic ="energy/phase2/power";
     const char* phase2EnergyTopic = "energy/phase2/energy";
     const char* phase2FrequencyTopic ="energy/phase2/frequency";
     const char* phase2PowerFactorTopic ="energy/phase2/powerfactor";
 
     const char* phase3VoltageTopic = "energy/phase3/voltage";
     const char* phase3CurrentTopic ="energy/phase3/current";
+    const char* phase3PowerTopic ="energy/phase3/power";
     const char* phase3EnergyTopic = "energy/phase3/energy";
     const char* phase3FrequencyTopic ="energy/phase3/frequency";
     const char* phase3PowerFactorTopic ="energy/phase3/powerfactor";
+/*
+    const char* phasesCombinedVoltageTopic = "energy/phasesCombined/voltage";
+    const char* phasesCombinedCurrentTopic ="energy/phasesCombined/current";
+    const char* phasesCombinedPowerTopic ="energy/phasesCombined/power";
+    const char* phasesCombinedEnergyTopic = "energy/phasesCombined/energy";
+    const char* phasesCombinedFrequencyTopic ="energy/phasesCombined/frequency";
+    const char* phasesCombinedPowerFactorTopic ="energy/phasesCombined/powerfactor";
+*/
     const char* _led1BrightnessTopic = "energy/control/led1Brightness";
     const char* _led2BrightnessTopic = "energy/control/led2Brightness";
     const char* _selectedViewTopic = "energy/control/view";

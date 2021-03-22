@@ -173,7 +173,7 @@ void Network::reconnect()
     _mqttClient->publish(_reconnectCountTopic, reconnectStr);
 }
 
-void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
+void Network::update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
     long ts = millis();
 
@@ -217,21 +217,31 @@ void Network::update(const hw::pzem004tvalues& phase1, const hw::pzem004tvalues&
     if((ts - _lastPublish) > _configuration->numericMqttPublishInterval())
     {
         _lastPublish = ts;
-
+/*
+        publishFloat(phasesCombinedVoltageTopic, phasesCombined.voltage, 2);
+        publishFloat(phasesCombinedCurrentTopic, phasesCombined.current, 2);
+        publishFloat(phasesCombinedPowerTopic, phasesCombined.power, 2);
+        publishFloat(phasesCombinedEnergyTopic, phasesCombined.energy, 2);
+        publishFloat(phasesCombinedFrequencyTopic, phasesCombined.frequency, 2);
+        publishFloat(phasesCombinedPowerFactorTopic, phasesCombined.pf, 2);
+*/
         publishFloat(phase1VoltageTopic, phase1.voltage, 2);
         publishFloat(phase1CurrentTopic, phase1.current, 2);
+        publishFloat(phase1PowerTopic, phase1.power, 2);
         publishFloat(phase1EnergyTopic, phase1.energy, 2);
         publishFloat(phase1FrequencyTopic, phase1.frequency, 2);
         publishFloat(phase1PowerFactorTopic, phase1.pf, 2);
 
         publishFloat(phase2VoltageTopic, phase2.voltage, 2);
         publishFloat(phase2CurrentTopic, phase2.current, 2);
+        publishFloat(phase2PowerTopic, phase2.power, 2);
         publishFloat(phase2EnergyTopic, phase2.energy, 2);
         publishFloat(phase2FrequencyTopic, phase2.frequency, 2);
         publishFloat(phase2PowerFactorTopic, phase2.pf, 2);
 
         publishFloat(phase3VoltageTopic, phase3.voltage, 2);
         publishFloat(phase3CurrentTopic, phase3.current, 2);
+        publishFloat(phase3PowerTopic, phase3.power, 2);
         publishFloat(phase3EnergyTopic, phase3.energy, 2);
         publishFloat(phase3FrequencyTopic, phase3.frequency, 2);
         publishFloat(phase3PowerFactorTopic, phase3.pf, 2);
