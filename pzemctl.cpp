@@ -164,7 +164,7 @@ void setupTasks()
     xTaskCreate(
             TaskInput
             ,  "Input"
-            ,  48
+            ,  64
             ,  NULL
             ,  0
             ,  NULL );
@@ -172,7 +172,7 @@ void setupTasks()
     xTaskCreate(
             TaskNetwork
             ,  "Nw"
-            ,  992
+            ,  976
             ,  NULL
             ,  1
             ,  NULL );
