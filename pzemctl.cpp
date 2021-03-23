@@ -11,8 +11,8 @@
 #include "Input.h"
 #include "WebServer.h"
 #include "EepromConfiguration.h"
+#include "Config.h"
 
-const int SWITCH_PIN = 30;
 
 EepromConfiguration* configuration;
 hw::Pzem004t* pzem;

@@ -1,6 +1,4 @@
 #pragma once
-
-
 // LEDs
 #define LED1_PIN 5
 #define LED2_PIN 6
@@ -12,6 +10,9 @@
 #define SWITCH_VIEW_PIN 46
 #define SWITCH_ON_OFF_PIN 48
 #define LONG_PRESS_THRESHOLD 1000
+
+// Switch
+#define SWITCH_PIN 30
 
 // Ethernet
 #define ETHERNET_CS_PIN 53
