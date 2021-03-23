@@ -11,7 +11,7 @@
 
 Network* nwInst;
 
-Network::Network(Configuration* configuration,
+Network::Network(EepromConfiguration* configuration,
                  void (*networkEventCallback)(const NetworkEvent& value))
 : _configuration(configuration),
   _networkEventCallback(networkEventCallback)
@@ -134,27 +134,27 @@ void Network::reconnect()
 
             if(_firstConnect)
             {
-                _mqttClient->subscribe(_led2BrightnessTopic);
-                _mqttClient->subscribe(_led1BrightnessTopic);
-                _mqttClient->subscribe(_selectedViewTopic);
-                _mqttClient->subscribe(_selectedPhaseTopic);
-                _mqttClient->subscribe(_switchStateTopic);
-                _mqttClient->subscribe(_resetEnergyTopic);
-                _mqttClient->subscribe(_customViewValue1Topic);
-                _mqttClient->subscribe(_customViewValue2Topic);
-                _mqttClient->subscribe(_customViewValue3Topic);
+                _mqttClient->subscribe(led2BrightnessTopic);
+                _mqttClient->subscribe(led1BrightnessTopic);
+                _mqttClient->subscribe(selectedViewTopic);
+                _mqttClient->subscribe(selectedPhaseTopic);
+                _mqttClient->subscribe(switchStateTopic);
+                _mqttClient->subscribe(resetEnergyTopic);
+                _mqttClient->subscribe(customViewValue1Topic);
+                _mqttClient->subscribe(customViewValue2Topic);
+                _mqttClient->subscribe(customViewValue3Topic);
 
                 _firstConnect = false;
-                _mqttClient->publish(_led1BrightnessTopic, "0");
-                _mqttClient->publish(_led2BrightnessTopic, "0");
+                _mqttClient->publish(led1BrightnessTopic, "0");
+                _mqttClient->publish(led2BrightnessTopic, "0");
 
                 publishView(_currentView);
                 publishPhase(_currentPhase);
                 publishSwitchState(_switchState);
-                _mqttClient->publish(_resetEnergyTopic, "");
-                _mqttClient->publish(_customViewValue1Topic, "0");
-                _mqttClient->publish(_customViewValue2Topic, "1");
-                _mqttClient->publish(_customViewValue3Topic, "5");
+                _mqttClient->publish(resetEnergyTopic, "");
+                _mqttClient->publish(customViewValue1Topic, "0");
+                _mqttClient->publish(customViewValue2Topic, "1");
+                _mqttClient->publish(customViewValue3Topic, "5");
             }
         }
         else
@@ -170,7 +170,7 @@ void Network::reconnect()
     _reconnectCount++;
     char reconnectStr[12];
     itoa(_reconnectCount, reconnectStr, 10);
-    _mqttClient->publish(_reconnectCountTopic, reconnectStr);
+    _mqttClient->publish(reconnectCountTopic, reconnectStr);
 }
 
 void Network::update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
@@ -180,7 +180,7 @@ void Network::update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues
     if(_configMode) return;
     _updating = true;
 
-    int ledVal = 0;
+    uint8_t ledVal = 0;
 
     if(Ethernet.linkStatus() == EthernetLinkStatus::LinkON)
     {
@@ -250,17 +250,17 @@ void Network::update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues
     if(_viewChanged)
     {
         _viewChanged = false;
-        char cstr[5];
-        itoa(_currentView, cstr, 5);
-        _mqttClient->publish(_selectedViewTopic, cstr);
+        char cstr[2];
+        itoa(_currentView, cstr, 10);
+        _mqttClient->publish(selectedViewTopic, cstr);
     }
 
     if(_phaseChanged)
     {
         _phaseChanged = false;
-        char cstr[5];
-        itoa(_currentPhase, cstr, 5);
-        _mqttClient->publish(_selectedPhaseTopic, cstr);
+        char cstr[2];
+        itoa(_currentPhase, cstr, 10);
+        _mqttClient->publish(selectedPhaseTopic, cstr);
     }
 
     if(_switchStateChanged)
@@ -268,11 +268,11 @@ void Network::update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues
         _switchStateChanged = false;
         if(_switchState)
         {
-            _mqttClient->publish(_switchStateTopic, "1");
+            _mqttClient->publish(switchStateTopic, "1");
         }
         else
         {
-            _mqttClient->publish(_switchStateTopic, "0");
+            _mqttClient->publish(switchStateTopic, "0");
         }
     }
 
@@ -302,15 +302,15 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
     Serial.print(F(" = "));
     Serial.println(value);
 */
-    if(strcmp(topic, _led1BrightnessTopic) == 0)
+    if(strcmp(topic, led1BrightnessTopic) == 0)
     {
         hw::Led::setBrightnessWhite((int) atof(value) * 2.55);
     }
-    else if(strcmp(topic, _led2BrightnessTopic) == 0)
+    else if(strcmp(topic, led2BrightnessTopic) == 0)
     {
         hw::Led::setBrightnessBlue((int) atof(value) * 2.55);
     }
-    else if(strcmp(topic, _selectedViewTopic) == 0)
+    else if(strcmp(topic, selectedViewTopic) == 0)
     {
         NetworkEvent event
                 {
@@ -319,7 +319,7 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                 };
         _networkEventCallback(event);
     }
-    else if(strcmp(topic, _selectedPhaseTopic) == 0)
+    else if(strcmp(topic, selectedPhaseTopic) == 0)
     {
         NetworkEvent event
                 {
@@ -328,7 +328,7 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                 };
         _networkEventCallback(event);
     }
-    else if(strcmp(topic, _switchStateTopic) == 0)
+    else if(strcmp(topic, switchStateTopic) == 0)
     {
         NetworkEvent event
                 {
@@ -337,7 +337,7 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
         event.paramBool = atoi(value) > 0;
         _networkEventCallback(event);
     }
-    else if(strcmp(topic, _resetEnergyTopic) == 0)
+    else if(strcmp(topic, resetEnergyTopic) == 0)
     {
         if(strcmp(value, "confirm") == 0)
         {
@@ -347,9 +347,9 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                     };
             _networkEventCallback(event);
         }
-        _mqttClient->publish(_resetEnergyTopic, "");
+        _mqttClient->publish(resetEnergyTopic, "");
     }
-    else if(strcmp(topic, _customViewValue1Topic) == 0)
+    else if(strcmp(topic, customViewValue1Topic) == 0)
     {
         NetworkEvent event
                 {
@@ -358,7 +358,7 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                 };
         _networkEventCallback(event);
     }
-    else if(strcmp(topic, _customViewValue2Topic) == 0)
+    else if(strcmp(topic, customViewValue2Topic) == 0)
     {
         NetworkEvent event
                 {
@@ -367,7 +367,7 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                 };
         _networkEventCallback(event);
     }
-    else if(strcmp(topic, _customViewValue3Topic) == 0)
+    else if(strcmp(topic, customViewValue3Topic) == 0)
     {
         NetworkEvent event
                 {

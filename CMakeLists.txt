@@ -20,6 +20,7 @@ file(GLOB SRCFILES
 
 add_executable(pzemctl
         ${SRCFILES}
+        Config.h
         pzemctl.cpp
         Lib/pzem004t/PZEM004Tv30.cpp
         Lib/Adafruit_SSD1306/Adafruit_SSD1306.cpp
@@ -29,7 +30,10 @@ add_executable(pzemctl
         Network.cpp
         DisplaySSD1306.cpp
         Led.cpp
-        Input.cpp WebServer.cpp WebServer.h Configuration.cpp Configuration.h)
+        Input.cpp
+        WebServer.cpp
+        EepromConfiguration.cpp
+)
 
 target_link_arduino_libraries(pzemctl
     PRIVATE

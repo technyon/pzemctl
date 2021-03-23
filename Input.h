@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Config.h"
+
 namespace hw
 {
     enum class ButtonId
@@ -22,11 +24,6 @@ namespace hw
         void update();
 
     private:
-        const int SWITCH_PHASE_PIN = 22;
-        const int SWITCH_VIEW_PIN = 24;
-        const int SWITCH_ON_OFF_PIN = 26;
-        const int LONG_PRESS_THRESHOLD = 1000;
-
         void checkSwitchPhase();
         void checkSwitchView();
         void checkSwitchOnOff();

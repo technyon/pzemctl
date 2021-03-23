@@ -1,9 +1,9 @@
-#include "Configuration.h"
+#include "EepromConfiguration.h"
 #include <EEPROM.h>
 #include <string.h>
 #include <Arduino.h>
 
-Configuration::Configuration(void (*callback)())
+EepromConfiguration::EepromConfiguration(void (*callback)())
 : _callback(callback)
 {
     initialize();
@@ -15,7 +15,7 @@ Configuration::Configuration(void (*callback)())
     Serial.println(subnetMask);
 }
 
-void Configuration::initialize()
+void EepromConfiguration::initialize()
 {
     for(int i=0; i < sizeof(mqttServerAddress); i++)
     {
@@ -50,7 +50,7 @@ void Configuration::initialize()
 }
 
 
-void Configuration::readEeprom()
+void EepromConfiguration::readEeprom()
 {
     if(!hasValidSignature())
     {
@@ -90,7 +90,7 @@ void Configuration::readEeprom()
     parseMqttPublishInterval();
 }
 
-void Configuration::writeEeprom()
+void EepromConfiguration::writeEeprom()
 {
     Serial.println(F("Write EEPROM"));
 
@@ -141,7 +141,7 @@ void Configuration::writeEeprom()
     _callback();
 }
 
-void Configuration::writeSignature()
+void EepromConfiguration::writeSignature()
 {
     char sig[] = "pzem004t";
     for(int i=0; i < 9; i++)
@@ -150,7 +150,7 @@ void Configuration::writeSignature()
     }
 }
 
-bool Configuration::hasValidSignature()
+bool EepromConfiguration::hasValidSignature()
 {
     char sig[9];
     for(int i=0; i<9; i++)
@@ -161,7 +161,7 @@ bool Configuration::hasValidSignature()
     return strcmp(sig, "pzem004t") == 0;
 }
 
-void Configuration::generateMacAddress()
+void EepromConfiguration::generateMacAddress()
 {
     mac[0] = 0x00;  // wiznet prefix
     mac[1] = 0x08;  // wiznet prefix
@@ -171,7 +171,7 @@ void Configuration::generateMacAddress()
     mac[5] = random(0,255);
 }
 
-void Configuration::clearEeprom()
+void EepromConfiguration::clearEeprom()
 {
     for (int i = 0 ; i < EEPROM.length() ; i++)
     {
@@ -179,7 +179,7 @@ void Configuration::clearEeprom()
     }
 }
 
-void Configuration::parseMqttPublishInterval()
+void EepromConfiguration::parseMqttPublishInterval()
 {
     _numericMqttPublishInterval = max(atoi(mqttPublishInterval), 200);
 }

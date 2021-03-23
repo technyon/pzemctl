@@ -10,11 +10,11 @@
 #include "Led.h"
 #include "Input.h"
 #include "WebServer.h"
-#include "Configuration.h"
+#include "EepromConfiguration.h"
 
-const int SWITCH_PIN = 28;
+const int SWITCH_PIN = 30;
 
-Configuration* configuration;
+EepromConfiguration* configuration;
 hw::Pzem004t* pzem;
 hw::Input* input;
 hw::DisplaySSD1306 display;
@@ -41,7 +41,7 @@ void setupMode()
 
     IPAddress ip = nw->ipAddress();
     char message[18];
-    sprintf(message, "%i.%i.\ņ%i.%i", ip[0], ip[1], ip[2], ip[3]);
+    sprintf(message, "%i.%i.%i.%i", ip[0], ip[1], ip[2], ip[3]);
     display.showMessage(message);
 
     webServer->enable();
@@ -78,11 +78,12 @@ void TaskPollPzem(void *pvParameters)
 
         phasesCombined.voltage = (phase1Values.voltage + phase2Values.voltage + phase3Values.voltage) / 3;
         phasesCombined.current = phase1Values.current + phase2Values.current + phase3Values.current;
+        phasesCombined.power = 0; // TODO
         phasesCombined.energy = phase1Values.energy + phase2Values.energy + phase3Values.energy;
         phasesCombined.frequency = (phase1Values.frequency + phase2Values.frequency + phase3Values.frequency) / 3;
         phasesCombined.pf = (phase1Values.pf + phase2Values.pf + phase3Values.pf) / 3;
 
-        vTaskDelay( 200 / portTICK_PERIOD_MS);
+        vTaskDelay( 100 / portTICK_PERIOD_MS);
     }
 }
 
@@ -92,7 +93,7 @@ void TaskDisplay(void *pvParameters)
     {
         display.update(phasesCombined, phase1Values, phase2Values, phase3Values);
 
-        vTaskDelay( 250 / portTICK_PERIOD_MS);
+        vTaskDelay( 100 / portTICK_PERIOD_MS);
     }
 }
 
@@ -307,7 +308,7 @@ void setup()
 
     randomSeed(analogRead(0) + analogRead(1) + analogRead(2));
 
-    configuration = new Configuration(configurationChanged);
+    configuration = new EepromConfiguration(configurationChanged);
 
     input = new hw::Input(buttonPressed);
     nw = new Network(configuration, onNetworkEventReceived);

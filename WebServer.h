@@ -1,7 +1,7 @@
 #pragma once
 
 #include <EthernetClient.h>
-#include "Configuration.h"
+#include "EepromConfiguration.h"
 
 namespace web
 {
@@ -19,7 +19,7 @@ namespace web
     class WebServer
     {
     public:
-        explicit WebServer(EthernetClient *ethClient, Configuration* configuration);
+        explicit WebServer(EthernetClient *ethClient, EepromConfiguration* configuration);
         virtual ~WebServer() = default;
 
         void update();
@@ -35,7 +35,7 @@ namespace web
         EthernetClient *_ethClient;
         EthernetServer _server;
 
-        Configuration* _configuration;
+        EepromConfiguration* _configuration;
         bool _enabled = false;
     };
 }

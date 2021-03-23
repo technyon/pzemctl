@@ -3,7 +3,7 @@
 
 namespace web
 {
-   WebServer::WebServer(EthernetClient *ethClient, Configuration* configuration)
+   WebServer::WebServer(EthernetClient *ethClient, EepromConfiguration* configuration)
             : _ethClient(ethClient),
               _server(80),
               _configuration(configuration)

@@ -2,11 +2,11 @@
 
 #include <stdint.h>
 
-class Configuration
+class EepromConfiguration
 {
 public:
-    Configuration(void (*callback)());
-    virtual ~Configuration() = default;
+    EepromConfiguration(void (*callback)());
+    virtual ~EepromConfiguration() = default;
 
     char mqttServerAddress[41] = "";
     char dnsServerAddress[17] = "";

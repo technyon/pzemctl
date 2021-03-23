@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Config.h"
 #include <Ethernet.h>
 #include <src/PubSubClient.h>
 #include "Pzem004t.h"
 #include "DisplaySSD1306.h"
-#include "Configuration.h"
+#include "EepromConfiguration.h"
 
 enum class NetworkEventType
 {
@@ -27,11 +28,10 @@ struct NetworkEvent
 class Network
 {
 private:
-    static const uint8_t ETHERNET_CS_PIN = 53;
-    static const uint8_t ETHERNET_RESET_PIN = 49;
+
 
 public:
-    explicit Network(Configuration* configuration,
+    explicit Network(EepromConfiguration* configuration,
                      void (*networkEventCallback)(const NetworkEvent& value)
 );
 
@@ -62,45 +62,6 @@ private:
     void reconnect();
     void nwDelay(unsigned long ms);
 
-    const char* phase1VoltageTopic = "energy/phase1/voltage";
-    const char* phase1CurrentTopic ="energy/phase1/current";
-    const char* phase1PowerTopic ="energy/phase1/power";
-    const char* phase1EnergyTopic = "energy/phase1/energy";
-    const char* phase1FrequencyTopic ="energy/phase1/frequency";
-    const char* phase1PowerFactorTopic ="energy/phase1/powerfactor";
-
-    const char* phase2VoltageTopic = "energy/phase2/voltage";
-    const char* phase2CurrentTopic ="energy/phase2/current";
-    const char* phase2PowerTopic ="energy/phase2/power";
-    const char* phase2EnergyTopic = "energy/phase2/energy";
-    const char* phase2FrequencyTopic ="energy/phase2/frequency";
-    const char* phase2PowerFactorTopic ="energy/phase2/powerfactor";
-
-    const char* phase3VoltageTopic = "energy/phase3/voltage";
-    const char* phase3CurrentTopic ="energy/phase3/current";
-    const char* phase3PowerTopic ="energy/phase3/power";
-    const char* phase3EnergyTopic = "energy/phase3/energy";
-    const char* phase3FrequencyTopic ="energy/phase3/frequency";
-    const char* phase3PowerFactorTopic ="energy/phase3/powerfactor";
-/*
-    const char* phasesCombinedVoltageTopic = "energy/phasesCombined/voltage";
-    const char* phasesCombinedCurrentTopic ="energy/phasesCombined/current";
-    const char* phasesCombinedPowerTopic ="energy/phasesCombined/power";
-    const char* phasesCombinedEnergyTopic = "energy/phasesCombined/energy";
-    const char* phasesCombinedFrequencyTopic ="energy/phasesCombined/frequency";
-    const char* phasesCombinedPowerFactorTopic ="energy/phasesCombined/powerfactor";
-*/
-    const char* _led1BrightnessTopic = "energy/control/led1Brightness";
-    const char* _led2BrightnessTopic = "energy/control/led2Brightness";
-    const char* _selectedViewTopic = "energy/control/view";
-    const char* _selectedPhaseTopic = "energy/control/phase";
-    const char* _switchStateTopic = "energy/control/switchState";
-    const char* _resetEnergyTopic = "energy/control/resetEnergy";
-    const char* _reconnectCountTopic = "energy/control/reconnectCount";
-    const char* _customViewValue1Topic = "energy/control/customValue1";
-    const char* _customViewValue2Topic = "energy/control/customValue2";
-    const char* _customViewValue3Topic = "energy/control/customValue3";
-
     long _lastPublish = 0;
     long _lastMaintain = 0;
     const char _space = ' ';
@@ -127,5 +88,5 @@ private:
     EthernetClient* _ethClient;
     PubSubClient* _mqttClient;
 
-    Configuration* _configuration;
+    EepromConfiguration* _configuration;
 };
