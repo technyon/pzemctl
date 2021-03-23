@@ -78,7 +78,7 @@ void TaskPollPzem(void *pvParameters)
 
         phasesCombined.voltage = (phase1Values.voltage + phase2Values.voltage + phase3Values.voltage) / 3;
         phasesCombined.current = phase1Values.current + phase2Values.current + phase3Values.current;
-        phasesCombined.power = 0; // TODO
+        phasesCombined.power = phase1Values.power + phase2Values.power + phase3Values.power;
         phasesCombined.energy = phase1Values.energy + phase2Values.energy + phase3Values.energy;
         phasesCombined.frequency = (phase1Values.frequency + phase2Values.frequency + phase3Values.frequency) / 3;
         phasesCombined.pf = (phase1Values.pf + phase2Values.pf + phase3Values.pf) / 3;
@@ -111,7 +111,7 @@ void TaskNetwork(void *pvParameters)
 {
     while(true)
     {
-        nw->update(phase1Values, phase2Values, phase3Values);
+        nw->update(phasesCombined, phase1Values, phase2Values, phase3Values);
 
         vTaskDelay( 100 / portTICK_PERIOD_MS);
     }
@@ -172,7 +172,7 @@ void setupTasks()
     xTaskCreate(
             TaskNetwork
             ,  "Nw"
-            ,  976
+            ,  992
             ,  NULL
             ,  1
             ,  NULL );

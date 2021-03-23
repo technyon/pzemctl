@@ -38,7 +38,7 @@ public:
     virtual ~Network();
 
     void initialize();
-    void update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
+    void update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3);
     void configurationChanged();
 
     EthernetClient* ethernetClient();

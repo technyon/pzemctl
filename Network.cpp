@@ -173,7 +173,7 @@ void Network::reconnect()
     _mqttClient->publish(reconnectCountTopic, reconnectStr);
 }
 
-void Network::update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
+void Network::update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
     long ts = millis();
 
@@ -217,14 +217,13 @@ void Network::update( const hw::pzem004tvalues& phase1, const hw::pzem004tvalues
     if((ts - _lastPublish) > _configuration->numericMqttPublishInterval())
     {
         _lastPublish = ts;
-/*
-        publishFloat(phasesCombinedVoltageTopic, phasesCombined.voltage, 2);
-        publishFloat(phasesCombinedCurrentTopic, phasesCombined.current, 2);
-        publishFloat(phasesCombinedPowerTopic, phasesCombined.power, 2);
-        publishFloat(phasesCombinedEnergyTopic, phasesCombined.energy, 2);
-        publishFloat(phasesCombinedFrequencyTopic, phasesCombined.frequency, 2);
-        publishFloat(phasesCombinedPowerFactorTopic, phasesCombined.pf, 2);
-*/
+//        publishFloat(phasesCombinedVoltageTopic, phasesCombined.voltage, 2);
+//        publishFloat(phasesCombinedCurrentTopic, phasesCombined.current, 2);
+//        publishFloat(phasesCombinedPowerTopic, phasesCombined.power, 2);
+//        publishFloat(phasesCombinedEnergyTopic, phasesCombined.energy, 2);
+//        publishFloat(phasesCombinedFrequencyTopic, phasesCombined.frequency, 2);
+//        publishFloat(phasesCombinedPowerFactorTopic, phasesCombined.pf, 2);
+
         publishFloat(phase1VoltageTopic, phase1.voltage, 2);
         publishFloat(phase1CurrentTopic, phase1.current, 2);
         publishFloat(phase1PowerTopic, phase1.power, 2);
