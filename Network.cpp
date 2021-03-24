@@ -117,6 +117,16 @@ void Network::reconnect()
     server.fromString(_configuration->mqttServerAddress);
     _mqttClient->setServer(server, 1883);
 
+    _mqttClient->unsubscribe(led2BrightnessTopic);
+    _mqttClient->unsubscribe(led1BrightnessTopic);
+    _mqttClient->unsubscribe(selectedViewTopic);
+    _mqttClient->unsubscribe(selectedPhaseTopic);
+    _mqttClient->unsubscribe(switchStateTopic);
+    _mqttClient->unsubscribe(resetEnergyTopic);
+    _mqttClient->unsubscribe(customViewValue1Topic);
+    _mqttClient->unsubscribe(customViewValue2Topic);
+    _mqttClient->unsubscribe(customViewValue3Topic);
+
     Serial.print(F("Connecting to server: "));
     Serial.println(server);
 
@@ -132,18 +142,18 @@ void Network::reconnect()
             Serial.println(F("connected"));
             hw::Led::setNetworkLed(255);
 
+            _mqttClient->subscribe(led2BrightnessTopic);
+            _mqttClient->subscribe(led1BrightnessTopic);
+            _mqttClient->subscribe(selectedViewTopic);
+            _mqttClient->subscribe(selectedPhaseTopic);
+            _mqttClient->subscribe(switchStateTopic);
+            _mqttClient->subscribe(resetEnergyTopic);
+            _mqttClient->subscribe(customViewValue1Topic);
+            _mqttClient->subscribe(customViewValue2Topic);
+            _mqttClient->subscribe(customViewValue3Topic);
+
             if(_firstConnect)
             {
-                _mqttClient->subscribe(led2BrightnessTopic);
-                _mqttClient->subscribe(led1BrightnessTopic);
-                _mqttClient->subscribe(selectedViewTopic);
-                _mqttClient->subscribe(selectedPhaseTopic);
-                _mqttClient->subscribe(switchStateTopic);
-                _mqttClient->subscribe(resetEnergyTopic);
-                _mqttClient->subscribe(customViewValue1Topic);
-                _mqttClient->subscribe(customViewValue2Topic);
-                _mqttClient->subscribe(customViewValue3Topic);
-
                 _firstConnect = false;
                 _mqttClient->publish(led1BrightnessTopic, "0");
                 _mqttClient->publish(led2BrightnessTopic, "0");
