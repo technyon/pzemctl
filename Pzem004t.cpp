@@ -1,4 +1,5 @@
 #include "Pzem004t.h"
+#include "Config.h"
 
 namespace hw
 {
@@ -7,9 +8,9 @@ namespace hw
       _pzem2(serial2),
       _pzem3(serial3)
     {
-        _pzem1.setAddress(0xf8);
-        _pzem2.setAddress(0xf8);
-        _pzem3.setAddress(0xf8);
+        _pzem1.setAddress(PZEM1_ADDRESS);
+        _pzem2.setAddress(PZEM2_ADDRESS);
+        _pzem3.setAddress(PZEM3_ADDRESS);
 
         _pzem1.resetEnergy();
         _pzem2.resetEnergy();

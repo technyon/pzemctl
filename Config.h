@@ -1,4 +1,10 @@
 #pragma once
+
+// pzem004t
+#define PZEM1_ADDRESS 0xf8
+#define PZEM2_ADDRESS 0xf8
+#define PZEM3_ADDRESS 0xf8
+
 // LEDs
 #define LED1_PIN 5
 #define LED2_PIN 6
