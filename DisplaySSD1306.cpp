@@ -35,8 +35,8 @@ namespace hw
     void DisplaySSD1306::update(const pzem004tvalues& phasesCombined, const pzem004tvalues& phase1Values, const pzem004tvalues& phase2Values, const pzem004tvalues& phase3Values)
     {
         if(!_isInitialized) return;
-
-        _maxCurrent = max(_maxCurrent, max(max(phase1Values.current, phase2Values.current), phase2Values.current));
+    
+        _maxCurrent = max(_maxCurrent, max(max(phase1Values.current, phase2Values.current), phase3Values.current));
 
         _ssd1306.clearDisplay();
 
