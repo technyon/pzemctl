@@ -49,8 +49,6 @@ namespace hw
             _maxCurrent = 1;
         }
 
-        Serial.println(_maxCurrent);
-
         _ssd1306.clearDisplay();
 
         if(_message != nullptr)
