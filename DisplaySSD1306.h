@@ -72,6 +72,8 @@ namespace hw
         bool _isInitialized = false;
         char* _message = nullptr;
         float _maxCurrent = 1;
+        long _expiresAt = 0;
+
         int16_t col1x = 35;
         const int16_t col1y = 16;
         const int16_t colHeight = 23;

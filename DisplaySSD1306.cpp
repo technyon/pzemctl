@@ -35,8 +35,21 @@ namespace hw
     void DisplaySSD1306::update(const pzem004tvalues& phasesCombined, const pzem004tvalues& phase1Values, const pzem004tvalues& phase2Values, const pzem004tvalues& phase3Values)
     {
         if(!_isInitialized) return;
-    
+        long ts = millis();
+
+        float lastMaxcurrent = _maxCurrent;
         _maxCurrent = max(_maxCurrent, max(max(phase1Values.current, phase2Values.current), phase3Values.current));
+        if(_maxCurrent > lastMaxcurrent)
+        {
+            _expiresAt = ts + 10000;
+        }
+
+        if(ts > _expiresAt)
+        {
+            _maxCurrent = 1;
+        }
+
+        Serial.println(_maxCurrent);
 
         _ssd1306.clearDisplay();
 
@@ -64,7 +77,7 @@ namespace hw
 
     void DisplaySSD1306::drawBarGraph(const int16_t& x, const int16_t& y, const int16_t& width, const int16_t& height, const float& min, const float& max, const float& value)
     {
-        int16_t fillWidth = ((value - min) / (max - min)) * (float)width;
+        int16_t fillWidth = ((constrain(value, min, max) - min) / (max - min)) * (float)width;
 
         _ssd1306.drawRect(x, y, width, height, SSD1306_WHITE);
         _ssd1306.fillRect(x, y, fillWidth, height, SSD1306_WHITE);
