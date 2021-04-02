@@ -39,7 +39,7 @@ namespace hw
         void switchView();
         void switchPhase();
 
-        void showMessage(char* message);
+        void showMessage(char* message, int duration = -1);
         void clearMessage();
 
         void changeView(int value);
@@ -73,6 +73,7 @@ namespace hw
         char* _message = nullptr;
         float _maxCurrent = 1;
         long _expiresAt = 0;
+        long _clearMessageTs = -1;
 
         int16_t col1x = 35;
         const int16_t col1y = 16;

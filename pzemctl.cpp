@@ -17,7 +17,7 @@
 EepromConfiguration* configuration;
 hw::Pzem004t* pzem;
 hw::Input* input;
-hw::DisplaySSD1306 display;
+hw::DisplaySSD1306* display;
 Network *nw;
 web::WebServer* webServer;
 hw::Led led;
@@ -31,18 +31,19 @@ bool setupModeRequested = false;
 bool setupModeEnabled = false;
 
 bool switchState = false;
+uint8_t displayUpdateCounter = 0;
 
 void setupMode()
 {
     setupModeEnabled = true;
     Serial.println(F("SETUP"));
-    display.showMessage("Starting\nSetup");
+    display->showMessage("Starting\nSetup");
     nw->enableConfigMode();
 
     IPAddress ip = nw->ipAddress();
     char message[18];
     sprintf(message, "%i.%i.%i.%i", ip[0], ip[1], ip[2], ip[3]);
-    display.showMessage(message);
+    display->showMessage(message);
 
     webServer->enable();
     while(webServer->enabled() && setupModeEnabled)
@@ -51,17 +52,17 @@ void setupMode()
     }
     if(setupModeEnabled)
     {
-        display.showMessage("Configu\nsaved");
+        display->showMessage("Configu\nsaved");
     }
     else
     {
-        display.showMessage("Setup\ncancelled");
+        display->showMessage("Setup\ncancelled");
     }
 
     webServer->disable();
     nw->disableConfigMode();
     vTaskDelay(2000 / portTICK_PERIOD_MS);
-    display.clearMessage();
+    display->clearMessage();
 
     setupModeEnabled = false;
 }
@@ -87,22 +88,17 @@ void TaskPollPzem(void *pvParameters)
     }
 }
 
-void TaskDisplay(void *pvParameters)
-{
-    while(true)
-    {
-        display.update(phasesCombined, phase1Values, phase2Values, phase3Values);
-
-        vTaskDelay( 100 / portTICK_PERIOD_MS);
-    }
-}
-
-void TaskInput(void *pvParameters)
+void TaskInputAndDisplay(void *pvParameters)
 {
     while(true)
     {
         input->update();
-
+        displayUpdateCounter++;
+        if(displayUpdateCounter >= 3)
+        {
+            displayUpdateCounter = 0;
+            display->update(phasesCombined, phase1Values, phase2Values, phase3Values);
+        }
         vTaskDelay( 25 / portTICK_PERIOD_MS);
     }
 }
@@ -154,17 +150,9 @@ void setupTasks()
             ,  NULL );
 
     xTaskCreate(
-            TaskDisplay
+            TaskInputAndDisplay
             ,  "Dsp"
             ,  256
-            ,  NULL
-            ,  0
-            ,  NULL );
-
-    xTaskCreate(
-            TaskInput
-            ,  "Input"
-            ,  64
             ,  NULL
             ,  0
             ,  NULL );
@@ -205,13 +193,11 @@ void setSwitchState(bool value, bool showMessage)
     {
         if (switchState)
         {
-            display.showMessage("\n       ON");
+            display->showMessage("\n       ON", 1000);
         } else
         {
-            display.showMessage("\n      OFF");
+            display->showMessage("\n      OFF", 1000);
         }
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-        display.clearMessage();
     }
 }
 
@@ -220,8 +206,8 @@ void buttonPressed(hw::ButtonId buttonId)
     switch(buttonId)
     {
         case hw::ButtonId::SwitchPhase:
-            display.switchPhase();
-            nw->publishPhase(display.selectedPhase());
+            display->switchPhase();
+            nw->publishPhase(display->selectedPhase());
             break;
         case hw::ButtonId::SwitchPhaseLong:
         {
@@ -237,8 +223,8 @@ void buttonPressed(hw::ButtonId buttonId)
             break;
         }
         case hw::ButtonId::SwitchView:
-            display.switchView();
-            nw->publishView((int)display.selectedView() - 1);
+            display->switchView();
+            nw->publishView((int)display->selectedView() - 1);
             break;
         case hw::ButtonId::SwitchOnOff:
             setSwitchState(!switchState, true);
@@ -258,39 +244,39 @@ void onNetworkEventReceived(const NetworkEvent& event)
     switch(event.type)
     {
         case NetworkEventType::viewChange:
-            display.changeView(event.paramInt);
+            display->changeView(event.paramInt);
             break;
         case NetworkEventType::phaseChange:
-            display.changePhase(event.paramInt);
+            display->changePhase(event.paramInt);
             break;
         case NetworkEventType::switchStateChange:
             setSwitchState(event.paramBool, true);
             break;
         case NetworkEventType::resetEnergy:
             pzem->resetEnergy();
-            display.showMessage("Energy\nreset");
+            display->showMessage("Energy\nreset");
             vTaskDelay( 1000 / portTICK_PERIOD_MS);
-            display.clearMessage();
+            display->clearMessage();
             break;
         case NetworkEventType::customViewValue1Changed:
         {
-            hw::ViewConfiguration viewConfiguration = display.customViewConfiguration();
+            hw::ViewConfiguration viewConfiguration = display->customViewConfiguration();
             viewConfiguration.value1 = (hw::ViewValueType) event.paramInt;
-            display.setCustomViewConfiguration(viewConfiguration);
+            display->setCustomViewConfiguration(viewConfiguration);
             break;
         }
         case NetworkEventType::customViewValue2Changed:
         {
-            hw::ViewConfiguration viewConfiguration = display.customViewConfiguration();
+            hw::ViewConfiguration viewConfiguration = display->customViewConfiguration();
             viewConfiguration.value2 = (hw::ViewValueType) event.paramInt;
-            display.setCustomViewConfiguration(viewConfiguration);
+            display->setCustomViewConfiguration(viewConfiguration);
             break;
         }
         case NetworkEventType::customViewValue3Changed:
         {
-            hw::ViewConfiguration viewConfiguration = display.customViewConfiguration();
+            hw::ViewConfiguration viewConfiguration = display->customViewConfiguration();
             viewConfiguration.value3 = (hw::ViewValueType) event.paramInt;
-            display.setCustomViewConfiguration(viewConfiguration);
+            display->setCustomViewConfiguration(viewConfiguration);
             break;
         }
         default:
@@ -321,8 +307,9 @@ void setup()
     viewConfiguration.value2 = hw::ViewValueType::Current;
     viewConfiguration.value3 = hw::ViewValueType::PowerFactor;
 
-    display.initialize();
-    display.setCustomViewConfiguration(viewConfiguration);
+    display = new hw::DisplaySSD1306();
+    display->initialize();
+    display->setCustomViewConfiguration(viewConfiguration);
     led.initialize();
 
     pinMode(SWITCH_PIN, OUTPUT);

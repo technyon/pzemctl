@@ -37,6 +37,12 @@ namespace hw
         if(!_isInitialized) return;
         long ts = millis();
 
+        if(_clearMessageTs != -1 && ts >= _clearMessageTs)
+        {
+            _clearMessageTs = -1;
+            _message = nullptr;
+        }
+
         float lastMaxcurrent = _maxCurrent;
         _maxCurrent = max(_maxCurrent, max(max(phase1Values.current, phase2Values.current), phase3Values.current));
         if(_maxCurrent > lastMaxcurrent)
@@ -175,9 +181,13 @@ namespace hw
         _ssd1306.print(_message);
     }
 
-    void DisplaySSD1306::showMessage(char *message)
+    void DisplaySSD1306::showMessage(char *message, int duration)
     {
         _message = message;
+        if(duration > 0)
+        {
+            _clearMessageTs = millis() + duration;
+        }
     }
 
     void DisplaySSD1306::clearMessage()
