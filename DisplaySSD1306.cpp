@@ -53,6 +53,8 @@ namespace hw
         if(ts > _expiresAt)
         {
             _maxCurrent = 1;
+            _expiresAt = ts + 10000;
+            return;
         }
 
         _ssd1306.clearDisplay();

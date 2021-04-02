@@ -94,12 +94,12 @@ void TaskInputAndDisplay(void *pvParameters)
     {
         input->update();
         displayUpdateCounter++;
-        if(displayUpdateCounter >= 3)
+        if(displayUpdateCounter >= 4)
         {
             displayUpdateCounter = 0;
             display->update(phasesCombined, phase1Values, phase2Values, phase3Values);
         }
-        vTaskDelay( 25 / portTICK_PERIOD_MS);
+        vTaskDelay( 20 / portTICK_PERIOD_MS);
     }
 }
 
