@@ -7,7 +7,7 @@ The included 3D printable space houses all required hardware.
 
 # A word of caution
 
-The pzem-004t modules used ned to be connected to mains power. Mains power is dangerous and there's danger to receive a potentially lethal electric shock. Furthermore, fire can be the result of incorrectly connecting the modules.  Only connect the pzem-004t if you know what you are doing! If not, ask someone who does.
+The pzem-004t modules used need to be connected to mains power. Mains power is dangerous and there's danger to receive a potentially lethal electric shock. Furthermore, fire can be the result of incorrectly connecting the modules.  Only connect the pzem-004t if you know what you are doing! If not, ask someone who does.
 
 Also, please read the paragraph about liability in the provided LICENSE file.
 
