@@ -49,14 +49,12 @@
 #define phase3PowerFactorTopic "energy/phase3/powerfactor"
 #define phase3EnergyOffsetTopic  "energy/phase3/energyOffset"
 
-/*
-#define phasesCombinedVoltageTopic  "energy/phases/voltage"
-#define phasesCombinedCurrentTopic "energy/phases/current"
-#define phasesCombinedPowerTopic "energy/phases/power"
-#define phasesCombinedEnergyTopic  "energy/phases/energy"
-#define phasesCombinedFrequencyTopic "energy/phases/frequency"
-#define phasesCombinedPowerFactorTopic "energy/phases/powerfactor"
-*/
+#define phasesCombinedVoltageTopic  "energy/phasesCombined/voltage"
+#define phasesCombinedCurrentTopic "energy/phasesCombined/current"
+#define phasesCombinedPowerTopic "energy/phasesCombined/power"
+#define phasesCombinedEnergyTopic  "energy/phasesCombined/energy"
+#define phasesCombinedFrequencyTopic "energy/phasesCombined/frequency"
+#define phasesCombinedPowerFactorTopic "energy/phasesCombined/powerfactor"
 
 #define led1BrightnessTopic  "energy/control/led1Brightness"
 #define led2BrightnessTopic  "energy/control/led2Brightness"

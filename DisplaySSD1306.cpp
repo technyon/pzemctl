@@ -35,6 +35,7 @@ namespace hw
     void DisplaySSD1306::update(const pzem004tvalues& phasesCombined, const pzem004tvalues& phase1Values, const pzem004tvalues& phase2Values, const pzem004tvalues& phase3Values)
     {
         if(!_isInitialized) return;
+
         long ts = millis();
 
         if(_clearMessageTs != -1 && ts >= _clearMessageTs)

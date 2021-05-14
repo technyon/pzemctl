@@ -77,11 +77,11 @@ void TaskPollPzem(void *pvParameters)
         phase2Values = pzem->values2();
         phase3Values = pzem->values3();
 
-        phasesCombined.voltage = (phase1Values.voltage + phase2Values.voltage + phase3Values.voltage) / 3;
+        phasesCombined.voltage = (phase1Values.voltage + phase2Values.voltage + phase3Values.voltage) / (float)3;
         phasesCombined.current = phase1Values.current + phase2Values.current + phase3Values.current;
         phasesCombined.power = phase1Values.power + phase2Values.power + phase3Values.power;
         phasesCombined.energy = phase1Values.energy + phase2Values.energy + phase3Values.energy;
-        phasesCombined.frequency = (phase1Values.frequency + phase2Values.frequency + phase3Values.frequency) / 3;
+        phasesCombined.frequency = (phase1Values.frequency + phase2Values.frequency + phase3Values.frequency) / (float)3;
         phasesCombined.pf = (phase1Values.pf + phase2Values.pf + phase3Values.pf) / 3;
 
         vTaskDelay( 100 / portTICK_PERIOD_MS);

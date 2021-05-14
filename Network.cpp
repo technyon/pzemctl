@@ -236,12 +236,12 @@ void Network::update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004
     if((ts - _lastPublish) > _configuration->numericMqttPublishInterval())
     {
         _lastPublish = ts;
-//        publishFloat(phasesCombinedVoltageTopic, phasesCombined.voltage, 2);
-//        publishFloat(phasesCombinedCurrentTopic, phasesCombined.current, 2);
-//        publishFloat(phasesCombinedPowerTopic, phasesCombined.power, 2);
-//        publishFloat(phasesCombinedEnergyTopic, phasesCombined.energy, 2);
-//        publishFloat(phasesCombinedFrequencyTopic, phasesCombined.frequency, 2);
-//        publishFloat(phasesCombinedPowerFactorTopic, phasesCombined.pf, 2);
+        publishFloat(phasesCombinedVoltageTopic, phasesCombined.voltage, 2);
+        publishFloat(phasesCombinedCurrentTopic, phasesCombined.current, 2);
+        publishFloat(phasesCombinedPowerTopic, phasesCombined.power, 2);
+        publishFloat(phasesCombinedEnergyTopic, phasesCombined.energy, 2);
+        publishFloat(phasesCombinedFrequencyTopic, phasesCombined.frequency, 2);
+        publishFloat(phasesCombinedPowerFactorTopic, phasesCombined.pf, 2);
 
         publishFloat(phase1VoltageTopic, phase1.voltage, 2);
         publishFloat(phase1CurrentTopic, phase1.current, 2);
