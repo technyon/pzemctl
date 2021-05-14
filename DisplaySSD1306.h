@@ -45,6 +45,10 @@ namespace hw
         void changeView(int value);
         void changePhase(int value);
 
+        void setEnergyOffsetPhase1(const float& value);
+        void setEnergyOffsetPhase2(const float& value);
+        void setEnergyOffsetPhase3(const float& value);
+
         const byte selectedPhase();
         const int selectedView();
         const ViewConfiguration& customViewConfiguration();
@@ -56,6 +60,7 @@ namespace hw
         void drawValueByType(int16_t x, int16_t y, const ViewValueType& type, const pzem004tvalues& values);
 
         const hw::pzem004tvalues& getSelectedValues(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1Values, const hw::pzem004tvalues& phase2Values, const hw::pzem004tvalues& phase3Values);
+        float getEnergyOffset();
 
         #define NUM_VIEW_CONFIGURATIONS 4
 
@@ -81,6 +86,10 @@ namespace hw
 
         byte _selectedPhase = 0; // 0 = all; 1-3 = phase1,2,3
         int _selectedView = 0;
+
+        float _energyOffsetPhase1 = 0;
+        float _energyOffsetPhase2 = 0;
+        float _energyOffsetPhase3 = 0;
 
         Adafruit_SSD1306 _ssd1306;
     };

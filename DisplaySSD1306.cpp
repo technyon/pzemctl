@@ -129,9 +129,12 @@ namespace hw
                 _ssd1306.print(F(" W"));
                 break;
             case ViewValueType::Energy:
-                _ssd1306.print(values.energy, values.energy < 1000 ? 1 : 0);
+            {
+                float energy = values.energy + getEnergyOffset();
+                _ssd1306.print(energy, energy < 1000 ? 1 : 0);
                 _ssd1306.print(F(" kw"));
                 break;
+            }
             case ViewValueType::Frequency:
                 _ssd1306.print(values.frequency, 1);
                 _ssd1306.print(F(" Hz"));
@@ -176,6 +179,21 @@ namespace hw
         }
         return phasesCombined;
     }
+
+    float DisplaySSD1306::getEnergyOffset()
+    {
+        switch(_selectedPhase)
+        {
+            case 0:
+                return _energyOffsetPhase1 + _energyOffsetPhase2 + _energyOffsetPhase3;
+            case 1:
+                return _energyOffsetPhase1;
+            case 2:
+                return _energyOffsetPhase2;
+            case 3:
+                return _energyOffsetPhase3;
+        }    }
+
 
     void DisplaySSD1306::drawMessage()
     {
@@ -227,5 +245,18 @@ namespace hw
     const ViewConfiguration &DisplaySSD1306::customViewConfiguration()
     {
         return _customViewConfiguration;
+    }
+
+    void DisplaySSD1306::setEnergyOffsetPhase1(const float &value)
+    {
+        _energyOffsetPhase1 = value;
+    }
+    void DisplaySSD1306::setEnergyOffsetPhase2(const float &value)
+    {
+        _energyOffsetPhase2 = value;
+    }
+    void DisplaySSD1306::setEnergyOffsetPhase3(const float &value)
+    {
+        _energyOffsetPhase3 = value;
     }
 }

@@ -126,6 +126,9 @@ void Network::reconnect()
     _mqttClient->unsubscribe(customViewValue1Topic);
     _mqttClient->unsubscribe(customViewValue2Topic);
     _mqttClient->unsubscribe(customViewValue3Topic);
+    _mqttClient->unsubscribe(phase1EnergyOffsetTopic);
+    _mqttClient->unsubscribe(phase2EnergyOffsetTopic);
+    _mqttClient->unsubscribe(phase3EnergyOffsetTopic);
 
     Serial.print(F("Connecting to server: "));
     Serial.println(server);
@@ -151,6 +154,9 @@ void Network::reconnect()
             _mqttClient->subscribe(customViewValue1Topic);
             _mqttClient->subscribe(customViewValue2Topic);
             _mqttClient->subscribe(customViewValue3Topic);
+            _mqttClient->subscribe(phase1EnergyOffsetTopic);
+            _mqttClient->subscribe(phase2EnergyOffsetTopic);
+            _mqttClient->subscribe(phase3EnergyOffsetTopic);
 
             if(_firstConnect)
             {
@@ -165,6 +171,9 @@ void Network::reconnect()
                 _mqttClient->publish(customViewValue1Topic, "0");
                 _mqttClient->publish(customViewValue2Topic, "1");
                 _mqttClient->publish(customViewValue3Topic, "5");
+                _mqttClient->publish(phase1EnergyOffsetTopic, "0");
+                _mqttClient->publish(phase2EnergyOffsetTopic, "0");
+                _mqttClient->publish(phase3EnergyOffsetTopic, "0");
             }
         }
         else
@@ -383,6 +392,33 @@ void Network::onMqttDataReceived(char*& topic, byte*& payload, unsigned int& len
                         type: NetworkEventType::customViewValue3Changed,
                         paramInt: atoi(value)
                 };
+        _networkEventCallback(event);
+    }
+    else if(strcmp(topic, phase1EnergyOffsetTopic) == 0)
+    {
+        NetworkEvent event
+                {
+                        type: NetworkEventType::phase1OffsetChanged,
+                };
+        event.paramFloat = atof(value);
+        _networkEventCallback(event);
+    }
+    else if(strcmp(topic, phase2EnergyOffsetTopic) == 0)
+    {
+        NetworkEvent event
+                {
+                        type: NetworkEventType::phase2OffsetChanged,
+                };
+        event.paramFloat = atof(value);
+        _networkEventCallback(event);
+    }
+    else if(strcmp(topic, phase3EnergyOffsetTopic) == 0)
+    {
+        NetworkEvent event
+                {
+                        type: NetworkEventType::phase3OffsetChanged,
+                };
+        event.paramFloat = atof(value);
         _networkEventCallback(event);
     }
 }

@@ -107,6 +107,7 @@ void TaskNetwork(void *pvParameters)
 {
     while(true)
     {
+        webServer->update();
         nw->update(phasesCombined, phase1Values, phase2Values, phase3Values);
 
         vTaskDelay( 100 / portTICK_PERIOD_MS);
@@ -127,15 +128,6 @@ void TaskSetupMode(void *pvParameters)
         }
 
         vTaskDelay( 200 / portTICK_PERIOD_MS);
-    }
-}
-
-void TaskWebServer(void *pvParameters)
-{
-    while(true)
-    {
-        webServer->update();
-        vTaskDelay( 500 / portTICK_PERIOD_MS);
     }
 }
 
@@ -160,7 +152,7 @@ void setupTasks()
     xTaskCreate(
             TaskNetwork
             ,  "Nw"
-            ,  976
+            ,  1024
             ,  NULL
             ,  1
             ,  NULL );
@@ -168,18 +160,18 @@ void setupTasks()
     xTaskCreate(
             TaskSetupMode
             ,  "Setup"
-            ,  320
-            ,  NULL
-            ,  0
-            ,  NULL );
-
-    xTaskCreate(
-            TaskWebServer
-            ,  "WS"
             ,  448
             ,  NULL
             ,  0
             ,  NULL );
+
+//    xTaskCreate(
+//            TaskWebServer
+//            ,  "WS"
+//            ,  448
+//            ,  NULL
+//            ,  0
+//            ,  NULL );
 }
 
 void setSwitchState(bool value, bool showMessage)
@@ -277,6 +269,21 @@ void onNetworkEventReceived(const NetworkEvent& event)
             hw::ViewConfiguration viewConfiguration = display->customViewConfiguration();
             viewConfiguration.value3 = (hw::ViewValueType) event.paramInt;
             display->setCustomViewConfiguration(viewConfiguration);
+            break;
+        }
+        case NetworkEventType::phase1OffsetChanged:
+        {
+            display->setEnergyOffsetPhase1(event.paramFloat);
+            break;
+        }
+        case NetworkEventType::phase2OffsetChanged:
+        {
+            display->setEnergyOffsetPhase2(event.paramFloat);
+            break;
+        }
+        case NetworkEventType::phase3OffsetChanged:
+        {
+            display->setEnergyOffsetPhase3(event.paramFloat);
             break;
         }
         default:

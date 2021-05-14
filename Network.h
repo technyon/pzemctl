@@ -15,7 +15,10 @@ enum class NetworkEventType
     resetEnergy,
     customViewValue1Changed,
     customViewValue2Changed,
-    customViewValue3Changed
+    customViewValue3Changed,
+    phase1OffsetChanged,
+    phase2OffsetChanged,
+    phase3OffsetChanged
 };
 
 struct NetworkEvent
@@ -23,6 +26,7 @@ struct NetworkEvent
     NetworkEventType type;
     int paramInt;
     bool paramBool;
+    float paramFloat;
 };
 
 class Network
