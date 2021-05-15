@@ -86,7 +86,6 @@ class PZEM004tEnergyMonitor
     {
         if(this.getTotalEnergyDelta() > this.threshold)
         {
-            log("################ UPDATE OFFSETS");
             this.updateOffsets();
             setState(this.devicePath + "control.resetEnergy", "confirm");
         }
