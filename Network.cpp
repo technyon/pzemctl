@@ -242,6 +242,7 @@ void Network::update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004
         publishFloat(phasesCombinedEnergyTopic, phasesCombined.energy, 2);
         publishFloat(phasesCombinedFrequencyTopic, phasesCombined.frequency, 2);
         publishFloat(phasesCombinedPowerFactorTopic, phasesCombined.pf, 2);
+        publishInt(phasesCombinedErrorTopic, phasesCombined.error ? 1 : 0);
 
         publishFloat(phase1VoltageTopic, phase1.voltage, 2);
         publishFloat(phase1CurrentTopic, phase1.current, 2);
@@ -249,6 +250,7 @@ void Network::update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004
         publishFloat(phase1EnergyTopic, phase1.energy, 2);
         publishFloat(phase1FrequencyTopic, phase1.frequency, 2);
         publishFloat(phase1PowerFactorTopic, phase1.pf, 2);
+        publishInt(phase1ErrorTopic, phase1.error ? 1 : 0);
 
         publishFloat(phase2VoltageTopic, phase2.voltage, 2);
         publishFloat(phase2CurrentTopic, phase2.current, 2);
@@ -256,6 +258,7 @@ void Network::update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004
         publishFloat(phase2EnergyTopic, phase2.energy, 2);
         publishFloat(phase2FrequencyTopic, phase2.frequency, 2);
         publishFloat(phase2PowerFactorTopic, phase2.pf, 2);
+        publishInt(phase2ErrorTopic, phase2.error ? 1 : 0);
 
         publishFloat(phase3VoltageTopic, phase3.voltage, 2);
         publishFloat(phase3CurrentTopic, phase3.current, 2);
@@ -263,6 +266,7 @@ void Network::update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004
         publishFloat(phase3EnergyTopic, phase3.energy, 2);
         publishFloat(phase3FrequencyTopic, phase3.frequency, 2);
         publishFloat(phase3PowerFactorTopic, phase3.pf, 2);
+        publishInt(phase3ErrorTopic, phase3.error ? 1 : 0);
     }
 
     if(_viewChanged)
@@ -432,6 +436,25 @@ void Network::publishFloat(const char* topic, const float &value, const float& p
     }
 
     dtostrf(value, 20, precision, _charVal);
+
+    _charIndex = 0;
+    while(_charVal[_charIndex] == _space)
+    {
+        _charIndex++;
+    }
+
+    _mqttClient->publish(topic, _charVal + _charIndex);
+}
+
+void Network::publishInt(const char* topic, const int &value)
+{
+    if(_mqttClient->state() != 0)
+    {
+        Serial.println(F("MQTT not connected, abort publish."));
+        return;
+    }
+
+    itoa(value, _charVal, 10);
 
     _charIndex = 0;
     while(_charVal[_charIndex] == _space)

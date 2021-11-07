@@ -33,6 +33,7 @@ namespace hw
         values.energy = pzem.energy();
         values.frequency = pzem.frequency();
         values.pf = pzem.pf();
+        values.error = isnan(values.voltage);
     }
 
     const pzem004tvalues &Pzem004t::values1()

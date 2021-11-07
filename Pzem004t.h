@@ -16,6 +16,7 @@ namespace hw
         float energy;    // kw/h           3
         float frequency; // Hz       1  2     4
         float pf;        //                   4
+        bool error;     // false = ok;  true = error
     };
 
     class Pzem004t

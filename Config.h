@@ -32,6 +32,7 @@
 #define phase1FrequencyTopic "energy/phase1/frequency"
 #define phase1PowerFactorTopic "energy/phase1/powerfactor"
 #define phase1EnergyOffsetTopic  "energy/phase1/energyOffset"
+#define phase1ErrorTopic "energy/phase1/error"
 
 #define phase2VoltageTopic  "energy/phase2/voltage"
 #define phase2CurrentTopic "energy/phase2/current"
@@ -40,6 +41,7 @@
 #define phase2FrequencyTopic "energy/phase2/frequency"
 #define phase2PowerFactorTopic "energy/phase2/powerfactor"
 #define phase2EnergyOffsetTopic  "energy/phase2/energyOffset"
+#define phase2ErrorTopic "energy/phase2/error"
 
 #define phase3VoltageTopic  "energy/phase3/voltage"
 #define phase3CurrentTopic "energy/phase3/current"
@@ -48,6 +50,7 @@
 #define phase3FrequencyTopic "energy/phase3/frequency"
 #define phase3PowerFactorTopic "energy/phase3/powerfactor"
 #define phase3EnergyOffsetTopic  "energy/phase3/energyOffset"
+#define phase3ErrorTopic "energy/phase3/error"
 
 #define phasesCombinedVoltageTopic  "energy/phasesCombined/voltage"
 #define phasesCombinedCurrentTopic "energy/phasesCombined/current"
@@ -55,6 +58,7 @@
 #define phasesCombinedEnergyTopic  "energy/phasesCombined/energy"
 #define phasesCombinedFrequencyTopic "energy/phasesCombined/frequency"
 #define phasesCombinedPowerFactorTopic "energy/phasesCombined/powerfactor"
+#define phasesCombinedErrorTopic "energy/phasesCombined/error"
 
 #define led1BrightnessTopic  "energy/control/led1Brightness"
 #define led2BrightnessTopic  "energy/control/led2Brightness"

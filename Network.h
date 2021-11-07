@@ -60,6 +60,7 @@ private:
     void initializeEthernet();
     void ethernetHardwareReset();
     void publishFloat(const char* topic, const float& value, const float& precision);
+    void publishInt(const char* topic, const int& value);
     static void onMqttDataReceivedCallback(char* topic, byte* payload, unsigned int length);
     void onMqttDataReceived(char*& topic, byte*& payload, unsigned int& length);
 
