@@ -27,7 +27,7 @@ Also, please read the paragraph about liability in the provided LICENSE file.
 
 ### Prerequisites
 - Arduino SDK. Unpack and set ARDUINO_SDK_PATH to its location (e. g. export ARDUINO_SDK_PATH="/usr/share/arduino-1.8.13/")
-- Arduino cmake toolchain: https://github.com/a9183756-gh/Arduino-CMake-Toolchain/blob/master/README.md. Unpack to a location of your choice
+- Arduino cmake toolchain: https://github.com/a9183756-gh/Arduino-CMake-Toolchain/. Unpack to a location of your choice
 - cmake
 - avr-gcc
 
