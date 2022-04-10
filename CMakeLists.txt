@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 
+set(ARDUINO_BOARD "Arduino Mega or Mega 2560 [avr.mega]")
+
 project(pzemctl CXX)
 
 include_directories(Lib/pzem004t)

@@ -35,10 +35,8 @@ Also, please read the paragraph about liability in the provided LICENSE file.
 
 In the pzemctl directory, create a cmake build directory in change into it.
 
-- cmake -D CMAKE_TOOLCHAIN_FILE=/path/to/Arduino-toolchain.cmake ..
-- You will get an error that the board is not selected.
-- Run "ccmake ..". As ARDUINO_BOARD, select "Arduino Mega or Mega 2560 [avr.mega]" and configure.
-- cmake -D CMAKE_TOOLCHAIN_FILE=/usr/share/Arduino-CMake-Toolchain/Arduino-toolchain.cmake -D ARDUINO_BOARD_OPTIONS_FILE=BoardOptions.cmake ..
+- cmake -D CMAKE_TOOLCHAIN_FILE=/path/to/Arduino-CMake-Toolchain/Arduino-toolchain.cmake ..
+- Run make
 
 cmake should now be setup. Run make to compile.
 
