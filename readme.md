@@ -15,7 +15,6 @@ Also, please read the paragraph about liability in the provided LICENSE file.
 ### Required
 - Arduino Mega 2560
 - W5500 LAN Module (https://www.az-delivery.de/en/products/w5500-ethernet-netzwerk-internet-modul-fuer-arduino)
-- SSD1306 Display (https://www.amazon.de/gp/product/B0777HHQDT/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1)
 
 ### Optional
 - SSD1306 Display (https://www.amazon.de/gp/product/B0777HHQDT)
