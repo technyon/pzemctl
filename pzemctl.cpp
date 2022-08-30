@@ -165,14 +165,6 @@ void setupTasks()
             ,  NULL
             ,  0
             ,  NULL );
-
-//    xTaskCreate(
-//            TaskWebServer
-//            ,  "WS"
-//            ,  448
-//            ,  NULL
-//            ,  0
-//            ,  NULL );
 }
 
 void setSwitchState(bool value, bool showMessage)
