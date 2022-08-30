@@ -194,7 +194,7 @@ void Network::reconnect()
 
 void Network::update(const hw::pzem004tvalues& phasesCombined, const hw::pzem004tvalues& phase1, const hw::pzem004tvalues& phase2, const hw::pzem004tvalues& phase3)
 {
-    long ts = millis();
+    unsigned long ts = millis();
 
     if(_configMode) return;
     _updating = true;

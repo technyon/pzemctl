@@ -67,8 +67,8 @@ private:
     void reconnect();
     void nwDelay(unsigned long ms);
 
-    long _lastPublish = 0;
-    long _lastMaintain = 0;
+    unsigned long _lastPublish = 0;
+    unsigned long _lastMaintain = 0;
     const char _space = ' ';
     char _charVal[21];
     int _charIndex;
